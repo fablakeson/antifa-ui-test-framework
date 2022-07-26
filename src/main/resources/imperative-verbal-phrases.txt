@@ -1,0 +1,27 @@
+# Open page commands
+open the login page
+open login page
+open the login page to start
+open the login
+
+# Click command examples
+click the open button
+click on the open button
+click on open
+click carefully on the open button
+click the open button for show the file dialog
+on open button, click
+
+# Write command examples
+write the password "password" --> write the passowrd $passowrdText
+write down the password "password" --> write down the passowrd $passowrdText
+write the password "password" to password input --> write the passowrd $passowrdText to password input
+write "password" to password -->
+write "password" to password input -->
+insert the passowrd "passowrd" -->
+
+# Check command examples
+check the option "yes, i agree" --> check the option $optionText
+uncheck the option "send me mails" --> uncheck the option $optionText
+check the "Don't ask me again" option --> check the $optionText option
+check "Don't ask me again"
