@@ -1,12 +1,18 @@
 package com.gotriva.testing.antifa.handler.impl;
 
-import com.gotriva.testing.antifa.handler.PageObjectHandler;
+import com.gotriva.testing.antifa.exception.PageObjectActionException;
+import com.gotriva.testing.antifa.handler.PageObjectActionHandler;
 import com.gotriva.testing.antifa.model.ExecutionContext;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 /** his class implements a page object handler for open page action. */
-public class OpenPageHandler implements PageObjectHandler {
+public class OpenPageHandler implements PageObjectActionHandler {
+
+  @Override
+  public String getAction() {
+    return "open";
+  }
 
   @Override
   public void handle(ExecutionContext context, String page, String url) {
@@ -15,16 +21,10 @@ public class OpenPageHandler implements PageObjectHandler {
       try {
         context.openPage(page, new URL(url.replaceAll("'", "")));
       } catch (MalformedURLException e) {
-        // TODO: add appropriated exception type.
-        throw new RuntimeException("URL is malformed: " + url);
+        throw new PageObjectActionException("Error opening the page: " + page, e);
       }
     } else {
       context.openPage(page);
     }
-  }
-
-  @Override
-  public String getAction() {
-    return "open";
   }
 }

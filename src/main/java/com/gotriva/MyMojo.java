@@ -4,8 +4,8 @@ import com.gotriva.testing.antifa.element.impl.Button;
 import com.gotriva.testing.antifa.element.impl.Text;
 import com.gotriva.testing.antifa.execution.Executor;
 import com.gotriva.testing.antifa.factory.InteractableFactory;
-import com.gotriva.testing.antifa.handler.Handler;
-import com.gotriva.testing.antifa.handler.impl.ClickableHandler;
+import com.gotriva.testing.antifa.handler.ActionHandler;
+import com.gotriva.testing.antifa.handler.impl.ClickHandler;
 import com.gotriva.testing.antifa.handler.impl.ClosePageHandler;
 import com.gotriva.testing.antifa.handler.impl.OpenPageHandler;
 import com.gotriva.testing.antifa.handler.impl.WriteHandler;
@@ -43,7 +43,6 @@ import org.apache.maven.plugin.MojoExecutionException;
  */
 public class MyMojo extends AbstractMojo {
 
-  // TODO: Add missing interactable handlers.
   // TODO: add component injectable annotation to the handler services.
   // TODO: Add read tests from text files support.
   // TODO: Add post execution report support.
@@ -54,12 +53,12 @@ public class MyMojo extends AbstractMojo {
   // TODO: Add unitary tests to each class.
 
   /** The handler strategies. */
-  private static final Map<String, Handler> HANDLER_STRATEGIES =
+  private static final Map<String, ActionHandler> HANDLER_STRATEGIES =
       Map.of(
           /** Add text handler */
           "write", new WriteHandler(),
           /** Add click action hadndler */
-          "click", new ClickableHandler(),
+          "click", new ClickHandler(),
           /** Open page handler */
           "open", new OpenPageHandler(),
           /** Close page handler */

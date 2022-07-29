@@ -133,4 +133,8 @@ public class GenericPageObject {
   public void setAddress(URL address) {
     this.address = address;
   }
+
+  public WebDriver getDriver() {
+    return this.driver;
+  }
 }

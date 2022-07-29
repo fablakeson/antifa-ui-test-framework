@@ -1,18 +1,18 @@
 package com.gotriva.testing.antifa.handler.impl;
 
 import com.gotriva.testing.antifa.element.Writable;
-import com.gotriva.testing.antifa.handler.InteractableHandler;
+import com.gotriva.testing.antifa.handler.InteractableActionHandler;
 
-/** This class implements a interactable handler for write action. */
-public class WriteHandler implements InteractableHandler<Writable> {
-
-  @Override
-  public void handle(Writable interactable, String string) {
-    interactable.write(string);
-  }
+/** This class implements a handler for write action interactable. */
+public class WriteHandler implements InteractableActionHandler<Writable> {
 
   @Override
   public String getAction() {
     return "write";
+  }
+
+  @Override
+  public void handle(Writable interactable, String text) {
+    interactable.write(text);
   }
 }

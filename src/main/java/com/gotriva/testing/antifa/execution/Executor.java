@@ -2,9 +2,9 @@ package com.gotriva.testing.antifa.execution;
 
 import com.gotriva.testing.antifa.element.Interactable;
 import com.gotriva.testing.antifa.factory.InteractableFactory;
-import com.gotriva.testing.antifa.handler.Handler;
-import com.gotriva.testing.antifa.handler.InteractableHandler;
-import com.gotriva.testing.antifa.handler.PageObjectHandler;
+import com.gotriva.testing.antifa.handler.ActionHandler;
+import com.gotriva.testing.antifa.handler.InteractableActionHandler;
+import com.gotriva.testing.antifa.handler.PageObjectActionHandler;
 import com.gotriva.testing.antifa.model.Command;
 import com.gotriva.testing.antifa.model.ExecutionContext;
 import com.gotriva.testing.antifa.model.ExecutionResult;
@@ -34,7 +34,7 @@ public class Executor {
   }
 
   /** The handler strategies for the commands names. */
-  private final Map<String, Handler> handlerStrategies;
+  private final Map<String, ActionHandler> handlerStrategies;
 
   /** The default interactable types for the command names. */
   private final Map<String, String> defaultTypes;
@@ -56,7 +56,7 @@ public class Executor {
 
   /** Default constructor. */
   public Executor(
-      Map<String, Handler> handlerStrategies,
+      Map<String, ActionHandler> handlerStrategies,
       Map<String, String> defaultTypes,
       InteractableFactory factory,
       List<Command> commands,
@@ -91,18 +91,20 @@ public class Executor {
       /** Try to execute the command */
       try {
         /** Get handler strategy for this command. */
-        Handler handler = handlerStrategies.get(command.getCommand());
+        ActionHandler handler = handlerStrategies.get(command.getCommand());
         /** Get appropriated handler type. */
-        if (handler instanceof InteractableHandler) {
+        if (handler instanceof InteractableActionHandler) {
           /** Get the interactable object from context. */
           Interactable interactable = getInteractableFor(command);
           /** Try handle this interactable. */
           handleInteractable(
-              (InteractableHandler<Interactable>) handler, interactable, command.getParameter());
-        } else if (handler instanceof PageObjectHandler) {
+              (InteractableActionHandler<Interactable>) handler,
+              interactable,
+              command.getParameter());
+        } else if (handler instanceof PageObjectActionHandler) {
           /** Try handle this page context action. */
           handlePageObject(
-              (PageObjectHandler) handler, command.getObject(), command.getParameter());
+              (PageObjectActionHandler) handler, command.getObject(), command.getParameter());
         } else {
           /** Handler not reconigsed */
           throw new RuntimeException(
@@ -147,8 +149,8 @@ public class Executor {
    * @param page
    * @param url
    */
-  private <T extends PageObjectHandler> void handlePageObject(
-      PageObjectHandler handler, String page, String parameter) {
+  private <T extends PageObjectActionHandler> void handlePageObject(
+      PageObjectActionHandler handler, String page, String parameter) {
     handler.handle(context, page, parameter);
   }
 
@@ -161,7 +163,7 @@ public class Executor {
    * @param parameter the parameter
    */
   private <T extends Interactable> void handleInteractable(
-      InteractableHandler<T> handler, T interactable, String parameter) {
+      InteractableActionHandler<T> handler, T interactable, String parameter) {
     handler.handle(interactable, parameter);
   }
 

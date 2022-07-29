@@ -1,5 +1,6 @@
 package com.gotriva.testing.antifa.exception;
 
+/** Exception for interactable type not found on factory. */
 public class InteractableTypeNotFoundException extends RuntimeException {
 
   private static final String MESSAGE =

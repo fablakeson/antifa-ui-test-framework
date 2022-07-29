@@ -2,14 +2,13 @@ package com.gotriva.testing.antifa.element.impl;
 
 import com.gotriva.testing.antifa.element.AbstractElement;
 import com.gotriva.testing.antifa.element.Hoverable;
-import com.gotriva.testing.antifa.element.Readable;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WrapsDriver;
 import org.openqa.selenium.interactions.Actions;
 
 /** This class represents an interactable label on UI. */
-public class Label extends AbstractElement implements Readable, Hoverable {
+public class Label extends AbstractElement implements Hoverable {
 
   public Label(WebElement element) {
     super(element);
@@ -20,10 +19,5 @@ public class Label extends AbstractElement implements Readable, Hoverable {
     WebDriver driver = ((WrapsDriver) element).getWrappedDriver();
     Actions action = new Actions(driver);
     action.moveToElement(element).perform();
-  }
-
-  @Override
-  public String read() {
-    return element.getText();
   }
 }
