@@ -10,5 +10,6 @@
                 "cmd": "java -jar /home/fabio/Documentos/Projetos/vscode/google-java-format-1.15.0-all-deps.jar --replace ${file}"
             },
         ],
-    }
+    },
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

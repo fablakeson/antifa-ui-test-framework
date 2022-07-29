@@ -10,6 +10,9 @@ public class RollPageHandler implements PageObjectActionHandler {
 
   private static final int SCROLLED_PIXELS = 350;
 
+  /** Default constructor */
+  RollPageHandler() {}
+
   @Override
   public String getAction() {
     return "roll";

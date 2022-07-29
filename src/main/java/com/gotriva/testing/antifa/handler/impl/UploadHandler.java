@@ -6,6 +6,9 @@ import com.gotriva.testing.antifa.handler.InteractableActionHandler;
 /** This class implements a handler for upload action interactable. */
 public class UploadHandler implements InteractableActionHandler<Uploadable> {
 
+  /** Default constructor */
+  UploadHandler() {}
+
   @Override
   public String getAction() {
     return "upload";

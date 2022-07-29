@@ -128,9 +128,11 @@ public class SemanticPath {
     return commandBuilder.build();
   }
 
-  /** Getter */
-  public int getStepsCount() {
-    return steps.size();
+  /**
+   * @return the {@link SemanticPath} builder.
+   */
+  public static Builder builder() {
+    return Builder.newBuilder();
   }
 
   /**

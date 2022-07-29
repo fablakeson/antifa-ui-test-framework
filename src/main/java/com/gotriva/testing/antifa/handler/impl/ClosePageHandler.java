@@ -6,6 +6,9 @@ import com.gotriva.testing.antifa.model.ExecutionContext;
 /** This class implements a page object handler for close page action. */
 public class ClosePageHandler implements PageObjectActionHandler {
 
+  /** Default constructor */
+  ClosePageHandler() {}
+
   @Override
   public String getAction() {
     return "close";

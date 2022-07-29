@@ -9,6 +9,9 @@ import java.net.URL;
 /** his class implements a page object handler for open page action. */
 public class OpenPageHandler implements PageObjectActionHandler {
 
+  /** Default constructor */
+  OpenPageHandler() {}
+
   @Override
   public String getAction() {
     return "open";

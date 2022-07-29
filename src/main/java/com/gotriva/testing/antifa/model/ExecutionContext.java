@@ -1,13 +1,14 @@
 package com.gotriva.testing.antifa.model;
 
 import com.gotriva.testing.antifa.factory.InteractableFactory;
+import java.io.Closeable;
 import java.net.URL;
 import java.util.Deque;
 import java.util.LinkedList;
 import org.openqa.selenium.WebDriver;
 
-/** This class represents the execution context for the {@link Executor}. */
-public class ExecutionContext {
+/** This class represents the execution context for the {@link ExecutorImpl}. */
+public class ExecutionContext implements Closeable {
 
   /** The stack of pages on context. */
   private Deque<GenericPageObject> pageStack;
@@ -19,21 +20,10 @@ public class ExecutionContext {
   private InteractableFactory interactableFactory;
 
   /** Default constructor. */
-  private ExecutionContext(WebDriver driver, InteractableFactory interactableFactory) {
+  public ExecutionContext(WebDriver driver, InteractableFactory interactableFactory) {
     this.pageStack = new LinkedList<>();
     this.driver = driver;
     this.interactableFactory = interactableFactory;
-  }
-
-  /**
-   * Gets a new execution context.
-   *
-   * @param driver the context associated webdriver.
-   * @param factory the context associated component factory.
-   * @return the created empty context.
-   */
-  public static ExecutionContext newContext(WebDriver driver, InteractableFactory factory) {
-    return new ExecutionContext(driver, factory);
   }
 
   /**
@@ -69,5 +59,10 @@ public class ExecutionContext {
     pageStack.addFirst(GenericPageObject.newPage(name, url, driver, interactableFactory));
     /** Returns added page. */
     return getCurrentPage();
+  }
+
+  @Override
+  public void close() {
+    driver.close();
   }
 }

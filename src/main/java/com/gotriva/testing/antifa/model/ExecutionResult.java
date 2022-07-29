@@ -6,7 +6,7 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
-/** This class represents the result of an execution call on {@link Executor}. */
+/** This class represents the result of an execution call on {@link ExecutorImpl}. */
 public class ExecutionResult {
 
   public enum Status {
@@ -26,19 +26,15 @@ public class ExecutionResult {
   /** The execution result status. */
   private Status status;
 
-  /** Default constructor */
-  private ExecutionResult(Deque<ExecutionStep> steps, Status status) {
+  /** All args constructor */
+  public ExecutionResult(Deque<ExecutionStep> steps, Status status) {
     this.steps = steps;
     this.status = status;
   }
 
-  /**
-   * Creates a new execution result.
-   *
-   * @return the created execution result.
-   */
-  public static ExecutionResult newResult() {
-    return new ExecutionResult(new LinkedList<>(), Status.NOT_EXECUTED);
+  /** Default constructor */
+  public ExecutionResult() {
+    this(new LinkedList<>(), Status.NOT_EXECUTED);
   }
 
   /**
@@ -81,7 +77,9 @@ public class ExecutionResult {
    */
   public void finish() {
     /** If this execution has not executed, then it fails. */
-    if (isStarted()) {
+    if (isFinished()) {
+      return;
+    } else if (isStarted()) {
       success();
     } else {
       fail();

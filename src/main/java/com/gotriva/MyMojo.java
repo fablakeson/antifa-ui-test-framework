@@ -1,25 +1,20 @@
 package com.gotriva;
 
-import com.gotriva.testing.antifa.element.impl.Button;
-import com.gotriva.testing.antifa.element.impl.Text;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.gotriva.testing.antifa.execution.Executor;
-import com.gotriva.testing.antifa.factory.InteractableFactory;
-import com.gotriva.testing.antifa.handler.ActionHandler;
-import com.gotriva.testing.antifa.handler.impl.ClickHandler;
-import com.gotriva.testing.antifa.handler.impl.ClosePageHandler;
-import com.gotriva.testing.antifa.handler.impl.OpenPageHandler;
-import com.gotriva.testing.antifa.handler.impl.WriteHandler;
+import com.gotriva.testing.antifa.execution.impl.ExecutionModule;
 import com.gotriva.testing.antifa.model.Command;
-import com.gotriva.testing.antifa.parsing.Interpreter;
+import com.gotriva.testing.antifa.model.ExecutionResult;
 import com.gotriva.testing.antifa.parsing.Parser;
-import edu.stanford.nlp.pipeline.StanfordCoreNLP;
+import com.gotriva.testing.antifa.parsing.impl.ParsingModule;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /*
  * Copyright 2001-2005 The Apache Software Foundation.
@@ -43,41 +38,15 @@ import org.apache.maven.plugin.MojoExecutionException;
  */
 public class MyMojo extends AbstractMojo {
 
-  // TODO: add component injectable annotation to the handler services.
-  // TODO: Add read tests from text files support.
+  private static final Logger LOGGER = LoggerFactory.getLogger(MyMojo.class);
+
+  // TODO: Refactor sysouts into Logger. (ongoing)
+  // TODO: Add read execution from text files support.
   // TODO: Add post execution report support.
   // TODO: Add HTML report.
-  // TODO: Refactor sysouts in Logger.
-  // TODO: Refactor into dependency injection pattern.
   // TODO: Add plugin parameterization support.
   // TODO: Add unitary tests to each class.
-
-  /** The handler strategies. */
-  private static final Map<String, ActionHandler> HANDLER_STRATEGIES =
-      Map.of(
-          /** Add text handler */
-          "write", new WriteHandler(),
-          /** Add click action hadndler */
-          "click", new ClickHandler(),
-          /** Open page handler */
-          "open", new OpenPageHandler(),
-          /** Close page handler */
-          "close", new ClosePageHandler());
-
-  /** The default action interactable types types. */
-  private static final Map<String, String> DEFAULT_INTERACTABLE_TYPES =
-      Map.of(
-          /** Add write default interactable type */
-          "write", "text",
-          /** Add click default interactable type */
-          "click", "button");
-
-  /** The interactable factory. */
-  private static final InteractableFactory INTERACTABLE_FACTORY =
-      new InteractableFactory()
-          /** Register type interactable creators */
-          .registerInteractableType("button", element -> new Button(element))
-          .registerInteractableType("text", element -> new Text(element));
+  // TODO: Remove unnecessary comments
 
   /**
    * Location of the file.
@@ -94,14 +63,10 @@ public class MyMojo extends AbstractMojo {
    */
   public void execute() throws MojoExecutionException {
 
+    /** Dependency injection */
+    Injector injector = Guice.createInjector(new ParsingModule(), new ExecutionModule());
+
     /** Enable just basic dependency parsing. */
-    Properties props = new Properties();
-    props.setProperty("annotators", "tokenize,ssplit,pos,parse");
-
-    StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
-
-    Parser parser = new Parser(pipeline, new Interpreter());
-
     List<String> instructions =
         Arrays.asList(
             "open the login page at \"http://localhost:8000/login.html\".",
@@ -110,21 +75,17 @@ public class MyMojo extends AbstractMojo {
             "write \"1234 1234 1234 1234\" to the credit card input.",
             "click on the login button.");
 
+    Parser parser = injector.getInstance(Parser.class);
+
     List<Command> commands = parser.parse(instructions);
 
     /** Print decoded commands */
-    System.out.println("The decoded commands: ");
-    System.out.println(commands);
-    System.out.println();
+    LOGGER.info("The decoded commands: {}", commands);
 
-    Executor executor =
-        new Executor(
-            HANDLER_STRATEGIES,
-            DEFAULT_INTERACTABLE_TYPES,
-            INTERACTABLE_FACTORY,
-            commands,
-            new Properties());
+    Executor executor = injector.getInstance(Executor.class);
 
-    executor.execute();
+    ExecutionResult result = executor.execute(commands);
+
+    LOGGER.info("The result: {}", result);
   }
 }

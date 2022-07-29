@@ -5,6 +5,9 @@ import com.gotriva.testing.antifa.handler.InteractableActionHandler;
 
 public class UncheckHandler implements InteractableActionHandler<Checkable> {
 
+  /** Default constructor */
+  UncheckHandler() {}
+
   @Override
   public String getAction() {
     return "uncheck";

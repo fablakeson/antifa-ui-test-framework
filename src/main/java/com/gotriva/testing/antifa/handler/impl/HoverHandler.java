@@ -6,6 +6,9 @@ import com.gotriva.testing.antifa.handler.InteractableActionHandler;
 /** This class implements a handler for hover action interactable. */
 public class HoverHandler implements InteractableActionHandler<Hoverable> {
 
+  /** Default constructor */
+  HoverHandler() {}
+
   @Override
   public String getAction() {
     return "hover";

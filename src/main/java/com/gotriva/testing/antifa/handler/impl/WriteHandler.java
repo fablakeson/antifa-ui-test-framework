@@ -6,6 +6,9 @@ import com.gotriva.testing.antifa.handler.InteractableActionHandler;
 /** This class implements a handler for write action interactable. */
 public class WriteHandler implements InteractableActionHandler<Writable> {
 
+  /** Default constructor */
+  WriteHandler() {}
+
   @Override
   public String getAction() {
     return "write";

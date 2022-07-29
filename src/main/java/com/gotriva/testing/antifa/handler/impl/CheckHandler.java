@@ -6,6 +6,9 @@ import com.gotriva.testing.antifa.handler.InteractableActionHandler;
 /** This class implements a handler for check action interactable. */
 public class CheckHandler implements InteractableActionHandler<Checkable> {
 
+  /** Default constructor */
+  CheckHandler() {}
+
   @Override
   public String getAction() {
     return "check";
