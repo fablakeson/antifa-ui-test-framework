@@ -27,7 +27,7 @@ public class Command {
 
     private Builder() {}
 
-    public static Builder newBuilder() {
+    private static Builder newBuilder() {
       return new Builder();
     }
 
@@ -71,11 +71,18 @@ public class Command {
   private String type;
 
   /** Default all args constructor for an command. */
-  public Command(String command, String parameter, String object, String type) {
+  private Command(String command, String parameter, String object, String type) {
     this.command = command;
     this.parameter = parameter;
     this.object = object;
     this.type = type;
+  }
+
+  /**
+   * @return a new builder instance.
+   */
+  public static Builder builder() {
+    return Builder.newBuilder();
   }
 
   /** Getters and Setters */

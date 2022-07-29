@@ -11,6 +11,7 @@ public class InteractableFactory {
   /** The mapped type creators */
   private Map<String, AbstractElementFactory<?>> elementFactoryMap;
 
+  // TODO: make constructor package-level and create FactoryMethod
   public InteractableFactory(Map<String, AbstractElementFactory<?>> elementFactoryMap) {
     this.elementFactoryMap = elementFactoryMap;
   }

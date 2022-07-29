@@ -9,13 +9,19 @@ import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** This class represents a path traversal on a semantic graph. */
 public class SemanticPath {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(SemanticPath.class);
+
   /** The builder for semantic path traversal. */
   public static class Builder {
+
     /** Builder steps that guarantees no steps will repeat source and destination. */
     private LinkedHashSet<Step> steps;
 
@@ -29,17 +35,13 @@ public class SemanticPath {
     }
 
     /**
-     * Adds a new step to this path. If same source and destination where found before it will be
-     * replaced.
+     * Adds a new step to this path.
      *
-     * @param source the source
-     * @param edge the edge to be used to navigate
-     * @param destination the expected destination
+     * @param step the step builder
      * @return the Builder
      */
-    public Builder newStep(
-        Command.ComponentType source, GrammaticalRelation edge, Command.ComponentType destination) {
-      steps.add(Step.of(source, edge, destination));
+    public Builder newStep(Step.Builder step) {
+      steps.add(step.build());
       return this;
     }
 
@@ -63,11 +65,11 @@ public class SemanticPath {
    * Traverses the semantic graph on given path order and returns the interpreted action.
    *
    * @param graph the semantic graph
-   * @return the decoded action
+   * @return the decoded action if any
    */
-  public Command traverse(final SemanticGraph graph) {
-    System.out.println("============== Start Traversing ===========");
-    System.out.println("Steps: " + steps);
+  public Optional<Command> traverse(final SemanticGraph graph) {
+    LOGGER.info("============== Start Traversing ===========");
+    LOGGER.info("Steps: {}", steps);
 
     /** Get the graph root */
     IndexedWord root = graph.getFirstRoot();
@@ -76,42 +78,38 @@ public class SemanticPath {
     Map<Command.ComponentType, Deque<IndexedWord>> actionsMap = new HashMap<>();
     putOrAppend(actionsMap, Command.ComponentType.COMMAND, root);
 
-    System.out.println("My root is: " + root);
-    System.out.println();
+    LOGGER.info("My root is: {}", root);
 
     /** Traverses the graph from root */
     for (Step step : steps) {
-      System.out.println("Step: " + step);
+      LOGGER.info("Current step: {}", step);
 
       /** Get source. */
       IndexedWord source = getFirst(actionsMap, step.getSource());
-      System.out.println("Source: " + source);
+      LOGGER.info("Source: {}", source);
 
       /** Get edge. */
       GrammaticalRelation edge = step.getEdge();
-      System.out.println("Edge: " + edge);
+      LOGGER.info("Edge: {}", edge);
 
       /** Get destination. */
       IndexedWord destination = graph.getChildWithReln(source, edge);
-      System.out.println("Dest: " + destination);
+      LOGGER.info("Dest: {}", destination);
 
       /** Check if destination was found */
       if (destination == null) {
-        String error = "Desination not found. Ending traversal.";
-        System.out.println(error);
-        System.out.println("========================================");
-        throw new RuntimeException(error);
+        LOGGER.info("Desination not found. Ending traversal.");
+        LOGGER.info("========================================");
+        return Optional.empty();
       }
 
       /** Add destination to the graph */
       putOrAppend(actionsMap, step.getDestination(), destination);
-      System.out.println("Map: " + actionsMap);
-      System.out.println();
     }
 
     /** Build command from actions map with mandatory fields. */
     final Command.Builder commandBuilder =
-        Command.Builder.newBuilder()
+        Command.builder()
             .setCommand(concatString(actionsMap.get(Command.ComponentType.COMMAND)))
             .setObject(concatString(actionsMap.get(Command.ComponentType.OBJECT)));
 
@@ -123,9 +121,10 @@ public class SemanticPath {
       commandBuilder.setType(concatString(actionsMap.get(Command.ComponentType.TYPE)));
     }
 
-    System.out.println("========================================");
+    LOGGER.info("Map: {}", actionsMap);
+    LOGGER.info("========================================");
 
-    return commandBuilder.build();
+    return Optional.of(commandBuilder.build());
   }
 
   /**

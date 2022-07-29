@@ -14,9 +14,13 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** This class implements the {@link Parser}. */
 public class ParserImpl implements Parser {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ParserImpl.class);
 
   /** The NLP pipeline processor. */
   private final StanfordCoreNLP pipeline;
@@ -63,7 +67,7 @@ public class ParserImpl implements Parser {
     for (CoreMap sentence : sentences) {
       /** Get semantic dependency graph */
       SemanticGraph dependencyParse = sentence.get(BasicDependenciesAnnotation.class);
-      System.out.println(dependencyParse);
+      LOGGER.info("dependencyParse: {}", dependencyParse);
       /** Try to interpret the graph as a command */
       Command command = interpreter.intepret(dependencyParse);
       /** Replace parameter value (if any) */
@@ -71,7 +75,7 @@ public class ParserImpl implements Parser {
         command.setParameter(parameters.get(command.getParameter()));
       }
       // Print action
-      System.out.println(command);
+      LOGGER.info("command: {}", command);
       // add action to list
       commands.add(command);
     }
@@ -89,7 +93,6 @@ public class ParserImpl implements Parser {
     Map<String, String> parameters = new HashMap<>();
     for (int i = 0; i < instructions.size(); ++i) {
       String instruction = instructions.get(i);
-      System.out.print("Instruction: " + instruction);
       int parameterStart = instruction.indexOf("\"");
       if (parameterStart >= 0) {
         int parameterEnd = instruction.indexOf("\"", parameterStart + 1);
@@ -97,18 +100,19 @@ public class ParserImpl implements Parser {
           throw new InstructionParsingException(
               "Parameter must have a closing quote: " + instruction);
         }
-        /** Replace parameter */
+        /** Register parameter */
         String parameterName = "param" + i;
         String parameterValue = instruction.substring(parameterStart + 1, parameterEnd);
         parameters.put(parameterName, parameterValue);
-        instructions.set(
-            i,
+        /** Replace parameters */
+        String newInstruction =
             instruction.substring(0, parameterStart)
                 + parameterName
-                + instruction.substring(parameterEnd + 1));
-        System.out.println(" --> " + instructions.get(i));
+                + instruction.substring(parameterEnd + 1);
+        instructions.set(i, newInstruction);
+        LOGGER.info("Instruction: {} --> {}", instruction, instructions.get(i));
       } else {
-        System.out.println();
+        LOGGER.info("Instruction: {}", instruction);
       }
     }
     return parameters;

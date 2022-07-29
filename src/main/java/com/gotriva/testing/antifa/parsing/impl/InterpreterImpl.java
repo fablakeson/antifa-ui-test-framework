@@ -4,6 +4,7 @@ import static com.gotriva.testing.antifa.model.Command.ComponentType.COMMAND;
 import static com.gotriva.testing.antifa.model.Command.ComponentType.OBJECT;
 import static com.gotriva.testing.antifa.model.Command.ComponentType.PARAMETER;
 import static com.gotriva.testing.antifa.model.Command.ComponentType.TYPE;
+import static com.gotriva.testing.antifa.model.Step.builder;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.COMPOUND_MODIFIER;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.DIRECT_OBJECT;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.OBLIQUE_MODIFIER;
@@ -15,10 +16,14 @@ import com.gotriva.testing.antifa.model.SemanticPath;
 import com.gotriva.testing.antifa.parsing.Interpreter;
 import edu.stanford.nlp.semgraph.SemanticGraph;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** This class implements the {@link Interpreter}. */
 public class InterpreterImpl implements Interpreter {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(InterpreterImpl.class);
 
   // TODO: Correct the semantic paths
 
@@ -33,69 +38,69 @@ public class InterpreterImpl implements Interpreter {
           /** Actions with parameter + type and composite object names */
           SemanticPath.builder()
               /** COMMAND -- obj --> TYPE */
-              .newStep(COMMAND, DIRECT_OBJECT, TYPE)
+              .newStep(builder().from(COMMAND).with(DIRECT_OBJECT).to(TYPE))
               /** TYPE -- compound --> OBJECT */
-              .newStep(TYPE, COMPOUND_MODIFIER, OBJECT)
+              .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
               /** OBJECT -- compound --> OBJECT */
-              .newStep(OBJECT, COMPOUND_MODIFIER, OBJECT)
+              .newStep(builder().from(OBJECT).with(COMPOUND_MODIFIER).to(OBJECT))
               /** COMMAND -- obl --> PARAMETER */
-              .newStep(COMMAND, OBLIQUE_MODIFIER, PARAMETER)
+              .newStep(builder().from(COMMAND).with(OBLIQUE_MODIFIER).to(PARAMETER))
               /** Ex: open the login page at theUrl. */
               .build(),
           SemanticPath.builder()
               /** COMMAND -- obj --> PARAMETER */
-              .newStep(COMMAND, DIRECT_OBJECT, PARAMETER)
+              .newStep(builder().from(COMMAND).with(DIRECT_OBJECT).to(PARAMETER))
               /** COMMAND -- obl --> TYPE */
-              .newStep(COMMAND, OBLIQUE_MODIFIER, TYPE)
+              .newStep(builder().from(COMMAND).with(OBLIQUE_MODIFIER).to(TYPE))
               /** TYPE -- compound --> OBJECT */
-              .newStep(TYPE, COMPOUND_MODIFIER, OBJECT)
+              .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
               /** OBJECT -- compound --> OBJECT */
-              .newStep(OBJECT, COMPOUND_MODIFIER, OBJECT)
+              .newStep(builder().from(OBJECT).with(COMPOUND_MODIFIER).to(OBJECT))
               /** Ex: write passwordText to the passoword input */
               .build(),
 
           /** Actions with parameter + type */
           SemanticPath.builder()
               /** COMMAND -- obj --> TYPE */
-              .newStep(COMMAND, DIRECT_OBJECT, TYPE)
+              .newStep(builder().from(COMMAND).with(DIRECT_OBJECT).to(TYPE))
               /** TYPE -- compound --> OBJECT */
-              .newStep(TYPE, COMPOUND_MODIFIER, OBJECT)
+              .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
               /** COMMAND -- obl --> PARAMETER */
-              .newStep(COMMAND, OBLIQUE_MODIFIER, PARAMETER)
+              .newStep(builder().from(COMMAND).with(OBLIQUE_MODIFIER).to(PARAMETER))
               /** Ex: open the login page at theUrl. */
               .build(),
           SemanticPath.builder()
               /** COMMAND -- obj --> PARAMETER */
-              .newStep(COMMAND, DIRECT_OBJECT, PARAMETER)
+              .newStep(builder().from(COMMAND).with(DIRECT_OBJECT).to(PARAMETER))
               /** COMMAND -- obl --> TYPE */
-              .newStep(COMMAND, OBLIQUE_MODIFIER, TYPE)
+              .newStep(builder().from(COMMAND).with(OBLIQUE_MODIFIER).to(TYPE))
               /** TYPE -- compound --> OBJECT */
-              .newStep(TYPE, COMPOUND_MODIFIER, OBJECT)
+              .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
               /** Ex: write passwordText to the passoword input */
               .build(),
 
           /** Actions with parameter and no type */
           SemanticPath.builder()
               /** COMMAND -- obj --> PARAMETER */
-              .newStep(COMMAND, DIRECT_OBJECT, PARAMETER)
+              .newStep(builder().from(COMMAND).with(DIRECT_OBJECT).to(PARAMETER))
               /** PARAMETER -- obj --> OBJECT */
-              .newStep(PARAMETER, COMPOUND_MODIFIER, OBJECT)
+              .newStep(builder().from(PARAMETER).with(COMPOUND_MODIFIER).to(OBJECT))
               /** Ex: write the passoword passwordText */
               .build(),
 
           /** Actions with type without paramter */
           SemanticPath.builder()
               /** COMMAND -- obl --> TYPE */
-              .newStep(COMMAND, OBLIQUE_MODIFIER, TYPE)
+              .newStep(builder().from(COMMAND).with(OBLIQUE_MODIFIER).to(TYPE))
               /** TYPE -- compound --> OBJECT */
-              .newStep(TYPE, COMPOUND_MODIFIER, OBJECT)
+              .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
               /** Ex: click on the login button */
               .build(),
 
           /** Actions without type and parameter */
           SemanticPath.builder()
               /** COMMAND -- obl --> OBJECT */
-              .newStep(COMMAND, OBLIQUE_MODIFIER, OBJECT)
+              .newStep(builder().from(COMMAND).with(OBLIQUE_MODIFIER).to(OBJECT))
               /** Ex: click on login */
               .build());
 
@@ -113,31 +118,13 @@ public class InterpreterImpl implements Interpreter {
     /** Try to interpret dependency graph. */
     return SEMANTIC_PATHS.stream()
         /** Try each semantic path traversal interpretation. */
-        .map(path -> tryTraverse(path, context))
-        /** Filter the fails */
-        .filter(Objects::nonNull)
-        /** Get the first succeded interpretation. */
+        .map(path -> path.traverse(context))
+        .filter(Optional::isPresent)
         .findFirst()
-        /** Throw an exception if not interpretation found. */
+        .map(Optional::get)
         .orElseThrow(
             () ->
                 new InterpretationException(
                     "No interpretations found for given context: " + context));
-  }
-
-  /**
-   * Tries to traverse the {@link SemanticGraph} using the given {@link SemanticPath}} to interpret
-   * the {@link Command}.
-   *
-   * @param path the interpretation path
-   * @param graph the semantic dependency graph
-   * @return the interpreted action if complete or null in case of {@link Exception}
-   */
-  private Command tryTraverse(SemanticPath path, SemanticGraph graph) {
-    try {
-      return path.traverse(graph);
-    } catch (Exception ex) {
-      return null;
-    }
   }
 }

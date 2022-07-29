@@ -1,5 +1,6 @@
 package com.gotriva.testing.antifa.model;
 
+import com.gotriva.testing.antifa.exception.ExecutionException;
 import com.gotriva.testing.antifa.factory.InteractableFactory;
 import java.io.Closeable;
 import java.net.URL;
@@ -17,13 +18,13 @@ public class ExecutionContext implements Closeable {
   private WebDriver driver;
 
   /** The interactable factory */
-  private InteractableFactory interactableFactory;
+  private InteractableFactory factory;
 
   /** Default constructor. */
-  public ExecutionContext(WebDriver driver, InteractableFactory interactableFactory) {
+  public ExecutionContext(WebDriver driver, InteractableFactory factory) {
     this.pageStack = new LinkedList<>();
     this.driver = driver;
-    this.interactableFactory = interactableFactory;
+    this.factory = factory;
   }
 
   /**
@@ -39,7 +40,7 @@ public class ExecutionContext implements Closeable {
   public GenericPageObject closeCurrentPage() {
     /** Checks if context has any open page. */
     if (pageStack.isEmpty()) {
-      throw new RuntimeException("No pages to close.");
+      throw new ExecutionException("No pages to close.");
     }
     pageStack.pollFirst();
     return getCurrentPage();
@@ -48,7 +49,8 @@ public class ExecutionContext implements Closeable {
   /** Creates a new page on context. */
   public GenericPageObject openPage(String name) {
     /** Adds new page to the top. */
-    pageStack.addFirst(GenericPageObject.newPage(name, driver, interactableFactory));
+    pageStack.addFirst(
+        GenericPageObject.builder().setName(name).setDriver(driver).setFactory(factory).build());
     /** Returns added page. */
     return getCurrentPage();
   }
@@ -56,7 +58,13 @@ public class ExecutionContext implements Closeable {
   /** Creates a new page on context for the given URL. */
   public GenericPageObject openPage(String name, URL url) {
     /** Adds new page to the top. */
-    pageStack.addFirst(GenericPageObject.newPage(name, url, driver, interactableFactory));
+    pageStack.addFirst(
+        GenericPageObject.builder()
+            .setName(name)
+            .setAddress(url)
+            .setDriver(driver)
+            .setFactory(factory)
+            .build());
     /** Returns added page. */
     return getCurrentPage();
   }

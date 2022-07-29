@@ -1,7 +1,7 @@
 {
     "java.format.settings.url": "/home/fabio/Documentos/Projetos/vscode/eclipse-java-google-style.xml",
     "[java]": {
-        "editor.tabSize": 4
+        "editor.tabSize": 2
     },
     "emeraldwalk.runonsave": {
         "commands": [

@@ -12,6 +12,56 @@ import org.openqa.selenium.WebElement;
 /** A page object model generic implementation. */
 public class GenericPageObject {
 
+  /** A builder class for {@link GenericPageObject} */
+  public static class Builder {
+
+    /** The builder name. */
+    private String name;
+    /** The builder address. */
+    private URL address;
+    /** The buidler driver. */
+    private WebDriver driver;
+    /** The builder factory. */
+    private InteractableFactory factory;
+
+    /** The page object web elements. */
+    private Builder() {}
+
+    /**
+     * @return a new builder instance.
+     */
+    private static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public Builder setName(String name) {
+      this.name = name;
+      return this;
+    }
+
+    public Builder setAddress(URL address) {
+      this.address = address;
+      return this;
+    }
+
+    public Builder setDriver(WebDriver driver) {
+      this.driver = driver;
+      return this;
+    }
+
+    public Builder setFactory(InteractableFactory factory) {
+      this.factory = factory;
+      return this;
+    }
+
+    public GenericPageObject build() {
+      if (address != null) {
+        return new GenericPageObject(name, address, driver, factory);
+      }
+      return new GenericPageObject(name, driver, factory);
+    }
+  }
+
   /** The name of this page object. */
   private String name;
 
@@ -51,30 +101,10 @@ public class GenericPageObject {
   }
 
   /**
-   * Generates a new page object model.
-   *
-   * @param name the page name
-   * @param driver the session webdriver
-   * @param factory the interactable factory
-   * @return
+   * @return the builder isntance.
    */
-  public static GenericPageObject newPage(
-      String name, WebDriver driver, InteractableFactory factory) {
-    return new GenericPageObject(name, driver, factory);
-  }
-
-  /**
-   * Generates a new page object model opening the given URL address.
-   *
-   * @param name the page name
-   * @param address the URL address
-   * @param driver the session webdriver
-   * @param factory the interactable factory
-   * @return
-   */
-  public static GenericPageObject newPage(
-      String name, URL address, WebDriver driver, InteractableFactory factory) {
-    return new GenericPageObject(name, address, driver, factory);
+  public static Builder builder() {
+    return Builder.newBuilder();
   }
 
   /**

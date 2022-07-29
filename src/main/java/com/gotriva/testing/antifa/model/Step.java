@@ -7,6 +7,47 @@ import edu.stanford.nlp.trees.GrammaticalRelation;
 /** This class represents a step on the {@link SemanticPath} */
 public class Step {
 
+  /** Builder class for {@link Step} */
+  public static class Builder {
+
+    /** The builder source. */
+    private Command.ComponentType source;
+
+    /** The builder edge. */
+    private GrammaticalRelation edge;
+
+    /** The builder destination. */
+    private Command.ComponentType destination;
+
+    private Builder() {}
+
+    /**
+     * @return a new builder instance
+     */
+    public static Builder newBuilder() {
+      return new Builder();
+    }
+
+    public Builder from(Command.ComponentType source) {
+      this.source = source;
+      return this;
+    }
+
+    public Builder with(GrammaticalRelation edge) {
+      this.edge = edge;
+      return this;
+    }
+
+    public Builder to(Command.ComponentType destination) {
+      this.destination = destination;
+      return this;
+    }
+
+    public Step build() {
+      return new Step(source, edge, destination);
+    }
+  }
+
   /** The source of the step. */
   private final Command.ComponentType source;
 
@@ -23,8 +64,11 @@ public class Step {
     this.destination = destination;
   }
 
-  public static Step of(ComponentType source, GrammaticalRelation edge, ComponentType destination) {
-    return new Step(source, edge, destination);
+  /**
+   * @return the builder instance
+   */
+  public static Builder builder() {
+    return Builder.newBuilder();
   }
 
   /** Getters */
