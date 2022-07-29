@@ -11,19 +11,19 @@ import org.openqa.selenium.interactions.Actions;
 /** This class represents an interactable label on UI. */
 public class Label extends AbstractElement implements Readable, Hoverable {
 
-    public Label(WebElement element) {
-        super(element);
-    }
+  public Label(WebElement element) {
+    super(element);
+  }
 
-    @Override
-    public void hoverOn() {
-        WebDriver driver = ((WrapsDriver)element).getWrappedDriver();
-        Actions action = new Actions(driver);
-        action.moveToElement(element).perform();
-    }
+  @Override
+  public void hoverOn() {
+    WebDriver driver = ((WrapsDriver) element).getWrappedDriver();
+    Actions action = new Actions(driver);
+    action.moveToElement(element).perform();
+  }
 
-    @Override
-    public String read() {
-        return element.getText();
-    }   
+  @Override
+  public String read() {
+    return element.getText();
+  }
 }

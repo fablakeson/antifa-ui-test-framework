@@ -4,76 +4,77 @@ import java.time.LocalDateTime;
 
 /** This class represents a step on {@link ExecutionResult}. */
 public class ExecutionStep {
-    
-    public enum Result {
-        /** Step has executed successfully. */
-        SUCCESS,
-        /** Step has failed on exection. */
-        FAIL
-    }
 
-    /** The interpreted command for this instruction. */
-    private final Command command;
+  // TODO: Add builder to execution step
 
-    /** The execution step start time. */
-    private final LocalDateTime startTime;
+  public enum Result {
+    /** Step has executed successfully. */
+    SUCCESS,
+    /** Step has failed on exection. */
+    FAIL
+  }
 
-    /** The execution step end time. */
-    private final LocalDateTime endTime;
+  /** The interpreted command for this instruction. */
+  private final Command command;
 
-    /** The execution result status. */
-    private final Result result;
+  /** The execution step start time. */
+  private final LocalDateTime startTime;
 
-    /** The execution step snapshot. */
-    private final String snapshot;
+  /** The execution step end time. */
+  private final LocalDateTime endTime;
 
-    /** The default constructor */
-    public ExecutionStep(
-            Command command, 
-            LocalDateTime startTime, 
-            LocalDateTime endTime,
-            Result result, 
-            String snapshot) {
-        this.command = command;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.result = result;
-        this.snapshot = snapshot;
-    }
+  /** The execution result status. */
+  private final Result result;
 
-    /**
-     * @return true if step was a fail.
-     */
-    public boolean isFail() {
-        return result == Result.FAIL;
-    }
+  /** The execution step snapshot. */
+  private final String snapshot;
 
-    /**
-     * @return true if step was a success.
-     */
-    public boolean isSuccess() {
-        return result == Result.SUCCESS;
-    }
+  /** The default constructor */
+  public ExecutionStep(
+      Command command,
+      LocalDateTime startTime,
+      LocalDateTime endTime,
+      Result result,
+      String snapshot) {
+    this.command = command;
+    this.startTime = startTime;
+    this.endTime = endTime;
+    this.result = result;
+    this.snapshot = snapshot;
+  }
 
-    /** Getters */
+  /**
+   * @return true if step was a fail.
+   */
+  public boolean isFail() {
+    return result == Result.FAIL;
+  }
 
-    public Command getCommand() {
-        return command;
-    }
+  /**
+   * @return true if step was a success.
+   */
+  public boolean isSuccess() {
+    return result == Result.SUCCESS;
+  }
 
-    public LocalDateTime getStartTime() {
-        return startTime;
-    }
+  /** Getters */
+  public Command getCommand() {
+    return command;
+  }
 
-    public LocalDateTime getEndTime() {
-        return endTime;
-    }
+  public LocalDateTime getStartTime() {
+    return startTime;
+  }
 
-    public Result getResult() {
-        return result;
-    }
+  public LocalDateTime getEndTime() {
+    return endTime;
+  }
 
-    public String getSnapshot() {
-        return snapshot;
-    }
+  public Result getResult() {
+    return result;
+  }
+
+  public String getSnapshot() {
+    return snapshot;
+  }
 }

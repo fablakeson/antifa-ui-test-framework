@@ -5,21 +5,19 @@ import com.gotriva.testing.antifa.element.Readable;
 import com.gotriva.testing.antifa.element.Writable;
 import org.openqa.selenium.WebElement;
 
-
 public class Text extends AbstractElement implements Readable, Writable {
 
-    public Text(WebElement element) {
-        super(element);
-    }
+  public Text(WebElement element) {
+    super(element);
+  }
 
-    @Override
-    public void write(CharSequence text) {
-        element.sendKeys(text);
-    }
+  @Override
+  public void write(CharSequence text) {
+    element.sendKeys(text);
+  }
 
-    @Override
-    public String read() {
-        return element.getText();
-    }
-    
+  @Override
+  public String read() {
+    return element.getText();
+  }
 }

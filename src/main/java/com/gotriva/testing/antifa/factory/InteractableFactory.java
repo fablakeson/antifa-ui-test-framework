@@ -7,44 +7,42 @@ import java.util.Map;
 import java.util.function.Function;
 import org.openqa.selenium.WebElement;
 
-
 /** This class creates interactables from given type name or default action. */
 public class InteractableFactory {
 
-    /** */
-    private Map<String, Function<WebElement, Interactable>> typeMap;
+  /** */
+  private Map<String, Function<WebElement, Interactable>> typeMap;
 
-    public InteractableFactory() {
-        this.typeMap = new HashMap<>();
-    }
+  public InteractableFactory() {
+    this.typeMap = new HashMap<>();
+  }
 
-    /**
-     * Registers a creator function for a given type name.
-     * 
-     * @param <T>
-     * @param type
-     * @param creator
-     * @return
-     */
-    public <T extends Interactable> InteractableFactory registerInteractableType(
-            String type,
-            Function<WebElement, Interactable> creator) {
-        typeMap.put(type, creator);
-        return this;
-    }
+  /**
+   * Registers a creator function for a given type name.
+   *
+   * @param <T>
+   * @param type
+   * @param creator
+   * @return
+   */
+  public <T extends Interactable> InteractableFactory registerInteractableType(
+      String type, Function<WebElement, Interactable> creator) {
+    typeMap.put(type, creator);
+    return this;
+  }
 
-    /**
-     * Creates an interactable from a type name.
-     * 
-     * @param element
-     * @param typeName
-     * @return
-     */
-    public Interactable createInteractableFromType(WebElement element, String typeName) {
-        Function<WebElement, Interactable> creator = typeMap.get(typeName);
-        if (creator == null) {
-            throw new InteractableTypeNotFoundException(typeName);
-        }
-        return creator.apply(element);
+  /**
+   * Creates an interactable from a type name.
+   *
+   * @param element
+   * @param typeName
+   * @return
+   */
+  public Interactable createInteractableFromType(WebElement element, String typeName) {
+    Function<WebElement, Interactable> creator = typeMap.get(typeName);
+    if (creator == null) {
+      throw new InteractableTypeNotFoundException(typeName);
     }
+    return creator.apply(element);
+  }
 }
