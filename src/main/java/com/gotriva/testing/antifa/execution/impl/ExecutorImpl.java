@@ -11,13 +11,18 @@ import com.gotriva.testing.antifa.model.ExecutionContext;
 import com.gotriva.testing.antifa.model.ExecutionResult;
 import com.gotriva.testing.antifa.model.ExecutionStep;
 import com.gotriva.testing.antifa.model.GenericPageObject;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import org.openqa.selenium.By;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** This class implements {@link Executor}. */
 public class ExecutorImpl implements Executor {
+
+  private static final Logger LOGGER = LoggerFactory.getLogger(ExecutorImpl.class);
 
   /** The handler strategies for the commands names. */
   private final Map<String, ActionHandler> handlers;
@@ -42,7 +47,7 @@ public class ExecutorImpl implements Executor {
   @Override
   @SuppressWarnings("unchecked")
   public ExecutionResult execute(List<Command> commands) {
-    System.out.println("Starting execution...");
+    LOGGER.info("Starting execution...");
     /** Validate execution state. */
     if (status != Status.NOT_STARTED) {
       throw new IllegalStateException("Executor has already started execution.");
@@ -54,7 +59,6 @@ public class ExecutorImpl implements Executor {
     try (context) {
       /** Commands must be executed at the given order. */
       for (Command command : commands) {
-        System.out.print("Executing command: " + command + "...");
         /** Start and end time for this command execution. */
         final ExecutionStep.Builder executionStep =
             ExecutionStep.builder().setCommand(command).startNow();
@@ -86,13 +90,12 @@ public class ExecutorImpl implements Executor {
           String snapshot = null;
           /** This execution step was successful. */
           result.addStep(executionStep.endNow().withSuccess().setSnapshot(snapshot).build());
-
-          System.out.println("SUCCESS");
+          LOGGER.info("Executing command: {} ... SUCCESS", command);
         } catch (RuntimeException re) {
           /** This execution step was failed. */
           result.addStep(executionStep.endNow().withFail().build());
-          System.out.println("FAIL");
-          re.printStackTrace();
+          LOGGER.info("Executing command: {} ... FAIL", command);
+          LOGGER.error("Error executing command.", re);
           /** Break the command execution loop */
           break;
         } finally {
@@ -102,7 +105,7 @@ public class ExecutorImpl implements Executor {
     }
     /** Set final execution status */
     status = Status.FINISHED;
-    System.out.println("Finishing execution...");
+    LOGGER.info("Finishing execution...");
 
     return result;
   }
@@ -159,8 +162,8 @@ public class ExecutorImpl implements Executor {
       /** Fail if type is not present */
       if (Objects.isNull(command.getType())) {
         throw new ExecutionException(
-            String.format(
-                "Command 'type' must be present when object '%s' is referenced at first time.",
+            MessageFormat.format(
+                "Command 'type' must be present when object '{0}' is referenced at first time.",
                 command.getObject()));
       }
       /** Creates the object on this page */

@@ -40,13 +40,12 @@ public class MyMojo extends AbstractMojo {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MyMojo.class);
 
-  // TODO: Refactor sysouts into Logger. (ongoing)
   // TODO: Add read execution from text files support.
   // TODO: Add post execution report support.
   // TODO: Add HTML report.
-  // TODO: Add plugin parameterization support.
+  // TODO: Add plugin properties parameterization support.
   // TODO: Add unitary tests to each class.
-  // TODO: Remove unnecessary comments
+  // TODO: Remove unnecessary comments (like this)
 
   /**
    * Location of the file.

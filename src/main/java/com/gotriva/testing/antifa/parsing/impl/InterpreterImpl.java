@@ -17,13 +17,9 @@ import com.gotriva.testing.antifa.parsing.Interpreter;
 import edu.stanford.nlp.semgraph.SemanticGraph;
 import java.util.List;
 import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /** This class implements the {@link Interpreter}. */
 public class InterpreterImpl implements Interpreter {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(InterpreterImpl.class);
 
   // TODO: Correct the semantic paths
 
