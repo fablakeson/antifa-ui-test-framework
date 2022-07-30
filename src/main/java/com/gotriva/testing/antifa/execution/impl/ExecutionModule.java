@@ -12,7 +12,7 @@ import com.google.inject.Singleton;
 import com.gotriva.testing.antifa.execution.ExecutionContext;
 import com.gotriva.testing.antifa.execution.Executor;
 import com.gotriva.testing.antifa.factory.impl.FactorySubModule;
-import com.gotriva.testing.antifa.factory.impl.InteractableAbstractElementFactory;
+import com.gotriva.testing.antifa.factory.impl.InteractableElementFactory;
 import com.gotriva.testing.antifa.factory.impl.FactorySubModule.Factory;
 import com.gotriva.testing.antifa.handler.ActionHandler;
 import com.gotriva.testing.antifa.handler.impl.HandlerSubModule;
@@ -78,7 +78,7 @@ public class ExecutionModule extends AbstractModule {
   @Provides
   @Context
   public ExecutionContext provideContext(
-      @Driver WebDriver driver, @Factory InteractableAbstractElementFactory factory) {
+      @Driver WebDriver driver, @Factory InteractableElementFactory factory) {
     return new ExecutionContextImpl(driver, factory);
   }
 

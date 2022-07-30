@@ -2,7 +2,7 @@ package com.gotriva.testing.antifa.execution.impl;
 
 import com.gotriva.testing.antifa.exception.ExecutionException;
 import com.gotriva.testing.antifa.execution.ExecutionContext;
-import com.gotriva.testing.antifa.factory.impl.InteractableAbstractElementFactory;
+import com.gotriva.testing.antifa.factory.impl.InteractableElementFactory;
 import com.gotriva.testing.antifa.model.GenericPageObject;
 
 import java.net.URL;
@@ -23,10 +23,10 @@ public class ExecutionContextImpl implements ExecutionContext {
   private WebDriver driver;
 
   /** The interactable factory */
-  private InteractableAbstractElementFactory factory;
+  private InteractableElementFactory factory;
 
   /** Default constructor. */
-  ExecutionContextImpl(WebDriver driver, InteractableAbstractElementFactory factory) {
+  ExecutionContextImpl(WebDriver driver, InteractableElementFactory factory) {
     this.pageStack = new LinkedList<>();
     this.driver = driver;
     this.factory = factory;

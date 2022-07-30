@@ -72,8 +72,8 @@ public class FactorySubModule extends AbstractModule {
     @Provides
     @Singleton
     @Factory
-    public InteractableAbstractElementFactory provideFactory(
+    public InteractableElementFactory provideFactory(
             @ElementFactoryMap Map<String, AbstractElementFactory<?>> typeMap) {
-        return new InteractableAbstractElementFactory(typeMap);
+        return new InteractableElementFactory(typeMap);
     }
 }

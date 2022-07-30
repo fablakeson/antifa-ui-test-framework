@@ -1,7 +1,7 @@
 package com.gotriva.testing.antifa.model;
 
 import com.gotriva.testing.antifa.element.Interactable;
-import com.gotriva.testing.antifa.factory.impl.InteractableAbstractElementFactory;
+import com.gotriva.testing.antifa.factory.impl.InteractableElementFactory;
 
 import java.net.URL;
 import java.util.HashMap;
@@ -23,7 +23,7 @@ public class GenericPageObject {
     /** The buidler driver. */
     private WebDriver driver;
     /** The builder factory. */
-    private InteractableAbstractElementFactory factory;
+    private InteractableElementFactory factory;
 
     /** The page object web elements. */
     private Builder() {
@@ -51,7 +51,7 @@ public class GenericPageObject {
       return this;
     }
 
-    public Builder setFactory(InteractableAbstractElementFactory factory) {
+    public Builder setFactory(InteractableElementFactory factory) {
       this.factory = factory;
       return this;
     }
@@ -74,13 +74,13 @@ public class GenericPageObject {
   private WebDriver driver;
 
   /** The interactable factory instance. */
-  private InteractableAbstractElementFactory factory;
+  private InteractableElementFactory factory;
 
   /** The page object web elements. */
   Map<String, Interactable> elements;
 
   /** Constructor for pages that not opens a new URL. */
-  private GenericPageObject(String name, WebDriver driver, InteractableAbstractElementFactory factory) {
+  private GenericPageObject(String name, WebDriver driver, InteractableElementFactory factory) {
     this.name = name;
     this.driver = driver;
     this.factory = factory;
@@ -96,7 +96,7 @@ public class GenericPageObject {
    * @param factory the interactable factory
    */
   private GenericPageObject(
-      String name, URL address, WebDriver driver, InteractableAbstractElementFactory factory) {
+      String name, URL address, WebDriver driver, InteractableElementFactory factory) {
     this(name, driver, factory);
     this.address = address;
     navigateToAddress();

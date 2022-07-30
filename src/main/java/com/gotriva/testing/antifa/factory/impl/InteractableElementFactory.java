@@ -8,16 +8,18 @@ import java.util.Map;
 import org.openqa.selenium.WebElement;
 
 /**
- * This class creates interactables from abstract elements given type name or
+ * This class creates interactables from web elements given type name or
  * default action.
  */
-public class InteractableAbstractElementFactory {
+public class InteractableElementFactory {
+
+  // TODO: add abstract factory interface with composite design pattern
 
   /** The mapped type creators */
   private Map<String, AbstractElementFactory<?>> elementFactoryMap;
 
   /** Default constructor */
-  InteractableAbstractElementFactory(Map<String, AbstractElementFactory<?>> elementFactoryMap) {
+  InteractableElementFactory(Map<String, AbstractElementFactory<?>> elementFactoryMap) {
     this.elementFactoryMap = elementFactoryMap;
   }
 
