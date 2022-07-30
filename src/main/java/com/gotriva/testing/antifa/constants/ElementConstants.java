@@ -24,4 +24,14 @@ public class ElementConstants {
   public static final String RADIO = "radio";
 
   public static final String OPTION = "option";
+
+  public static final String RANGE = "range";
+
+  public static final String INPUT = "input";
+
+  public static final String FIELD = "field";
+
+  public static final String TEXTBOX = "textbox";
+
+  public static final String PASSWORD = "password";
 }

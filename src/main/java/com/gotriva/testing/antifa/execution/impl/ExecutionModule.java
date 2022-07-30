@@ -17,12 +17,16 @@ import com.google.common.collect.ImmutableMap;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import com.gotriva.testing.antifa.constants.ElementConstants;
 import com.gotriva.testing.antifa.element.impl.Button;
 import com.gotriva.testing.antifa.element.impl.Checkbox;
 import com.gotriva.testing.antifa.element.impl.File;
 import com.gotriva.testing.antifa.element.impl.Image;
 import com.gotriva.testing.antifa.element.impl.Label;
+import com.gotriva.testing.antifa.element.impl.Password;
 import com.gotriva.testing.antifa.element.impl.Radio;
+import com.gotriva.testing.antifa.element.impl.Range;
+import com.gotriva.testing.antifa.element.impl.Text;
 import com.gotriva.testing.antifa.execution.Executor;
 import com.gotriva.testing.antifa.factory.AbstractElementFactory;
 import com.gotriva.testing.antifa.factory.InteractableFactory;
@@ -107,6 +111,14 @@ public class ExecutionModule extends AbstractModule {
         /** Option type names */
         .put(RADIO, (element) -> new Radio(element))
         .put(OPTION, (element) -> new Radio(element))
+        /** Range type names */
+        .put(ElementConstants.RANGE, (element) -> new Range(element))
+        /** Text type names */
+        .put(ElementConstants.INPUT, (element) -> new Text(element))
+        .put(ElementConstants.FIELD, (element) -> new Text(element))
+        .put(ElementConstants.TEXTBOX, (element) -> new Text(element))
+        /** Password type names */
+        .put(ElementConstants.PASSWORD, (element) -> new Password(element))
         /** returns map */
         .build();
   }

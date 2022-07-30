@@ -45,6 +45,7 @@ public class MyMojo extends AbstractMojo {
   // TODO: Add HTML report.
   // TODO: Add plugin properties parameterization support.
   // TODO: Add unitary tests to each class.
+  // TODO: Change LOGGER.info to LOGGER.debug
   // TODO: Remove unnecessary comments (like this)
 
   /**
@@ -69,8 +70,8 @@ public class MyMojo extends AbstractMojo {
     List<String> instructions =
         Arrays.asList(
             "open the login page at \"http://localhost:8000/login.html\".",
-            "write the username \"fabiojunior@gmail.com.br\".",
-            "write the password \"password123\".",
+            "write \"fabiojunior@gmail.com.br\" to username input.",
+            "write \"password123\" to password input.",
             "write \"1234 1234 1234 1234\" to the credit card input.",
             "click on the login button.");
 
