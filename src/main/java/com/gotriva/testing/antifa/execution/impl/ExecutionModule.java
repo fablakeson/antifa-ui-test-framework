@@ -34,7 +34,6 @@ import com.gotriva.testing.antifa.handler.ActionHandler;
 import com.gotriva.testing.antifa.handler.impl.HandlerSubModule;
 import com.gotriva.testing.antifa.handler.impl.HandlerSubModule.HandlersMap;
 import com.gotriva.testing.antifa.model.ExecutionContext;
-import com.gotriva.testing.antifa.model.ExecutionResult;
 import java.lang.annotation.Retention;
 import java.util.Map;
 import java.util.Properties;
@@ -64,10 +63,6 @@ public class ExecutionModule extends AbstractModule {
   @Qualifier
   @Retention(RUNTIME)
   @interface Context {}
-
-  @Qualifier
-  @Retention(RUNTIME)
-  @interface Result {}
 
   @Override
   protected void configure() {
@@ -139,16 +134,9 @@ public class ExecutionModule extends AbstractModule {
   }
 
   @Provides
-  @Result
-  public ExecutionResult provideResult() {
-    return new ExecutionResult();
-  }
-
-  @Provides
   public Executor providExecutor(
       @HandlersMap Map<String, ActionHandler> handlers,
-      @Context ExecutionContext context,
-      @Result ExecutionResult result) {
-    return new ExecutorImpl(handlers, context, result);
+      @Context ExecutionContext context) {
+    return new ExecutorImpl(handlers, context);
   }
 }

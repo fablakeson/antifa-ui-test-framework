@@ -30,38 +30,27 @@ public class ExecutorImpl implements Executor {
   /** The execution context for this execution. */
   private final ExecutionContext context;
 
-  /** The result of this execution. */
-  private final ExecutionResult result;
-
-  /** The execution status. */
-  private Status status = Status.NOT_STARTED;
-
   /** Default constructor. */
   ExecutorImpl(
-      Map<String, ActionHandler> handlers, ExecutionContext context, ExecutionResult result) {
+      Map<String, ActionHandler> handlers, ExecutionContext context) {
     this.handlers = handlers;
     this.context = context;
-    this.result = result;
   }
 
   @Override
   @SuppressWarnings("unchecked")
   public ExecutionResult execute(List<Command> commands) {
     LOGGER.info("Starting execution...");
-    /** Validate execution state. */
-    if (status != Status.NOT_STARTED) {
-      throw new IllegalStateException("Executor has already started execution.");
-    }
-    /** Set execution status. */
-    status = Status.EXECUTING;
+
+    // TODO: Add builder pattern
+    ExecutionResult result = new ExecutionResult();
 
     /** Within execution context */
     try (context) {
       /** Commands must be executed at the given order. */
       for (Command command : commands) {
         /** Start and end time for this command execution. */
-        final ExecutionStep.Builder executionStep =
-            ExecutionStep.builder().setCommand(command).startNow();
+        final ExecutionStep.Builder executionStep = ExecutionStep.builder().setCommand(command).startNow();
         /** Try to execute the command */
         try {
           /** Get handler strategy for this command. */
@@ -80,7 +69,6 @@ public class ExecutorImpl implements Executor {
             handlePageObject(
                 (PageObjectActionHandler) handler, command.getObject(), command.getParameter());
           } else {
-            // TODO: Add correct exception
             /** Handler not reconigsed */
             throw new ExecutionException(
                 "Handler for command '" + command.getCommand() + "' not found.");
@@ -98,26 +86,14 @@ public class ExecutorImpl implements Executor {
           LOGGER.error("Error executing command.", re);
           /** Break the command execution loop */
           break;
-        } finally {
-          result.finish();
-        }
-      }
+        } 
+      } 
+    } finally {
+      result.finish();
     }
     /** Set final execution status */
-    status = Status.FINISHED;
     LOGGER.info("Finishing execution...");
 
-    return result;
-  }
-
-  /** Getters */
-  @Override
-  public Status getStatus() {
-    return status;
-  }
-
-  @Override
-  public ExecutionResult getResult() {
     return result;
   }
 
@@ -138,9 +114,9 @@ public class ExecutorImpl implements Executor {
    * Handles the interactable with the given handler.
    *
    * @param <T>
-   * @param handler the given handler.
+   * @param handler      the given handler.
    * @param interactable the interactable.
-   * @param parameter the parameter
+   * @param parameter    the parameter
    */
   private <T extends Interactable> void handleInteractable(
       InteractableActionHandler<T> handler, T interactable, String parameter) {
@@ -148,7 +124,8 @@ public class ExecutorImpl implements Executor {
   }
 
   /**
-   * Gets the interactable on context for given command. Creates one if it does not exists.
+   * Gets the interactable on context for given command. Creates one if it does
+   * not exists.
    *
    * @param command
    * @return
