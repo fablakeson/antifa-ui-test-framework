@@ -1,18 +1,23 @@
-package com.gotriva.testing.antifa.factory;
+package com.gotriva.testing.antifa.factory.impl;
 
 import com.gotriva.testing.antifa.element.Interactable;
 import com.gotriva.testing.antifa.exception.InteractableTypeNotFoundException;
+import com.gotriva.testing.antifa.factory.AbstractElementFactory;
+
 import java.util.Map;
 import org.openqa.selenium.WebElement;
 
-/** This class creates interactables from given type name or default action. */
-public class InteractableFactory {
+/**
+ * This class creates interactables from abstract elements given type name or
+ * default action.
+ */
+public class InteractableAbstractElementFactory {
 
   /** The mapped type creators */
   private Map<String, AbstractElementFactory<?>> elementFactoryMap;
 
-  // TODO: make constructor package-level and create FactoryMethod
-  public InteractableFactory(Map<String, AbstractElementFactory<?>> elementFactoryMap) {
+  /** Default constructor */
+  InteractableAbstractElementFactory(Map<String, AbstractElementFactory<?>> elementFactoryMap) {
     this.elementFactoryMap = elementFactoryMap;
   }
 

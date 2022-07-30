@@ -1,7 +1,8 @@
 package com.gotriva.testing.antifa.model;
 
 import com.gotriva.testing.antifa.element.Interactable;
-import com.gotriva.testing.antifa.factory.InteractableFactory;
+import com.gotriva.testing.antifa.factory.impl.InteractableAbstractElementFactory;
+
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,10 +23,11 @@ public class GenericPageObject {
     /** The buidler driver. */
     private WebDriver driver;
     /** The builder factory. */
-    private InteractableFactory factory;
+    private InteractableAbstractElementFactory factory;
 
     /** The page object web elements. */
-    private Builder() {}
+    private Builder() {
+    }
 
     /**
      * @return a new builder instance.
@@ -49,7 +51,7 @@ public class GenericPageObject {
       return this;
     }
 
-    public Builder setFactory(InteractableFactory factory) {
+    public Builder setFactory(InteractableAbstractElementFactory factory) {
       this.factory = factory;
       return this;
     }
@@ -72,13 +74,13 @@ public class GenericPageObject {
   private WebDriver driver;
 
   /** The interactable factory instance. */
-  private InteractableFactory factory;
+  private InteractableAbstractElementFactory factory;
 
   /** The page object web elements. */
   Map<String, Interactable> elements;
 
   /** Constructor for pages that not opens a new URL. */
-  private GenericPageObject(String name, WebDriver driver, InteractableFactory factory) {
+  private GenericPageObject(String name, WebDriver driver, InteractableAbstractElementFactory factory) {
     this.name = name;
     this.driver = driver;
     this.factory = factory;
@@ -88,13 +90,13 @@ public class GenericPageObject {
   /**
    * Constructor for pages that opens a new URL.
    *
-   * @param name the page name
+   * @param name    the page name
    * @param address the page address
-   * @param driver the session webdriver
+   * @param driver  the session webdriver
    * @param factory the interactable factory
    */
   private GenericPageObject(
-      String name, URL address, WebDriver driver, InteractableFactory factory) {
+      String name, URL address, WebDriver driver, InteractableAbstractElementFactory factory) {
     this(name, driver, factory);
     this.address = address;
     navigateToAddress();
@@ -110,14 +112,15 @@ public class GenericPageObject {
   /**
    * Create and attaches a new interactable element to this page.
    *
-   * @param <T> the type of created interactable
-   * @param name the name of the element
+   * @param <T>     the type of created interactable
+   * @param name    the name of the element
    * @param locator the location strategy to find the webelement
-   * @param type the interactable type
+   * @param type    the interactable type
    */
   public <T extends Interactable> void addElement(String name, By locator, String type) {
     WebElement element = driver.findElement(locator);
-    if (type != null) {}
+    if (type != null) {
+    }
     Interactable interactable = factory.createInteractableFromType(element, type);
     elements.put(name, interactable);
   }

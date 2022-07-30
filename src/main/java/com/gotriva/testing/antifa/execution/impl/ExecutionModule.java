@@ -1,72 +1,54 @@
 package com.gotriva.testing.antifa.execution.impl;
 
-import static com.gotriva.testing.antifa.constants.ElementConstants.BUTTON;
-import static com.gotriva.testing.antifa.constants.ElementConstants.CAPTION;
-import static com.gotriva.testing.antifa.constants.ElementConstants.CHECKBOX;
-import static com.gotriva.testing.antifa.constants.ElementConstants.FILE;
-import static com.gotriva.testing.antifa.constants.ElementConstants.HEADER;
-import static com.gotriva.testing.antifa.constants.ElementConstants.IMAGE;
-import static com.gotriva.testing.antifa.constants.ElementConstants.LABEL;
-import static com.gotriva.testing.antifa.constants.ElementConstants.MESSAGE;
-import static com.gotriva.testing.antifa.constants.ElementConstants.OPTION;
-import static com.gotriva.testing.antifa.constants.ElementConstants.OPT_IN;
-import static com.gotriva.testing.antifa.constants.ElementConstants.RADIO;
+import static com.gotriva.testing.antifa.constants.WebDriverPropertiesConstants.WEB_DRIVER;
+import static com.gotriva.testing.antifa.constants.WebDriverPropertiesConstants.WEB_DRIVER_CHROME_VALUE;
+import static com.gotriva.testing.antifa.constants.WebDriverPropertiesConstants.WEB_DRIVER_EDGE_VALUE;
+import static com.gotriva.testing.antifa.constants.WebDriverPropertiesConstants.WEB_DRIVER_FIREFOX_VALUE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import com.gotriva.testing.antifa.constants.ElementConstants;
-import com.gotriva.testing.antifa.element.impl.Button;
-import com.gotriva.testing.antifa.element.impl.Checkbox;
-import com.gotriva.testing.antifa.element.impl.File;
-import com.gotriva.testing.antifa.element.impl.Image;
-import com.gotriva.testing.antifa.element.impl.Label;
-import com.gotriva.testing.antifa.element.impl.Password;
-import com.gotriva.testing.antifa.element.impl.Radio;
-import com.gotriva.testing.antifa.element.impl.Range;
-import com.gotriva.testing.antifa.element.impl.Text;
+import com.gotriva.testing.antifa.execution.ExecutionContext;
 import com.gotriva.testing.antifa.execution.Executor;
-import com.gotriva.testing.antifa.factory.AbstractElementFactory;
-import com.gotriva.testing.antifa.factory.InteractableFactory;
+import com.gotriva.testing.antifa.factory.impl.FactorySubModule;
+import com.gotriva.testing.antifa.factory.impl.InteractableAbstractElementFactory;
+import com.gotriva.testing.antifa.factory.impl.FactorySubModule.Factory;
 import com.gotriva.testing.antifa.handler.ActionHandler;
 import com.gotriva.testing.antifa.handler.impl.HandlerSubModule;
 import com.gotriva.testing.antifa.handler.impl.HandlerSubModule.HandlersMap;
-import com.gotriva.testing.antifa.model.ExecutionContext;
+
 import java.lang.annotation.Retention;
 import java.util.Map;
 import java.util.Properties;
 import javax.inject.Qualifier;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 
 /** Provides execution classes bindings. */
 public class ExecutionModule extends AbstractModule {
 
   @Qualifier
   @Retention(RUNTIME)
-  @interface WebDriverProperties {}
+  @interface WebDriverProperties {
+  }
 
   @Qualifier
   @Retention(RUNTIME)
-  @interface Driver {}
+  @interface Driver {
+  }
 
   @Qualifier
   @Retention(RUNTIME)
-  @interface ElementFactoryMap {}
-
-  @Qualifier
-  @Retention(RUNTIME)
-  @interface Factory {}
-
-  @Qualifier
-  @Retention(RUNTIME)
-  @interface Context {}
+  @interface Context {
+  }
 
   @Override
   protected void configure() {
     install(new HandlerSubModule());
+    install(new FactorySubModule());
   }
 
   @Provides
@@ -74,63 +56,30 @@ public class ExecutionModule extends AbstractModule {
   @WebDriverProperties
   public Properties provideProps() {
     Properties props = new Properties();
+    props.put(WEB_DRIVER, WEB_DRIVER_CHROME_VALUE);
     return props;
   }
 
   @Provides
   @Driver
   public WebDriver provideWebDriver(@WebDriverProperties Properties props) {
-    // TODO: get driver by properties
-    return new ChromeDriver();
-  }
-
-  @Provides
-  @Singleton
-  @ElementFactoryMap
-  public Map<String, AbstractElementFactory<?>> provideElementFactoryMap() {
-    return ImmutableMap.<String, AbstractElementFactory<?>>builder()
-        /** Button input type names */
-        .put(BUTTON, (element) -> new Button(element))
-        /** Check input type names */
-        .put(CHECKBOX, (element) -> new Checkbox(element))
-        .put(OPT_IN, (element) -> new Checkbox(element))
-        /** File input type names */
-        .put(FILE, (element) -> new File(element))
-        /** Image type names */
-        .put(IMAGE, (element) -> new Image(element))
-        /** Label type names */
-        .put(LABEL, (element) -> new Label(element))
-        .put(HEADER, (element) -> new Label(element))
-        .put(CAPTION, (element) -> new Label(element))
-        .put(MESSAGE, (element) -> new Label(element))
-        /** Option type names */
-        .put(RADIO, (element) -> new Radio(element))
-        .put(OPTION, (element) -> new Radio(element))
-        /** Range type names */
-        .put(ElementConstants.RANGE, (element) -> new Range(element))
-        /** Text type names */
-        .put(ElementConstants.INPUT, (element) -> new Text(element))
-        .put(ElementConstants.FIELD, (element) -> new Text(element))
-        .put(ElementConstants.TEXTBOX, (element) -> new Text(element))
-        /** Password type names */
-        .put(ElementConstants.PASSWORD, (element) -> new Password(element))
-        /** returns map */
-        .build();
-  }
-
-  @Provides
-  @Singleton
-  @Factory
-  public InteractableFactory provideFactory(
-      @ElementFactoryMap Map<String, AbstractElementFactory<?>> typeMap) {
-    return new InteractableFactory(typeMap);
+    switch (props.getProperty(WEB_DRIVER)) {
+      case WEB_DRIVER_CHROME_VALUE:
+        return new ChromeDriver();
+      case WEB_DRIVER_FIREFOX_VALUE:
+        return new FirefoxDriver();
+      case WEB_DRIVER_EDGE_VALUE:
+        return new EdgeDriver();
+      default:
+        return new ChromeDriver();
+    }
   }
 
   @Provides
   @Context
   public ExecutionContext provideContext(
-      @Driver WebDriver driver, @Factory InteractableFactory factory) {
-    return new ExecutionContext(driver, factory);
+      @Driver WebDriver driver, @Factory InteractableAbstractElementFactory factory) {
+    return new ExecutionContextImpl(driver, factory);
   }
 
   @Provides

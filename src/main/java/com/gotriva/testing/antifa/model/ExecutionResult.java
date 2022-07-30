@@ -6,122 +6,152 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
-/** This class represents the result of an execution call on {@link ExecutorImpl}. */
+/**
+ * This class represents the result of an execution call on
+ * {@link ExecutorImpl}.
+ */
 public class ExecutionResult {
 
   public enum Status {
     /** This execution has not executed yet. */
     NOT_EXECUTED,
-    /** This execution has not a final status. */
-    UNKNOWN,
     /** This execution was a success. */
     SUCCESS,
     /** This excection failed. */
     FAIL
   }
 
+  /** The {@link ExecutionResult} builder. */
+  public static class Builder {
+
+    /** The builder steps. */
+    private Deque<ExecutionStep> steps;
+
+    /** The builder status. */
+    private Status status;
+
+    /** The builder fail reason. */
+    private String failReason;
+
+    private Builder() {
+      this.steps = new LinkedList<>();
+      this.status = Status.NOT_EXECUTED;
+    }
+
+    /**
+     * @return a new builder instance
+     */
+    private static Builder newBuilder() {
+      return new Builder();
+    }
+
+    /**
+     * Adds a new step to execution result.
+     * 
+     * @param step the step builder
+     * @return this builder
+     */
+    public Builder addStep(ExecutionStep.Builder step) {
+      steps.add(step.build());
+      return this;
+    }
+
+    /**
+     * Adds FAIL status to execution result.
+     * 
+     * @return this builder
+     */
+    public Builder withFail(String reason) {
+      failReason = reason;
+      status = Status.FAIL;
+      return this;
+    }
+
+    /**
+     * Adds SUCCESS status to execution result.
+     * 
+     * @return
+     */
+    public Builder withSuccess() {
+      status = Status.SUCCESS;
+      return this;
+    }
+
+    /**
+     * Builds a new instance of execution result.
+     * 
+     * @return the execution result instance
+     */
+    public ExecutionResult build() {
+      /** If not executed, then should not have steps. */
+      assert status == Status.NOT_EXECUTED ^ !steps.isEmpty()
+          : "Executed results must have termination state SUCCESS or FAIL.";
+      /** If fail must have a reason */
+      assert status == Status.FAIL ^ failReason == null
+          : "Failed results must have 'failReason'.";
+      /** If success must have */
+      return new ExecutionResult(ImmutableList.copyOf(steps), status, failReason);
+    }
+  }
+
   /** The execution result steps. */
-  private final Deque<ExecutionStep> steps;
+  private final ImmutableList<ExecutionStep> steps;
 
   /** The execution result status. */
-  private Status status;
+  private final Status status;
 
-  /** All args constructor */
-  public ExecutionResult(Deque<ExecutionStep> steps, Status status) {
-    this.steps = steps;
-    this.status = status;
-  }
+  /** The excecutio result fail reason message. */
+  private final String failReason;
 
   /** Default constructor */
-  public ExecutionResult() {
-    this(new LinkedList<>(), Status.NOT_EXECUTED);
+  private ExecutionResult(ImmutableList<ExecutionStep> steps, Status status, String failReason) {
+    this.steps = steps;
+    this.status = status;
+    this.failReason = failReason;
+  }
+
+  /** @return a new builder instance */
+  public static Builder builder() {
+    return Builder.newBuilder();
   }
 
   /**
-   * Adds a new step to execution result. The execution fails if the step is a FAIL. Otherwise, the
-   * execution result remains unknown until the finish method call.
-   *
-   * @param step the execution step to be added.
-   * @return
-   */
-  public Status addStep(ExecutionStep step) {
-    /** Check execution result state. */
-    if (isFinished()) {
-      throw new IllegalStateException("Execution is already finished.");
-    }
-    /** Add step to execution result. */
-    this.steps.add(step);
-
-    /** Check if step is a fail, then mark execution as fail. */
-    if (step.isFail()) {
-      fail();
-    } else if (status != Status.UNKNOWN) {
-      /** Execution result status is unknown now. */
-      status = Status.UNKNOWN;
-    }
-    return status;
-  }
-
-  /** Marks current execution result as FAIL. */
-  private void fail() {
-    this.status = Status.FAIL;
-  }
-
-  /** Marks current execution result as SUCCESS; */
-  private void success() {
-    this.status = Status.SUCCESS;
-  }
-
-  /**
-   * Marks current execution result as finished with SUCCESS. It will not accept new steps after.
-   */
-  public void finish() {
-    /** If this execution has not executed, then it fails. */
-    if (isFinished()) {
-      return;
-    } else if (isStarted()) {
-      success();
-    } else {
-      fail();
-    }
-  }
-
-  /**
-   * Check if current execution is finished.
-   *
-   * @return true if this execution is finished.
-   */
-  public boolean isFinished() {
-    return status == Status.SUCCESS || status == Status.FAIL;
-  }
-
-  /**
-   * Check if this execution is started.
+   * Check if this execution is done.
    *
    * @return true if this execution have at last one step.
    */
-  public boolean isStarted() {
+  public boolean isExecuted() {
     return !steps.isEmpty();
   }
 
-  /** Get the execution start time, if started. */
+  /** Get the execution start time, if executed. */
   public LocalDateTime getStartTime() {
-    if (!isStarted()) {
-      throw new IllegalStateException("Execution has not started.");
+    if (!isExecuted()) {
+      return null;
     }
-    return steps.getFirst().getStartTime();
+    return steps.get(0).getStartTime();
   }
 
-  /** Get the execution end time, if finished. */
+  /** Get the execution end time, if executed. */
   public LocalDateTime getEndTime() {
-    if (!isFinished()) {
-      throw new IllegalStateException("Execution has not ended.");
+    if (!isExecuted()) {
+      return null;
     }
-    return steps.getLast().getEndTime();
+    return steps.get(steps.size() - 1).getEndTime();
   }
 
-  /** Get the current execution steps list copy. */
+  /** @return the execution result status. */
+  public Status getStatus() {
+    return status;
+  }
+
+  /** @return the fail reason, if any */
+  public String getFailReason() {
+    return failReason;
+  }
+
+  /** @return the execution result steps list. */
   public List<ExecutionStep> getSteps() {
-    return ImmutableList.copyOf(steps);
+    return steps;
   }
 }

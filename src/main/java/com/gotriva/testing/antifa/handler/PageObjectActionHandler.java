@@ -1,8 +1,10 @@
 package com.gotriva.testing.antifa.handler;
 
-import com.gotriva.testing.antifa.model.ExecutionContext;
+import com.gotriva.testing.antifa.execution.ExecutionContext;
 
-/** This interface represents a hadler that manipulates the page objects actions. */
+/**
+ * This interface represents a hadler that manipulates the page objects actions.
+ */
 public interface PageObjectActionHandler extends ActionHandler {
 
   /**

@@ -1,7 +1,7 @@
 package com.gotriva.testing.antifa.handler.impl;
 
+import com.gotriva.testing.antifa.execution.ExecutionContext;
 import com.gotriva.testing.antifa.handler.PageObjectActionHandler;
-import com.gotriva.testing.antifa.model.ExecutionContext;
 import com.gotriva.testing.antifa.model.GenericPageObject;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -11,7 +11,8 @@ public class RollPageHandler implements PageObjectActionHandler {
   private static final int SCROLLED_PIXELS = 350;
 
   /** Default constructor */
-  RollPageHandler() {}
+  RollPageHandler() {
+  }
 
   @Override
   public String getAction() {

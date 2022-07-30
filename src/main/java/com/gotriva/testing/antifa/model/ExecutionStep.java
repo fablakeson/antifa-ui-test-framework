@@ -24,8 +24,8 @@ public class ExecutionStep {
     private LocalDateTime endTime;
     /** The builder result status. */
     private Result result;
-    /** The builder snapshot. */
-    private String snapshot;
+    /** The builder screenshot. */
+    private String screenshot;
 
     private Builder() {}
 
@@ -73,13 +73,13 @@ public class ExecutionStep {
       return this;
     }
 
-    public Builder setSnapshot(String snapshot) {
-      this.snapshot = snapshot;
+    public Builder setScreenshot(String screenshot) {
+      this.screenshot = screenshot;
       return this;
     }
 
     public ExecutionStep build() {
-      return new ExecutionStep(command, startTime, endTime, result, snapshot);
+      return new ExecutionStep(command, startTime, endTime, result, screenshot);
     }
   }
 
@@ -95,8 +95,8 @@ public class ExecutionStep {
   /** The execution result status. */
   private final Result result;
 
-  /** The execution step snapshot. */
-  private final String snapshot;
+  /** The execution step screenshot. */
+  private final String screenshot;
 
   /** The default constructor */
   private ExecutionStep(
@@ -104,12 +104,12 @@ public class ExecutionStep {
       LocalDateTime startTime,
       LocalDateTime endTime,
       Result result,
-      String snapshot) {
+      String screenshot) {
     this.command = command;
     this.startTime = startTime;
     this.endTime = endTime;
     this.result = result;
-    this.snapshot = snapshot;
+    this.screenshot = screenshot;
   }
 
   /**
@@ -150,7 +150,7 @@ public class ExecutionStep {
     return result;
   }
 
-  public String getSnapshot() {
-    return snapshot;
+  public String getScreenshot() {
+    return screenshot;
   }
 }

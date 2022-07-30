@@ -2,15 +2,17 @@ package com.gotriva.testing.antifa.execution.impl;
 
 import com.gotriva.testing.antifa.element.Interactable;
 import com.gotriva.testing.antifa.exception.ExecutionException;
+import com.gotriva.testing.antifa.execution.ExecutionContext;
 import com.gotriva.testing.antifa.execution.Executor;
 import com.gotriva.testing.antifa.handler.ActionHandler;
 import com.gotriva.testing.antifa.handler.InteractableActionHandler;
 import com.gotriva.testing.antifa.handler.PageObjectActionHandler;
 import com.gotriva.testing.antifa.model.Command;
-import com.gotriva.testing.antifa.model.ExecutionContext;
 import com.gotriva.testing.antifa.model.ExecutionResult;
 import com.gotriva.testing.antifa.model.ExecutionStep;
 import com.gotriva.testing.antifa.model.GenericPageObject;
+
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
@@ -41,10 +43,7 @@ public class ExecutorImpl implements Executor {
   @SuppressWarnings("unchecked")
   public ExecutionResult execute(List<Command> commands) {
     LOGGER.info("Starting execution...");
-
-    // TODO: Add builder pattern
-    ExecutionResult result = new ExecutionResult();
-
+    ExecutionResult.Builder result = ExecutionResult.builder();
     /** Within execution context */
     try (context) {
       /** Commands must be executed at the given order. */
@@ -73,28 +72,31 @@ public class ExecutorImpl implements Executor {
             throw new ExecutionException(
                 "Handler for command '" + command.getCommand() + "' not found.");
           }
-          // TODO: add screenshot capability
-          // ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
-          String snapshot = null;
           /** This execution step was successful. */
-          result.addStep(executionStep.endNow().withSuccess().setSnapshot(snapshot).build());
+          result.addStep(executionStep.endNow().withSuccess().setScreenshot(context.getScreenshot()));
           LOGGER.info("Executing command: {} ... SUCCESS", command);
-        } catch (RuntimeException re) {
+        } catch (Exception e) {
           /** This execution step was failed. */
-          result.addStep(executionStep.endNow().withFail().build());
+          result.addStep(executionStep.endNow().withFail());
+          /** Log the fail */
           LOGGER.info("Executing command: {} ... FAIL", command);
-          LOGGER.error("Error executing command.", re);
-          /** Break the command execution loop */
-          break;
-        } 
-      } 
-    } finally {
-      result.finish();
+          /** Wraps on execution exception if needed */
+          if (e instanceof ExecutionException) {
+            throw e;
+          }
+          throw new ExecutionException(e.getMessage(), e);
+        }
+      }
+      result.withSuccess();
+    } catch (ExecutionException ex) {
+      LOGGER.error("Error executing command.", ex);
+      result.withFail(ex.getMessage());
+    } catch (IOException ioe) {
+      LOGGER.error("Error closing the driver.", ioe);
     }
     /** Set final execution status */
     LOGGER.info("Finishing execution...");
-
-    return result;
+    return result.build();
   }
 
   /**

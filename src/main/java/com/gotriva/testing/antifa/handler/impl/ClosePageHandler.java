@@ -1,13 +1,14 @@
 package com.gotriva.testing.antifa.handler.impl;
 
+import com.gotriva.testing.antifa.execution.ExecutionContext;
 import com.gotriva.testing.antifa.handler.PageObjectActionHandler;
-import com.gotriva.testing.antifa.model.ExecutionContext;
 
 /** This class implements a page object handler for close page action. */
 public class ClosePageHandler implements PageObjectActionHandler {
 
   /** Default constructor */
-  ClosePageHandler() {}
+  ClosePageHandler() {
+  }
 
   @Override
   public String getAction() {

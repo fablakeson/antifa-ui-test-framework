@@ -1,15 +1,20 @@
-package com.gotriva.testing.antifa.model;
+package com.gotriva.testing.antifa.execution.impl;
 
 import com.gotriva.testing.antifa.exception.ExecutionException;
-import com.gotriva.testing.antifa.factory.InteractableFactory;
-import java.io.Closeable;
+import com.gotriva.testing.antifa.execution.ExecutionContext;
+import com.gotriva.testing.antifa.factory.impl.InteractableAbstractElementFactory;
+import com.gotriva.testing.antifa.model.GenericPageObject;
+
 import java.net.URL;
 import java.util.Deque;
 import java.util.LinkedList;
+
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
-/** This class represents the execution context for the {@link ExecutorImpl}. */
-public class ExecutionContext implements Closeable {
+/** This class implements the {@link ExecutionContext} */
+public class ExecutionContextImpl implements ExecutionContext {
 
   /** The stack of pages on context. */
   private Deque<GenericPageObject> pageStack;
@@ -18,10 +23,10 @@ public class ExecutionContext implements Closeable {
   private WebDriver driver;
 
   /** The interactable factory */
-  private InteractableFactory factory;
+  private InteractableAbstractElementFactory factory;
 
   /** Default constructor. */
-  public ExecutionContext(WebDriver driver, InteractableFactory factory) {
+  ExecutionContextImpl(WebDriver driver, InteractableAbstractElementFactory factory) {
     this.pageStack = new LinkedList<>();
     this.driver = driver;
     this.factory = factory;
@@ -67,6 +72,15 @@ public class ExecutionContext implements Closeable {
             .build());
     /** Returns added page. */
     return getCurrentPage();
+  }
+
+  /**
+   * Gets the current page screenshot.
+   * 
+   * @return the screenshot image base-64 representation
+   */
+  public String getScreenshot() {
+    return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
   }
 
   @Override
