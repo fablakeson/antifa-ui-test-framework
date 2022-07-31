@@ -88,7 +88,7 @@ public class AntifaMojo extends AbstractMojo {
               try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
                 return Pair.of(file.getName(), reader.lines().collect(Collectors.toList()));
               } catch (Exception ex) {
-                // LOG ERROR
+                LOGGER.error("Error reading file.", ex);
                 return Pair.of(file.getName(), Collections.<String>emptyList());
               }
             })
@@ -100,10 +100,11 @@ public class AntifaMojo extends AbstractMojo {
         .forEach(
             pair ->
                 getReportWriter()
-                    .writeReport(pair.getValue(), removeExtension(pair.getKey()), outputDirectory));
+                    .writeReport(
+                        pair.getValue(), removeFileExtension(pair.getKey()), outputDirectory));
   }
 
-  private String removeExtension(String fileName) {
+  private String removeFileExtension(String fileName) {
     return fileName.substring(0, fileName.lastIndexOf("."));
   }
 
