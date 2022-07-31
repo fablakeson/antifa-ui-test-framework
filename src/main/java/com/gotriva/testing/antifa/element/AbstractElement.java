@@ -10,9 +10,4 @@ public abstract class AbstractElement implements Interactable {
   public AbstractElement(WebElement element) {
     this.element = element;
   }
-
-  @Override
-  public WebElement getElement() {
-    return element;
-  }
 }

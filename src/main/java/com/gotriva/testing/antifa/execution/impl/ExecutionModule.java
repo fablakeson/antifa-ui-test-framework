@@ -11,13 +11,12 @@ import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import com.gotriva.testing.antifa.execution.ExecutionContext;
 import com.gotriva.testing.antifa.execution.Executor;
+import com.gotriva.testing.antifa.factory.CompositeElementFactory;
 import com.gotriva.testing.antifa.factory.impl.FactorySubModule;
-import com.gotriva.testing.antifa.factory.impl.InteractableElementFactory;
 import com.gotriva.testing.antifa.factory.impl.FactorySubModule.Factory;
 import com.gotriva.testing.antifa.handler.ActionHandler;
 import com.gotriva.testing.antifa.handler.impl.HandlerSubModule;
 import com.gotriva.testing.antifa.handler.impl.HandlerSubModule.HandlersMap;
-
 import java.lang.annotation.Retention;
 import java.util.Map;
 import java.util.Properties;
@@ -32,18 +31,15 @@ public class ExecutionModule extends AbstractModule {
 
   @Qualifier
   @Retention(RUNTIME)
-  @interface WebDriverProperties {
-  }
+  @interface WebDriverProperties {}
 
   @Qualifier
   @Retention(RUNTIME)
-  @interface Driver {
-  }
+  @interface Driver {}
 
   @Qualifier
   @Retention(RUNTIME)
-  @interface Context {
-  }
+  @interface Context {}
 
   @Override
   protected void configure() {
@@ -78,14 +74,13 @@ public class ExecutionModule extends AbstractModule {
   @Provides
   @Context
   public ExecutionContext provideContext(
-      @Driver WebDriver driver, @Factory InteractableElementFactory factory) {
+      @Driver WebDriver driver, @Factory CompositeElementFactory factory) {
     return new ExecutionContextImpl(driver, factory);
   }
 
   @Provides
   public Executor providExecutor(
-      @HandlersMap Map<String, ActionHandler> handlers,
-      @Context ExecutionContext context) {
+      @HandlersMap Map<String, ActionHandler> handlers, @Context ExecutionContext context) {
     return new ExecutorImpl(handlers, context);
   }
 }

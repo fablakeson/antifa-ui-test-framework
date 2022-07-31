@@ -1,6 +1,7 @@
 package com.gotriva.testing.antifa.model;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 /** This class represents a step on {@link ExecutionResult}. */
 public class ExecutionStep {
@@ -152,5 +153,9 @@ public class ExecutionStep {
 
   public String getScreenshot() {
     return screenshot;
+  }
+
+  public Long getElapsedTime() {
+    return ChronoUnit.MILLIS.between(getStartTime(), getEndTime());
   }
 }

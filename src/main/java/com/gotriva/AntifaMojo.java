@@ -8,6 +8,8 @@ import com.gotriva.testing.antifa.model.Command;
 import com.gotriva.testing.antifa.model.ExecutionResult;
 import com.gotriva.testing.antifa.parsing.Parser;
 import com.gotriva.testing.antifa.parsing.impl.ParsingModule;
+import com.gotriva.testing.antifa.presentation.ReportWriter;
+import com.gotriva.testing.antifa.presentation.impl.PresentationModule;
 import java.io.File;
 import java.util.Arrays;
 import java.util.List;
@@ -36,13 +38,12 @@ import org.slf4j.LoggerFactory;
  * @goal touch
  * @phase process-sources
  */
-public class MyMojo extends AbstractMojo {
+public class AntifaMojo extends AbstractMojo {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(MyMojo.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(AntifaMojo.class);
 
   // TODO: Add read execution from text files support.
   // TODO: Add post execution report support.
-  // TODO: Add HTML report.
   // TODO: Add plugin properties parameterization support.
   // TODO: Add unitary tests to each class.
   // TODO: Change LOGGER.info to LOGGER.debug
@@ -64,7 +65,8 @@ public class MyMojo extends AbstractMojo {
   public void execute() throws MojoExecutionException {
 
     /** Dependency injection */
-    Injector injector = Guice.createInjector(new ParsingModule(), new ExecutionModule());
+    Injector injector =
+        Guice.createInjector(new ParsingModule(), new ExecutionModule(), new PresentationModule());
 
     /** Enable just basic dependency parsing. */
     List<String> instructions =
@@ -87,5 +89,10 @@ public class MyMojo extends AbstractMojo {
     ExecutionResult result = executor.execute(commands);
 
     LOGGER.info("The result: {}", result);
+
+    ReportWriter writer = injector.getInstance(ReportWriter.class);
+    writer.writeReport(result, outputDirectory);
+
+    LOGGER.info("Writed report to file: {}", outputDirectory.getAbsolutePath());
   }
 }

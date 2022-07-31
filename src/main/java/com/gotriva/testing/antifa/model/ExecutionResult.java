@@ -2,14 +2,12 @@ package com.gotriva.testing.antifa.model;
 
 import com.google.common.collect.ImmutableList;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * This class represents the result of an execution call on
- * {@link ExecutorImpl}.
- */
+/** This class represents the result of an execution call on {@link ExecutorImpl}. */
 public class ExecutionResult {
 
   public enum Status {
@@ -47,7 +45,7 @@ public class ExecutionResult {
 
     /**
      * Adds a new step to execution result.
-     * 
+     *
      * @param step the step builder
      * @return this builder
      */
@@ -58,7 +56,7 @@ public class ExecutionResult {
 
     /**
      * Adds FAIL status to execution result.
-     * 
+     *
      * @return this builder
      */
     public Builder withFail(String reason) {
@@ -69,7 +67,7 @@ public class ExecutionResult {
 
     /**
      * Adds SUCCESS status to execution result.
-     * 
+     *
      * @return
      */
     public Builder withSuccess() {
@@ -79,7 +77,7 @@ public class ExecutionResult {
 
     /**
      * Builds a new instance of execution result.
-     * 
+     *
      * @return the execution result instance
      */
     public ExecutionResult build() {
@@ -87,8 +85,7 @@ public class ExecutionResult {
       assert status == Status.NOT_EXECUTED ^ !steps.isEmpty()
           : "Executed results must have termination state SUCCESS or FAIL.";
       /** If fail must have a reason */
-      assert status == Status.FAIL ^ failReason == null
-          : "Failed results must have 'failReason'.";
+      assert status == Status.FAIL ^ failReason == null : "Failed results must have 'failReason'.";
       /** If success must have */
       return new ExecutionResult(ImmutableList.copyOf(steps), status, failReason);
     }
@@ -110,7 +107,9 @@ public class ExecutionResult {
     this.failReason = failReason;
   }
 
-  /** @return a new builder instance */
+  /**
+   * @return a new builder instance
+   */
   public static Builder builder() {
     return Builder.newBuilder();
   }
@@ -140,17 +139,31 @@ public class ExecutionResult {
     return steps.get(steps.size() - 1).getEndTime();
   }
 
-  /** @return the execution result status. */
+  /** Get the execution elapsad time in milisseconds, if executed */
+  public Long getElapsedTime() {
+    if (!isExecuted()) {
+      return 0L;
+    }
+    return ChronoUnit.MILLIS.between(getStartTime(), getEndTime());
+  }
+
+  /**
+   * @return the execution result status.
+   */
   public Status getStatus() {
     return status;
   }
 
-  /** @return the fail reason, if any */
+  /**
+   * @return the fail reason, if any
+   */
   public String getFailReason() {
     return failReason;
   }
 
-  /** @return the execution result steps list. */
+  /**
+   * @return the execution result steps list.
+   */
   public List<ExecutionStep> getSteps() {
     return steps;
   }

@@ -2,13 +2,11 @@ package com.gotriva.testing.antifa.execution.impl;
 
 import com.gotriva.testing.antifa.exception.ExecutionException;
 import com.gotriva.testing.antifa.execution.ExecutionContext;
-import com.gotriva.testing.antifa.factory.impl.InteractableElementFactory;
+import com.gotriva.testing.antifa.factory.CompositeElementFactory;
 import com.gotriva.testing.antifa.model.GenericPageObject;
-
 import java.net.URL;
 import java.util.Deque;
 import java.util.LinkedList;
-
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -23,10 +21,10 @@ public class ExecutionContextImpl implements ExecutionContext {
   private WebDriver driver;
 
   /** The interactable factory */
-  private InteractableElementFactory factory;
+  private CompositeElementFactory factory;
 
   /** Default constructor. */
-  ExecutionContextImpl(WebDriver driver, InteractableElementFactory factory) {
+  ExecutionContextImpl(WebDriver driver, CompositeElementFactory factory) {
     this.pageStack = new LinkedList<>();
     this.driver = driver;
     this.factory = factory;
@@ -76,7 +74,7 @@ public class ExecutionContextImpl implements ExecutionContext {
 
   /**
    * Gets the current page screenshot.
-   * 
+   *
    * @return the screenshot image base-64 representation
    */
   public String getScreenshot() {
