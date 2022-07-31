@@ -9,11 +9,13 @@ import edu.stanford.nlp.pipeline.*;
 import edu.stanford.nlp.semgraph.SemanticGraph;
 import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations.BasicDependenciesAnnotation;
 import edu.stanford.nlp.util.CoreMap;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +48,7 @@ public class ParserImpl implements Parser {
     List<String> instructionsCopy = new ArrayList<>(instructions);
 
     /** Replace parameters */
-    Map<String, String> parameters = replaceParameter(instructionsCopy);
+    Map<String, String> parameters = prepareInstructions(instructionsCopy);
 
     /** Concatenate the instructions into one text. */
     String instructionsText = String.join("\n", instructionsCopy);
@@ -72,7 +74,17 @@ public class ParserImpl implements Parser {
       Command command = interpreter.intepret(dependencyParse);
       /** Replace parameter value (if any) */
       if (command.hasParameter()) {
-        command.setParameter(parameters.get(command.getParameter()));
+        String parameterValue = parameters.get(command.getParameter());
+        String originalInstruction =
+            StringUtils.capitalize(
+                sentence
+                    .toString()
+                    .replace(
+                        command.getParameter(), MessageFormat.format("\"{0}\"", parameterValue)));
+        command.setParameter(parameterValue);
+        command.setInstruction(originalInstruction);
+      } else {
+        command.setInstruction(StringUtils.capitalize(sentence.toString()));
       }
       // Print action
       LOGGER.info("command: {}", command);
@@ -84,18 +96,18 @@ public class ParserImpl implements Parser {
   }
 
   /**
-   * Replaces the instructions parameters for variable names.
+   * Replaces the instructions parameters for variable names and lower case instruction text.
    *
    * @param instructions the instructions to be replaced.
    * @return the map of replaced parameters
    */
-  private Map<String, String> replaceParameter(List<String> instructions) {
+  private Map<String, String> prepareInstructions(List<String> instructions) {
     Map<String, String> parameters = new HashMap<>();
     for (int i = 0; i < instructions.size(); ++i) {
-      String instruction = instructions.get(i);
-      int parameterStart = instruction.indexOf("\"");
+      final String instruction = instructions.get(i).toLowerCase();
+      final int parameterStart = instruction.indexOf("\"");
       if (parameterStart >= 0) {
-        int parameterEnd = instruction.indexOf("\"", parameterStart + 1);
+        final int parameterEnd = instruction.indexOf("\"", parameterStart + 1);
         if (parameterEnd <= 0) {
           throw new InstructionParsingException(
               "Parameter must have a closing quote: " + instruction);
@@ -105,14 +117,15 @@ public class ParserImpl implements Parser {
         String parameterValue = instruction.substring(parameterStart + 1, parameterEnd);
         parameters.put(parameterName, parameterValue);
         /** Replace parameters */
-        String newInstruction =
+        final String newInstruction =
             instruction.substring(0, parameterStart)
                 + parameterName
                 + instruction.substring(parameterEnd + 1);
-        instructions.set(i, newInstruction);
+        instructions.set(i, newInstruction.toLowerCase());
         LOGGER.info("Instruction: {} --> {}", instruction, instructions.get(i));
       } else {
         LOGGER.info("Instruction: {}", instruction);
+        instructions.set(i, instruction.toLowerCase());
       }
     }
     return parameters;

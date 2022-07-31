@@ -1,16 +1,31 @@
 <html>
     <head>
         <title>Login</title>
+        <style>
+            .hidden {
+                visibility: hidden;
+            }
+            .success {
+                color: green;
+                visibility: visible;
+            }
+        </style>
     </head>
     <body>
-        <form id="loginForm" name="login">
+        <form id="login-form" name="login">
             <label for="username">Username:</label>
             <input id="username" name="username" type="text"/>
             <label for="username">Password:</label>
             <input id="password" name="password" type="password"/>
+            <!--
             <label for="username">Credit Card:</label>
             <input id="credit-card" name="credit-card" type="text"/>
-            <input id="login" type="submit" value="Login"/>
+            -->
+            <input id="login" type="button" value="Login" 
+                onclick="document.getElementById('message').className = 'success'"/>
         </form>
+        <div id="message" class="hidden">
+            Login with success!!!
+        </div>
     </body>
 </html>

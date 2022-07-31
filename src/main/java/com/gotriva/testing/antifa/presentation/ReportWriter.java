@@ -10,7 +10,8 @@ public interface ReportWriter {
    * Writes a new report file for this execution.
    *
    * @param result the execution result.
+   * @param testName the test file name
    * @param outputDirectory the output directory file.
    */
-  void writeReport(ExecutionResult result, File outputDirectory);
+  void writeReport(ExecutionResult result, String testName, File outputDirectory);
 }

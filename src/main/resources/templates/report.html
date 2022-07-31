@@ -2,11 +2,11 @@
     <body>
         <style>
             table, th, td {
-            border: 1px solid black;
-            border-collapse: collapse;
+                border: 1px solid black;
+                border-collapse: collapse;
             }
             img {
-            border: 1px solid black;
+                border: 1px solid black;
             }
             .SUCCESS {
                 color: green;
@@ -17,7 +17,7 @@
         </style>
         <header>
             <h1>Antifa UI Testing Result</h1>
-            <h2>$result.testName</h2>
+            <h2>$testName</h2>
         </header>
         <section>
             <h3>Results</h3>
@@ -34,21 +34,21 @@
                     <tr>
                         <td>$result.startTime</td>
                         <td>$result.endTime</td>
-                        <td>$result.elapsedTime</td>
+                        <td>${result.elapsedTime}ms</td>
                         <td class="${result.status}">$result.status</td>
                     </tr>
                 </tbody>
             </table>
             #if ($result.status == "FAIL")
-            <p><strong>Fail Reason:</strong> <em>$result.failReason</em></p>
+            <p><strong>Fail Reason:</strong> $result.failReason</p>
             #end
         </section>
         <section>
-            <h3>Execution Steps</h3>
+            <h3>Executed Steps</h3>
             <ol>
                 #foreach( $step in $result.steps )
                 <li>
-                    <h4>$step.instruction</h4>
+                    <h4>$step.command.instruction</h4>
                     <details>
                         <summary>Details</summary>
                         <table>
@@ -64,16 +64,18 @@
                                 <tr>
                                     <td>$step.startTime</td>
                                     <td>$step.endTime</td>
-                                    <td>$step.elapsedTime</td>
-                                    <td class="${result.result}">$step.result</td>
+                                    <td>${step.elapsedTime}ms</td>
+                                    <td class="${step.result}">$step.result</td>
                                 </tr>
                             </tbody>
                         </table>
+                        #if ($step.screenshot)
                         <picture>
                             <img src="data:image/jpeg;base64,${step.screenshot}"/>
                         </picture>
+                        #end
+                        <p><code>$step.command</code></p>
                     </details>
-                    <!-- TODO: add debug details if debug flag is active -->
                 </li>
                 #end
             </ol>

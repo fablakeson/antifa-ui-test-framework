@@ -1,0 +1,4 @@
+Open the login page at "http://localhost:8000/login.html".
+Write "teste@mail.com.br" to username input.
+Write "testpass" to the password input.
+Click on the login button.

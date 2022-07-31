@@ -11,7 +11,6 @@ import com.gotriva.testing.antifa.model.Command;
 import com.gotriva.testing.antifa.model.ExecutionResult;
 import com.gotriva.testing.antifa.model.ExecutionStep;
 import com.gotriva.testing.antifa.model.GenericPageObject;
-
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.List;
@@ -33,8 +32,7 @@ public class ExecutorImpl implements Executor {
   private final ExecutionContext context;
 
   /** Default constructor. */
-  ExecutorImpl(
-      Map<String, ActionHandler> handlers, ExecutionContext context) {
+  ExecutorImpl(Map<String, ActionHandler> handlers, ExecutionContext context) {
     this.handlers = handlers;
     this.context = context;
   }
@@ -49,7 +47,8 @@ public class ExecutorImpl implements Executor {
       /** Commands must be executed at the given order. */
       for (Command command : commands) {
         /** Start and end time for this command execution. */
-        final ExecutionStep.Builder executionStep = ExecutionStep.builder().setCommand(command).startNow();
+        final ExecutionStep.Builder executionStep =
+            ExecutionStep.builder().setCommand(command).startNow();
         /** Try to execute the command */
         try {
           /** Get handler strategy for this command. */
@@ -73,7 +72,8 @@ public class ExecutorImpl implements Executor {
                 "Handler for command '" + command.getCommand() + "' not found.");
           }
           /** This execution step was successful. */
-          result.addStep(executionStep.endNow().withSuccess().setScreenshot(context.getScreenshot()));
+          result.addStep(
+              executionStep.endNow().withSuccess().setScreenshot(context.getScreenshot()));
           LOGGER.info("Executing command: {} ... SUCCESS", command);
         } catch (Exception e) {
           /** This execution step was failed. */
@@ -116,9 +116,9 @@ public class ExecutorImpl implements Executor {
    * Handles the interactable with the given handler.
    *
    * @param <T>
-   * @param handler      the given handler.
+   * @param handler the given handler.
    * @param interactable the interactable.
-   * @param parameter    the parameter
+   * @param parameter the parameter
    */
   private <T extends Interactable> void handleInteractable(
       InteractableActionHandler<T> handler, T interactable, String parameter) {
@@ -126,8 +126,7 @@ public class ExecutorImpl implements Executor {
   }
 
   /**
-   * Gets the interactable on context for given command. Creates one if it does
-   * not exists.
+   * Gets the interactable on context for given command. Creates one if it does not exists.
    *
    * @param command
    * @return
@@ -146,7 +145,7 @@ public class ExecutorImpl implements Executor {
                 command.getObject()));
       }
       /** Creates the object on this page */
-      pageObject.addElement(command.getObject(), By.name(command.getObject()), command.getType());
+      pageObject.addElement(command.getObject(), By.id(command.getObject()), command.getType());
     }
     /** returns the interactable element */
     return pageObject.getElement(command.getObject());

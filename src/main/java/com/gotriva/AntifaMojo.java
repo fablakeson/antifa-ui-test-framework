@@ -4,15 +4,17 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.gotriva.testing.antifa.execution.Executor;
 import com.gotriva.testing.antifa.execution.impl.ExecutionModule;
-import com.gotriva.testing.antifa.model.Command;
-import com.gotriva.testing.antifa.model.ExecutionResult;
 import com.gotriva.testing.antifa.parsing.Parser;
 import com.gotriva.testing.antifa.parsing.impl.ParsingModule;
 import com.gotriva.testing.antifa.presentation.ReportWriter;
 import com.gotriva.testing.antifa.presentation.impl.PresentationModule;
+import java.io.BufferedReader;
 import java.io.File;
-import java.util.Arrays;
-import java.util.List;
+import java.io.FileReader;
+import java.util.Collections;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.slf4j.Logger;
@@ -42,15 +44,20 @@ public class AntifaMojo extends AbstractMojo {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AntifaMojo.class);
 
-  // TODO: Add read execution from text files support.
-  // TODO: Add post execution report support.
   // TODO: Add plugin properties parameterization support.
   // TODO: Add unitary tests to each class.
   // TODO: Change LOGGER.info to LOGGER.debug
   // TODO: Remove unnecessary comments (like this)
 
+  /** The dependency injector */
+  private Injector injector =
+      Guice.createInjector(new ParsingModule(), new ExecutionModule(), new PresentationModule());
+
+  /** Location of the input file. */
+  private File inputDirectory = new File("./src/main/resources/test-files");
+
   /**
-   * Location of the file.
+   * Location of the output files.
    *
    * @parameter expression="project.build.directory"
    * @required
@@ -64,35 +71,51 @@ public class AntifaMojo extends AbstractMojo {
    */
   public void execute() throws MojoExecutionException {
 
-    /** Dependency injection */
-    Injector injector =
-        Guice.createInjector(new ParsingModule(), new ExecutionModule(), new PresentationModule());
+    /** Check input and output directories */
+    if (!inputDirectory.isDirectory()) {
+      throw new MojoExecutionException("Input directory is not valid");
+    }
 
-    /** Enable just basic dependency parsing. */
-    List<String> instructions =
-        Arrays.asList(
-            "open the login page at \"http://localhost:8000/login.html\".",
-            "write \"fabiojunior@gmail.com.br\" to username input.",
-            "write \"password123\" to password input.",
-            "write \"1234 1234 1234 1234\" to the credit card input.",
-            "click on the login button.");
+    if (!outputDirectory.isDirectory()) {
+      throw new MojoExecutionException("Output directory is not valid");
+    }
 
-    Parser parser = injector.getInstance(Parser.class);
+    /** For each test file */
+    Stream.of(inputDirectory.listFiles())
+        /** Read lines from each file */
+        .map(
+            file -> {
+              try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                return Pair.of(file.getName(), reader.lines().collect(Collectors.toList()));
+              } catch (Exception ex) {
+                // LOG ERROR
+                return Pair.of(file.getName(), Collections.<String>emptyList());
+              }
+            })
+        /** Parse instruction lines into commands */
+        .map(pair -> Pair.of(pair.getKey(), getParser().parse(pair.getValue())))
+        /** Execute commands and get result */
+        .map(pair -> Pair.of(pair.getKey(), getExecutor().execute(pair.getValue())))
+        /** Write the result report */
+        .forEach(
+            pair ->
+                getReportWriter()
+                    .writeReport(pair.getValue(), removeExtension(pair.getKey()), outputDirectory));
+  }
 
-    List<Command> commands = parser.parse(instructions);
+  private String removeExtension(String fileName) {
+    return fileName.substring(0, fileName.lastIndexOf("."));
+  }
 
-    /** Print decoded commands */
-    LOGGER.info("The decoded commands: {}", commands);
+  private Parser getParser() {
+    return injector.getInstance(Parser.class);
+  }
 
-    Executor executor = injector.getInstance(Executor.class);
+  private Executor getExecutor() {
+    return injector.getInstance(Executor.class);
+  }
 
-    ExecutionResult result = executor.execute(commands);
-
-    LOGGER.info("The result: {}", result);
-
-    ReportWriter writer = injector.getInstance(ReportWriter.class);
-    writer.writeReport(result, outputDirectory);
-
-    LOGGER.info("Writed report to file: {}", outputDirectory.getAbsolutePath());
+  private ReportWriter getReportWriter() {
+    return injector.getInstance(ReportWriter.class);
   }
 }

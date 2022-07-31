@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.time.LocalDateTime;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -18,6 +18,7 @@ public class ReportWriterImpl implements ReportWriter {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ReportWriterImpl.class);
 
+  // TODO: get file from jar
   /** The template file name */
   private static final String TEMPLATE_FILE_NAME = "./src/main/resources/templates/report.html";
 
@@ -37,13 +38,14 @@ public class ReportWriterImpl implements ReportWriter {
   }
 
   @Override
-  public void writeReport(ExecutionResult result, File outputDirectory) {
+  public void writeReport(ExecutionResult result, String testName, File outputDirectory) {
     if (!outputDirectory.isDirectory()) {
       throw new PresentationException("the output directory is not valid");
     }
-    try (FileWriter writer = new FileWriter(new File(outputDirectory, getFileName()))) {
+    try (FileWriter writer = new FileWriter(new File(outputDirectory, getFileName(testName)))) {
       velocity.init();
       Template template = velocity.getTemplate(TEMPLATE_FILE_NAME);
+      context.put("testName", StringUtils.capitalize(StringUtils.join(testName.split("_"), " ")));
       context.put("result", result);
       template.merge(context, writer);
     } catch (IOException | RuntimeException ex) {
@@ -55,7 +57,7 @@ public class ReportWriterImpl implements ReportWriter {
   /**
    * @return The new created file name.
    */
-  private String getFileName() {
-    return MessageFormat.format(CREATED_FILE_NAME_PATTERN, LocalDateTime.now());
+  private String getFileName(String testName) {
+    return MessageFormat.format(CREATED_FILE_NAME_PATTERN, testName);
   }
 }
