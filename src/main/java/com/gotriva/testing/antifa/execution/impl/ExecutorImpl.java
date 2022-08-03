@@ -40,7 +40,7 @@ public class ExecutorImpl implements Executor {
   @Override
   @SuppressWarnings("unchecked")
   public ExecutionResult execute(List<Command> commands) {
-    LOGGER.info("Starting execution...");
+    LOGGER.debug("Starting execution...");
     ExecutionResult.Builder result = ExecutionResult.builder();
     /** Within execution context */
     try (context) {
@@ -74,12 +74,12 @@ public class ExecutorImpl implements Executor {
           /** This execution step was successful. */
           result.addStep(
               executionStep.endNow().withSuccess().setScreenshot(context.getScreenshot()));
-          LOGGER.info("Executing command: {} ... SUCCESS", command);
+          LOGGER.debug("Executing command: {} ... SUCCESS", command);
         } catch (Exception e) {
           /** This execution step was failed. */
           result.addStep(executionStep.endNow().withFail());
           /** Log the fail */
-          LOGGER.info("Executing command: {} ... FAIL", command);
+          LOGGER.debug("Executing command: {} ... FAIL", command);
           /** Wraps on execution exception if needed */
           if (e instanceof ExecutionException) {
             throw e;
@@ -95,7 +95,7 @@ public class ExecutorImpl implements Executor {
       LOGGER.error("Error closing the driver.", ioe);
     }
     /** Set final execution status */
-    LOGGER.info("Finishing execution...");
+    LOGGER.debug("Finishing execution...");
     return result.build();
   }
 

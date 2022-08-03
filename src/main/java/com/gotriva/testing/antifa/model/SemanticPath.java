@@ -68,8 +68,8 @@ public class SemanticPath {
    * @return the decoded action if any
    */
   public Optional<Command> traverse(final SemanticGraph graph) {
-    LOGGER.info("============== Start Traversing ===========");
-    LOGGER.info("Steps: {}", steps);
+    LOGGER.debug("============== Start Traversing ===========");
+    LOGGER.debug("Steps: {}", steps);
 
     /** Get the graph root */
     IndexedWord root = graph.getFirstRoot();
@@ -78,28 +78,28 @@ public class SemanticPath {
     Map<Command.ComponentType, Deque<IndexedWord>> actionsMap = new HashMap<>();
     putOrAppend(actionsMap, Command.ComponentType.COMMAND, root);
 
-    LOGGER.info("My root is: {}", root);
+    LOGGER.debug("My root is: {}", root);
 
     /** Traverses the graph from root */
     for (Step step : steps) {
-      LOGGER.info("Current step: {}", step);
+      LOGGER.debug("Current step: {}", step);
 
       /** Get source. */
       IndexedWord source = getFirst(actionsMap, step.getSource());
-      LOGGER.info("Source: {}", source);
+      LOGGER.debug("Source: {}", source);
 
       /** Get edge. */
       GrammaticalRelation edge = step.getEdge();
-      LOGGER.info("Edge: {}", edge);
+      LOGGER.debug("Edge: {}", edge);
 
       /** Get destination. */
       IndexedWord destination = graph.getChildWithReln(source, edge);
-      LOGGER.info("Dest: {}", destination);
+      LOGGER.debug("Dest: {}", destination);
 
       /** Check if destination was found */
       if (destination == null) {
-        LOGGER.info("Desination not found. Ending traversal.");
-        LOGGER.info("========================================");
+        LOGGER.debug("Desination not found. Ending traversal.");
+        LOGGER.debug("========================================");
         return Optional.empty();
       }
 
@@ -121,8 +121,8 @@ public class SemanticPath {
       commandBuilder.setType(concatString(actionsMap.get(Command.ComponentType.TYPE)));
     }
 
-    LOGGER.info("Map: {}", actionsMap);
-    LOGGER.info("========================================");
+    LOGGER.debug("Map: {}", actionsMap);
+    LOGGER.debug("========================================");
 
     return Optional.of(commandBuilder.build());
   }

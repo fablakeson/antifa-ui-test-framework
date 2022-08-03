@@ -37,29 +37,32 @@ import org.slf4j.LoggerFactory;
 /**
  * Goal which touches a timestamp file.
  *
- * @goal touch
- * @phase process-sources
+ * @goal ui-test
+ * @phase test
  */
 public class AntifaMojo extends AbstractMojo {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AntifaMojo.class);
 
-  // TODO: Add plugin properties parameterization support.
   // TODO: Add unitary tests to each class.
-  // TODO: Change LOGGER.info to LOGGER.debug
   // TODO: Remove unnecessary comments (like this)
 
   /** The dependency injector */
   private Injector injector =
       Guice.createInjector(new ParsingModule(), new ExecutionModule(), new PresentationModule());
 
-  /** Location of the input file. */
-  private File inputDirectory = new File("./src/main/resources/test-files");
+  /**
+   * Location of the input files.
+   *
+   * @parameter default-value="${project.basedir}/src/test/resources/antifa"
+   * @required
+   */
+  private File inputDirectory;
 
   /**
    * Location of the output files.
    *
-   * @parameter expression="project.build.directory"
+   * @parameter default-value="${project.build.directory}"
    * @required
    */
   private File outputDirectory;
@@ -73,12 +76,16 @@ public class AntifaMojo extends AbstractMojo {
 
     /** Check input and output directories */
     if (!inputDirectory.isDirectory()) {
-      throw new MojoExecutionException("Input directory is not valid");
+      throw new MojoExecutionException(
+          "Input directory is not valid: " + inputDirectory.getAbsolutePath());
     }
+    LOGGER.info("Reading files on directory: {}", inputDirectory.getAbsolutePath());
 
     if (!outputDirectory.isDirectory()) {
-      throw new MojoExecutionException("Output directory is not valid");
+      throw new MojoExecutionException(
+          "Output directory is not valid: " + outputDirectory.getAbsolutePath());
     }
+    LOGGER.info("Output files on directory: {}", outputDirectory.getAbsolutePath());
 
     /** For each test file */
     Stream.of(inputDirectory.listFiles())
@@ -92,6 +99,8 @@ public class AntifaMojo extends AbstractMojo {
                 return Pair.of(file.getName(), Collections.<String>emptyList());
               }
             })
+        /** Log file if debug */
+        .peek(pair -> LOGGER.info("Running tests on file: {}", pair.getKey()))
         /** Parse instruction lines into commands */
         .map(pair -> Pair.of(pair.getKey(), getParser().parse(pair.getValue())))
         /** Execute commands and get result */
@@ -102,6 +111,7 @@ public class AntifaMojo extends AbstractMojo {
                 getReportWriter()
                     .writeReport(
                         pair.getValue(), removeFileExtension(pair.getKey()), outputDirectory));
+    LOGGER.info("All done!");
   }
 
   private String removeFileExtension(String fileName) {

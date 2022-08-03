@@ -23,15 +23,15 @@ public class PresentationModule extends AbstractModule {
   public Properties proveideVelocityProperties() {
     Properties props = new Properties();
     /** Add properties here */
-    props.setProperty("resource.loader", "class");
+    props.setProperty("resource.loaders", "class,file");
     props.setProperty(
-        "class.resource.loader.class",
+        "resource.loader.class.class",
         "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
     return props;
   }
 
   @Provides
-  public VelocityEngine provideVelocity(Properties props) {
+  public VelocityEngine provideVelocity(@VelocityProperties Properties props) {
     return new VelocityEngine(props);
   }
 

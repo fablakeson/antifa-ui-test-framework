@@ -69,7 +69,7 @@ public class ParserImpl implements Parser {
     for (CoreMap sentence : sentences) {
       /** Get semantic dependency graph */
       SemanticGraph dependencyParse = sentence.get(BasicDependenciesAnnotation.class);
-      LOGGER.info("dependencyParse: {}", dependencyParse);
+      LOGGER.debug("dependencyParse: {}", dependencyParse);
       /** Try to interpret the graph as a command */
       Command command = interpreter.intepret(dependencyParse);
       /** Replace parameter value (if any) */
@@ -87,7 +87,7 @@ public class ParserImpl implements Parser {
         command.setInstruction(StringUtils.capitalize(sentence.toString()));
       }
       // Print action
-      LOGGER.info("command: {}", command);
+      LOGGER.debug("command: {}", command);
       // add action to list
       commands.add(command);
     }
@@ -122,9 +122,9 @@ public class ParserImpl implements Parser {
                 + parameterName
                 + instruction.substring(parameterEnd + 1);
         instructions.set(i, newInstruction.toLowerCase());
-        LOGGER.info("Instruction: {} --> {}", instruction, instructions.get(i));
+        LOGGER.debug("Instruction: {} --> {}", instruction, instructions.get(i));
       } else {
-        LOGGER.info("Instruction: {}", instruction);
+        LOGGER.debug("Instruction: {}", instruction);
         instructions.set(i, instruction.toLowerCase());
       }
     }

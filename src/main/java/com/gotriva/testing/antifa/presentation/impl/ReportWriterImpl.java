@@ -18,12 +18,11 @@ public class ReportWriterImpl implements ReportWriter {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ReportWriterImpl.class);
 
-  // TODO: get file from jar
   /** The template file name */
-  private static final String TEMPLATE_FILE_NAME = "./src/main/resources/templates/report.html";
+  private static final String TEMPLATE_FILE_NAME = "templates/report.html";
 
   /** The file name template */
-  private static final String CREATED_FILE_NAME_PATTERN = "antifa_test_{0}.html";
+  private static final String CREATED_FILE_NAME_PATTERN = "antifa_test_{0}_{1,number,#}.html";
 
   /** The velocity engine */
   private final VelocityEngine velocity;
@@ -58,6 +57,6 @@ public class ReportWriterImpl implements ReportWriter {
    * @return The new created file name.
    */
   private String getFileName(String testName) {
-    return MessageFormat.format(CREATED_FILE_NAME_PATTERN, testName);
+    return MessageFormat.format(CREATED_FILE_NAME_PATTERN, testName, System.currentTimeMillis());
   }
 }
