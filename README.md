@@ -1,6 +1,6 @@
 # antifa-test-maven-plugin
 
-## An NLP-based Automated UI Testing Framework using the Page Object Model.
+## Creating an NLP-based Automated UI Test Framework using the Page Object Model.
 
 ### Abstract
 
