@@ -2,7 +2,7 @@ package com.gotriva.testing.antifa.element;
 
 import org.openqa.selenium.WebElement;
 
-/** Abstract class to represent a element. */
+/** Abstract class to represent an element. */
 public abstract class AbstractElement implements Interactable {
 
   protected WebElement element;
