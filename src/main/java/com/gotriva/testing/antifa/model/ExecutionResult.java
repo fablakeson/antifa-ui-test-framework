@@ -167,4 +167,15 @@ public class ExecutionResult {
   public List<ExecutionStep> getSteps() {
     return steps;
   }
+
+  @Override
+  public String toString() {
+    return "ExecutionResult [failReason="
+        + failReason
+        + ", status="
+        + status
+        + ", steps="
+        + steps
+        + "]";
+  }
 }

@@ -21,7 +21,7 @@ import java.util.Optional;
 /** This class implements the {@link Interpreter}. */
 public class InterpreterImpl implements Interpreter {
 
-  // TODO: Correct the semantic paths
+  // TODO: Test the semantic paths
 
   /** The semantic paths list for {@link SemanticGraph} traversals. */
   private static final List<SemanticPath> SEMANTIC_PATHS =

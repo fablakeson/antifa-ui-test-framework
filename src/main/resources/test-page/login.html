@@ -7,11 +7,23 @@
             }
             .success {
                 color: green;
-                visibility: visible;
+            }
+            .fail {
+                color: red;
             }
         </style>
     </head>
     <body>
+        <script>
+            var tryLogin = function (password) {
+                const message = document.querySelector('#message');
+                if (password !== 'testpassword') {
+                    document.querySelector('#message-fail').classList.remove('hidden');
+                } else {
+                    document.querySelector('#message-success').classList.remove('hidden');
+                }
+            }
+        </script>
         <form id="login-form" name="login">
             <label for="username">Username:</label>
             <input id="username" name="username" type="text"/>
@@ -22,10 +34,9 @@
             <input id="credit-card" name="credit-card" type="text"/>
             -->
             <input id="login" type="button" value="Login" 
-                onclick="document.getElementById('message').className = 'success'"/>
+                onclick="tryLogin(document.querySelector('#password').value)"/>
         </form>
-        <div id="message" class="hidden">
-            Login with success!!!
-        </div>
+        <div id="message-success" class="hidden success">Login with success!!!</div>
+        <div id="message-fail" class="hidden fail">Fail on login!</div>
     </body>
 </html>

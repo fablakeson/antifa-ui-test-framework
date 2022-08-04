@@ -14,6 +14,13 @@
             .FAIL {
                 color: red;
             }
+            h4.SUCCESS {
+                color: black;
+            }
+            h4.FAIL {
+                color: black;
+                text-decoration: line-through;
+            }
         </style>
         <header>
             <h1>Antifa UI Testing Result</h1>
@@ -48,7 +55,7 @@
             <ol>
                 #foreach( $step in $result.steps )
                 <li>
-                    <h4>$step.command.instruction</h4>
+                    <h4 class="${step.result}">$step.command.instruction</h4>
                     <details>
                         <summary>Details</summary>
                         <table>

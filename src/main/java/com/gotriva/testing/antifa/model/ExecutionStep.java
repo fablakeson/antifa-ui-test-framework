@@ -158,4 +158,19 @@ public class ExecutionStep {
   public Long getElapsedTime() {
     return ChronoUnit.MILLIS.between(getStartTime(), getEndTime());
   }
+
+  @Override
+  public String toString() {
+    return "ExecutionStep [command="
+        + command
+        + ", endTime="
+        + endTime
+        + ", result="
+        + result
+        + ", screenshot="
+        + (screenshot != null ? "[...]" : null)
+        + ", startTime="
+        + startTime
+        + "]";
+  }
 }

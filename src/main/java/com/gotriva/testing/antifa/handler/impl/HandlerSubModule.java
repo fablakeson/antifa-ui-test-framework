@@ -43,6 +43,7 @@ public class HandlerSubModule extends AbstractModule {
         /** Page Object handlers */
         .add(new OpenPageHandler())
         .add(new ClosePageHandler())
+        .add(new ReadPageHandler())
         .add(new RollPageHandler())
         /** return list */
         .build();

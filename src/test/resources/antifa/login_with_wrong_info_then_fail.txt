@@ -2,7 +2,7 @@
 
 Open the login page at "http://localhost:8000/login.html".
 Write "teste@mail.com.br" to username input.
-Write "testpassword" to the password input.
+Write "wrongpass" to the password input.
 Click on the login button.
 Read the message "Login with success!!!"
 

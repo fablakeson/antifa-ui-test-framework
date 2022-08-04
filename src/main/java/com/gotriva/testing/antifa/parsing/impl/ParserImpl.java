@@ -104,7 +104,7 @@ public class ParserImpl implements Parser {
   private Map<String, String> prepareInstructions(List<String> instructions) {
     Map<String, String> parameters = new HashMap<>();
     for (int i = 0; i < instructions.size(); ++i) {
-      final String instruction = instructions.get(i).toLowerCase();
+      final String instruction = instructions.get(i);
       final int parameterStart = instruction.indexOf("\"");
       if (parameterStart >= 0) {
         final int parameterEnd = instruction.indexOf("\"", parameterStart + 1);

@@ -12,8 +12,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -90,15 +92,7 @@ public class AntifaMojo extends AbstractMojo {
     /** For each test file */
     Stream.of(inputDirectory.listFiles())
         /** Read lines from each file */
-        .map(
-            file -> {
-              try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                return Pair.of(file.getName(), reader.lines().collect(Collectors.toList()));
-              } catch (Exception ex) {
-                LOGGER.error("Error reading file.", ex);
-                return Pair.of(file.getName(), Collections.<String>emptyList());
-              }
-            })
+        .map(file -> Pair.of(file.getName(), getLines(file)))
         /** Log file if debug */
         .peek(pair -> LOGGER.info("Running tests on file: {}", pair.getKey()))
         /** Parse instruction lines into commands */
@@ -112,6 +106,21 @@ public class AntifaMojo extends AbstractMojo {
                     .writeReport(
                         pair.getValue(), removeFileExtension(pair.getKey()), outputDirectory));
     LOGGER.info("All done!");
+  }
+
+  private List<String> getLines(File file) {
+    try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+      return reader
+          .lines()
+          /** Remove comment lines */
+          .filter(line -> !line.startsWith("#"))
+          /** Remove blank lines */
+          .filter(StringUtils::isNotBlank)
+          .collect(Collectors.toList());
+    } catch (Exception ex) {
+      LOGGER.error("Error reading file.", ex);
+      return Collections.emptyList();
+    }
   }
 
   private String removeFileExtension(String fileName) {
