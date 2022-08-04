@@ -8,13 +8,9 @@ import java.text.MessageFormat;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /** his class implements a page object handler for read on page action. */
 public class ReadPageHandler implements PageObjectActionHandler {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(ReadPageHandler.class);
 
   private static final String FIND_MESSAGE_XPATH =
       "//*[text()[contains(.,\"{0}\")]"
