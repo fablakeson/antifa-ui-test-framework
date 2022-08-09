@@ -1,6 +1,6 @@
 # antifa-test-maven-plugin
 
-## Antifa
+## What is Antifa?
 
 Antifa is an automated interface testing framework that interprets instructions in natural language and converts them to webdriver commands, making it possible to write complete interface tests in a fast and understandable way, even for non-programmers.
 
