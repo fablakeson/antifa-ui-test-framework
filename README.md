@@ -28,7 +28,7 @@ Ex.: `login_with_correct_credentials_then_success_message_appears.txt`
 
 3. Write your test following this instructions:
 
-- You **must** write individal sentences for each **command**.<br>
+- You **must** write an individal sentence for each **command**.<br>
   Ex.: `Click on the login button.`
 
 - Your **command** must be a valid regular english language phrase.
@@ -46,10 +46,10 @@ Ex.: `login_with_correct_credentials_then_success_message_appears.txt`
 - You must include the **object** name in your command. The framework use this to search your object *id* on webpage.
 
 - If your **object** name is composited, the framework contatenates it with the `-` prefix for each word after the first.<br>
-  Ex.: `Write "123456" on the phone number` --> `object_name: phone-number`.
+  Ex.: `Write "123456" on the phone number` &#8594; `object_name: phone-number`.
 
 - If you are interacting with the object for the **first time**, you **must** inform the **type** after the **name**.<br>
-  Ex.: `Write "123456" on the phone number input` --> `type_name: input/text`.<br>
+  Ex.: `Write "123456" on the phone number input` &#8594; `type_name: input/text`.<br>
   Possible **types** are described on the next section.
 
 ## Types and Actions
