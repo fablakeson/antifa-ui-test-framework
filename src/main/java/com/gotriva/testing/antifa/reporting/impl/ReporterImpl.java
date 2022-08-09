@@ -1,8 +1,8 @@
-package com.gotriva.testing.antifa.presentation.impl;
+package com.gotriva.testing.antifa.reporting.impl;
 
 import com.gotriva.testing.antifa.exception.PresentationException;
 import com.gotriva.testing.antifa.model.ExecutionResult;
-import com.gotriva.testing.antifa.presentation.ReportWriter;
+import com.gotriva.testing.antifa.reporting.Reporter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,9 +14,10 @@ import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ReportWriterImpl implements ReportWriter {
+/** This class implements the {@link Reporter}. */
+public class ReporterImpl implements Reporter {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(ReportWriterImpl.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(ReporterImpl.class);
 
   /** The file name split tokens */
   private static final String SPLIT_TOKENS = "( |_)";
@@ -34,7 +35,7 @@ public class ReportWriterImpl implements ReportWriter {
   private final VelocityContext context;
 
   /** Default constructor. */
-  public ReportWriterImpl(VelocityEngine velocity, VelocityContext context) {
+  public ReporterImpl(VelocityEngine velocity, VelocityContext context) {
     this.velocity = velocity;
     this.context = context;
   }

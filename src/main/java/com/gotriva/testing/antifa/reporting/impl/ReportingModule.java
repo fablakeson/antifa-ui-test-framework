@@ -1,10 +1,10 @@
-package com.gotriva.testing.antifa.presentation.impl;
+package com.gotriva.testing.antifa.reporting.impl;
 
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.gotriva.testing.antifa.presentation.ReportWriter;
+import com.gotriva.testing.antifa.reporting.Reporter;
 import java.lang.annotation.Retention;
 import java.util.Properties;
 import javax.inject.Qualifier;
@@ -12,7 +12,7 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 
 /** Provides presentation classes bindings. */
-public class PresentationModule extends AbstractModule {
+public class ReportingModule extends AbstractModule {
 
   @Qualifier
   @Retention(RUNTIME)
@@ -41,7 +41,7 @@ public class PresentationModule extends AbstractModule {
   }
 
   @Provides
-  public ReportWriter provideReportWriter(VelocityEngine velocity, VelocityContext context) {
-    return new ReportWriterImpl(velocity, context);
+  public Reporter provideReportWriter(VelocityEngine velocity, VelocityContext context) {
+    return new ReporterImpl(velocity, context);
   }
 }

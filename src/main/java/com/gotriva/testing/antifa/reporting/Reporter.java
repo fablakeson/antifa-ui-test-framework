@@ -1,10 +1,10 @@
-package com.gotriva.testing.antifa.presentation;
+package com.gotriva.testing.antifa.reporting;
 
 import com.gotriva.testing.antifa.model.ExecutionResult;
 import java.io.File;
 
 /** This class gets the {@link ExecutionResult} and writes an HTML report. */
-public interface ReportWriter {
+public interface Reporter {
 
   /**
    * Writes a new report file for this execution.

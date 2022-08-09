@@ -8,8 +8,8 @@ import com.gotriva.testing.antifa.model.Command;
 import com.gotriva.testing.antifa.model.ExecutionResult;
 import com.gotriva.testing.antifa.parsing.Parser;
 import com.gotriva.testing.antifa.parsing.impl.ParsingModule;
-import com.gotriva.testing.antifa.presentation.ReportWriter;
-import com.gotriva.testing.antifa.presentation.impl.PresentationModule;
+import com.gotriva.testing.antifa.reporting.Reporter;
+import com.gotriva.testing.antifa.reporting.impl.ReportingModule;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -31,7 +31,7 @@ public final class Antifa {
   /** Use Guice for dependency injection */
   static {
     INJECTOR =
-        Guice.createInjector(new ParsingModule(), new ExecutionModule(), new PresentationModule());
+        Guice.createInjector(new ParsingModule(), new ExecutionModule(), new ReportingModule());
   }
   /** The output directory. */
   private final File outputDirectory;
@@ -117,7 +117,7 @@ public final class Antifa {
     return INJECTOR.getInstance(Executor.class);
   }
 
-  private ReportWriter getReportWriter() {
-    return INJECTOR.getInstance(ReportWriter.class);
+  private Reporter getReportWriter() {
+    return INJECTOR.getInstance(Reporter.class);
   }
 }
