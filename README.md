@@ -28,12 +28,12 @@ Ex.: `login_with_correct_credentials_then_success_message_appears.txt`
 
 3. Write your test following this instructions:
 
-- The **command** is divided in 4 parts: **action**, **object**, **type** and **parameter**.
-
 - You **must** write individal sentences for each **command**.<br>
   Ex.: `Click on the login button.`
 
 - Your **command** must be a valid regular english language phrase.
+
+- The **command** is divided in 4 parts: **action**, **object**, **type** and **parameter**.
 
 - The sentences **must** begin with an **action**.
 
@@ -41,7 +41,7 @@ Ex.: `login_with_correct_credentials_then_success_message_appears.txt`
 
 - The sentences **must** end with a period `.`
 
-- Some **actions** requires a **parameter**, the parameter must be written between quotes.<br>
+- Some **actions** requires a **parameter**, it must be written between quotes.<br>
   Ex.: `Write "Hello World" on the message box.`
   
 - You must include the **object** name in your command. The framework use this to search your object *id* on webpage.
@@ -59,5 +59,7 @@ Ex.: `login_with_correct_credentials_then_success_message_appears.txt`
 ### Element types
 
 - **Button:** represents a HTML button, is capable of **click** action.
+
+### Element Actions
 
 ### Page Actions
