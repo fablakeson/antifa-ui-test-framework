@@ -28,35 +28,35 @@ Ex.: `login_with_correct_credentials_then_success_message_appears.txt`
 
 3. Write your test following this instructions:
 
-- You **must** write an individal sentence for each **command**.<br>
+- You **must** write an individal sentence for each *command*.<br>
   Ex.: `Click on the login button.`
 
-- The **command** must be a valid regular english language phrase.
+- The *command* **must** be a valid regular english language phrase.
 
-- The **command** is divided in 4 parts: **action**, **object**, **type** and **parameter**.
+- The *command* is divided in 4 parts: *action*, *object*, *type* and *parameter*.
 
-- The sentences **must** begin with an **action**.<br>
-  Possible **actions** are described in the next section.
+- The sentences **must** begin with an *action*.<br>
+  Possible *actions* are described in the next section.
 
 - The sentences **must** end with a period `.`
 
-- Some **actions** requires a **parameter**, it must be written between quotes.<br>
+- Some *actions* requires a *parameter*, it *must* be written between quotes.<br>
   Ex.: `Write "Hello World" on the message box.`
   
-- You **must** include the **object** name in your command. The framework use this to search the element **id** on HTML.
+- You **must** include the *object* name in your command. The framework use this to search the element *id* on HTML.
 
-- If your **object** name is composited, the framework contatenates it with the `-` prefix for each word after the first.<br>
+- If your *object* name is composited, the framework contatenates it with the `-` prefix for each word after the first.<br>
   Ex.: `Write "123456" on the phone number.` &#8594; `object_name: phone-number`.
 
-- If you are interacting with the object for the **first time**, you **must** inform the **type** after the **name**.<br>
+- If you are interacting with the object for the *first time*, you **must** inform the *type* after the *name*.<br>
   Ex.: `Write "123456" on the phone number input.` &#8594; `type_name: input/text`.<br>
-  Possible **types** are described on the next section.
+  Possible *types* are described on the next section.
 
 ## Types and Actions
 
 ### Element types
 
-- **Button:** represents a HTML button, is capable of **click** action.
+- **Button:** represents a HTML button, is capable of *click* action.
 
 ### Element Actions
 
