@@ -45,7 +45,7 @@ Ex.: `login_with_correct_credentials_then_success_message_appears.txt`
   
 - You **must** include the *object* name in your command. The framework use this to search the element *id* on HTML.
 
-- If your *object* name is composited, the framework contatenates it with the `-` prefix for each word after the first.<br>
+- If your *object* name is composited, the framework puts a hiphen `-` between the words after the first.<br>
   Ex.: `Write "123456" on the phone number.` &#8594; `object_name: phone-number`.
 
 - If you are interacting with the **object** for the **first time**, you **must** inform the **type** after the **name**.<br>
