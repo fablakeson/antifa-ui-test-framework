@@ -35,9 +35,7 @@ Ex.: `login_with_correct_credentials_then_success_message_appears.txt`
 
 - The **command** is divided in 4 parts: **action**, **object**, **type** and **parameter**.
 
-- The sentences **must** begin with an **action**.
-
-- The possible **actions** are described in the next section.
+- The sentences **must** begin with an **action**. Possible **actions** are described in the next section.
 
 - The sentences **must** end with a period `.`
 
@@ -49,10 +47,8 @@ Ex.: `login_with_correct_credentials_then_success_message_appears.txt`
 - If your **object** name is composited, the framework contatenates it with the `-` prefix for each word after the first.<br>
   Ex.: `Write "123456" on the phone number` --> `object_name: phone-number`.
 
-- If you are interacting with the object for the first time, you must inform the **type** after the **name**.<br>
+- If you are interacting with the object for the first time, you must inform the **type** after the **name**. Possible **types** are described on the next section.<br>
   Ex.: `Write "123456" on the phone number input` --> `type_name: input/text`.
-
-- The possible **types** are described on the next section.
 
 ## Types and Actions
 
