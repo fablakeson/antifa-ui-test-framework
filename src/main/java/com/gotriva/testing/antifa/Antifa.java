@@ -69,6 +69,7 @@ public final class Antifa {
   }
 
   public void execute(String testName, List<String> instructions) {
+    sanityCheck(instructions);
     LOGGER.info("Executing test: {}", testName);
     List<Command> commands = parseInstructions(instructions);
     ExecutionResult result = executeCommands(commands);
@@ -106,6 +107,15 @@ public final class Antifa {
    */
   private File writeResultReport(String testName, ExecutionResult result) {
     return getReportWriter().writeReport(result, testName, outputDirectory);
+  }
+
+  /**
+   * Assert the instructions list.
+   *
+   * @param instructions
+   */
+  private void sanityCheck(List<String> instructions) {
+    assert instructions.stream().allMatch(instruction -> instruction.endsWith("."));
   }
 
   /** Getters */
