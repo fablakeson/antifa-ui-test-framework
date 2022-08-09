@@ -12,6 +12,7 @@ public interface ReportWriter {
    * @param result the execution result.
    * @param testName the test file name
    * @param outputDirectory the output directory file.
+   * @return the writed file.
    */
-  void writeReport(ExecutionResult result, String testName, File outputDirectory);
+  File writeReport(ExecutionResult result, String testName, File outputDirectory);
 }

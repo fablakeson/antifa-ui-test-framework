@@ -1,22 +1,10 @@
 package com.gotriva;
 
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.gotriva.testing.antifa.execution.Executor;
-import com.gotriva.testing.antifa.execution.impl.ExecutionModule;
-import com.gotriva.testing.antifa.parsing.Parser;
-import com.gotriva.testing.antifa.parsing.impl.ParsingModule;
-import com.gotriva.testing.antifa.presentation.ReportWriter;
-import com.gotriva.testing.antifa.presentation.impl.PresentationModule;
-import java.io.BufferedReader;
+import com.gotriva.testing.antifa.Antifa;
 import java.io.File;
-import java.io.FileReader;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.io.IOException;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.slf4j.Logger;
@@ -48,10 +36,6 @@ public class AntifaMojo extends AbstractMojo {
 
   // TODO: Add unitary tests to each class.
   // TODO: Remove unnecessary comments (like this)
-
-  /** The dependency injector */
-  private Injector injector =
-      Guice.createInjector(new ParsingModule(), new ExecutionModule(), new PresentationModule());
 
   /**
    * Location of the input files.
@@ -89,53 +73,27 @@ public class AntifaMojo extends AbstractMojo {
     }
     LOGGER.info("Output files on directory: {}", outputDirectory.getAbsolutePath());
 
+    Antifa antifa = Antifa.instance(outputDirectory);
+
     /** For each test file */
     Stream.of(inputDirectory.listFiles())
-        /** Read lines from each file */
-        .map(file -> Pair.of(file.getName(), getLines(file)))
-        /** Log file if debug */
-        .peek(pair -> LOGGER.info("Running tests on file: {}", pair.getKey()))
-        /** Parse instruction lines into commands */
-        .map(pair -> Pair.of(pair.getKey(), getParser().parse(pair.getValue())))
-        /** Execute commands and get result */
-        .map(pair -> Pair.of(pair.getKey(), getExecutor().execute(pair.getValue())))
-        /** Write the result report */
+        /** execute tests for files */
         .forEach(
-            pair ->
-                getReportWriter()
-                    .writeReport(
-                        pair.getValue(), removeFileExtension(pair.getKey()), outputDirectory));
+            file -> {
+              try {
+                antifa.execute(getTestName(file.getName()), file);
+              } catch (IOException e) {
+                LOGGER.error("Error executing file " + file.getName(), e);
+                throw new RuntimeException(e);
+              }
+            });
+
     LOGGER.info("All done!");
   }
 
-  private List<String> getLines(File file) {
-    try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-      return reader
-          .lines()
-          /** Remove comment lines */
-          .filter(line -> !line.startsWith("#"))
-          /** Remove blank lines */
-          .filter(StringUtils::isNotBlank)
-          .collect(Collectors.toList());
-    } catch (Exception ex) {
-      LOGGER.error("Error reading file.", ex);
-      return Collections.emptyList();
-    }
-  }
-
-  private String removeFileExtension(String fileName) {
-    return fileName.substring(0, fileName.lastIndexOf("."));
-  }
-
-  private Parser getParser() {
-    return injector.getInstance(Parser.class);
-  }
-
-  private Executor getExecutor() {
-    return injector.getInstance(Executor.class);
-  }
-
-  private ReportWriter getReportWriter() {
-    return injector.getInstance(ReportWriter.class);
+  private String getTestName(String fileName) {
+    return StringUtils.capitalize(
+        String.join(" ", fileName.substring(0, fileName.lastIndexOf(".")).split("_"))
+            .toLowerCase());
   }
 }

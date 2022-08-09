@@ -18,6 +18,9 @@ public class ReportWriterImpl implements ReportWriter {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ReportWriterImpl.class);
 
+  /** The file name split tokens */
+  private static final String SPLIT_TOKENS = "( |_)";
+
   /** The template file name */
   private static final String TEMPLATE_FILE_NAME = "templates/report.html";
 
@@ -37,26 +40,49 @@ public class ReportWriterImpl implements ReportWriter {
   }
 
   @Override
-  public void writeReport(ExecutionResult result, String testName, File outputDirectory) {
+  public File writeReport(ExecutionResult result, String testName, File outputDirectory) {
     if (!outputDirectory.isDirectory()) {
       throw new PresentationException("the output directory is not valid");
     }
-    try (FileWriter writer = new FileWriter(new File(outputDirectory, getFileName(testName)))) {
+    File file = new File(outputDirectory, getFileName(testName));
+    try (FileWriter writer = new FileWriter(file)) {
       velocity.init();
       Template template = velocity.getTemplate(TEMPLATE_FILE_NAME);
-      context.put("testName", StringUtils.capitalize(StringUtils.join(testName.split("_"), " ")));
+      context.put("testName", formatTestName(testName));
       context.put("result", result);
       template.merge(context, writer);
     } catch (IOException | RuntimeException ex) {
       LOGGER.error("Error creating report.", ex);
       throw new PresentationException(ex.getMessage(), ex);
     }
+    return file;
   }
 
   /**
    * @return The new created file name.
    */
   private String getFileName(String testName) {
-    return MessageFormat.format(CREATED_FILE_NAME_PATTERN, testName, System.currentTimeMillis());
+    return MessageFormat.format(
+        CREATED_FILE_NAME_PATTERN, formatFileName(testName), System.currentTimeMillis());
+  }
+
+  /**
+   * Format the file name from test name.
+   *
+   * @param testName the test name
+   * @return
+   */
+  private String formatFileName(String testName) {
+    return String.join("_", testName.split(SPLIT_TOKENS)).toLowerCase();
+  }
+
+  /**
+   * Format the test printable name.
+   *
+   * @param testName
+   * @return
+   */
+  private String formatTestName(String testName) {
+    return StringUtils.capitalize(String.join(" ", testName.split(SPLIT_TOKENS)));
   }
 }
