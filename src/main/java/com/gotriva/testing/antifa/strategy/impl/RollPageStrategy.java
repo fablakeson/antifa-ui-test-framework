@@ -1,18 +1,18 @@
-package com.gotriva.testing.antifa.handler.impl;
+package com.gotriva.testing.antifa.strategy.impl;
 
 import com.gotriva.testing.antifa.execution.ExecutionContext;
-import com.gotriva.testing.antifa.handler.PageObjectActionHandler;
 import com.gotriva.testing.antifa.model.GenericPageObject;
+import com.gotriva.testing.antifa.strategy.PageObjectActionStrategy;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
-public class RollPageHandler implements PageObjectActionHandler {
+/** This class implements a page object strategy for scroll page action. */
+public class RollPageStrategy implements PageObjectActionStrategy {
 
   private static final int SCROLLED_PIXELS = 350;
 
   /** Default constructor */
-  RollPageHandler() {
-  }
+  RollPageStrategy() {}
 
   @Override
   public String getAction() {
@@ -20,7 +20,7 @@ public class RollPageHandler implements PageObjectActionHandler {
   }
 
   @Override
-  public void handle(ExecutionContext context, String page, String direction) {
+  public void perform(ExecutionContext context, String page, String direction) {
     GenericPageObject currentPage = context.getCurrentPage();
     WebDriver driver = currentPage.getDriver();
     switch (direction) {

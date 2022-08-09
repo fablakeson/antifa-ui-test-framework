@@ -1,9 +1,9 @@
-package com.gotriva.testing.antifa.handler;
+package com.gotriva.testing.antifa.strategy;
 
 import com.gotriva.testing.antifa.element.Interactable;
 
-/** This interface represents a interactable element action handler. */
-public interface InteractableActionHandler<T extends Interactable> extends ActionHandler {
+/** This interface represents a interactable element strategy. */
+public interface InteractableActionStrategy<T extends Interactable> extends ActionStrategy {
 
   /**
    * Handle some interactable action with a given paramter.
@@ -11,5 +11,5 @@ public interface InteractableActionHandler<T extends Interactable> extends Actio
    * @param interactable the interactable that performs the action
    * @param string the optional action parameter
    */
-  void handle(T interactable, String string);
+  void perform(T interactable, String string);
 }

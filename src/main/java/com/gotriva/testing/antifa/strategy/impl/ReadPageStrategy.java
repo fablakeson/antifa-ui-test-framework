@@ -1,16 +1,16 @@
-package com.gotriva.testing.antifa.handler.impl;
+package com.gotriva.testing.antifa.strategy.impl;
 
 import com.gotriva.testing.antifa.exception.ActionHandleException;
 import com.gotriva.testing.antifa.execution.ExecutionContext;
-import com.gotriva.testing.antifa.handler.PageObjectActionHandler;
 import com.gotriva.testing.antifa.model.GenericPageObject;
+import com.gotriva.testing.antifa.strategy.PageObjectActionStrategy;
 import java.text.MessageFormat;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-/** his class implements a page object handler for read on page action. */
-public class ReadPageHandler implements PageObjectActionHandler {
+/** This class implements a page object strategy for read on page action. */
+public class ReadPageStrategy implements PageObjectActionStrategy {
 
   private static final String FIND_MESSAGE_XPATH =
       "//*[text()[contains(.,\"{0}\")]"
@@ -23,7 +23,7 @@ public class ReadPageHandler implements PageObjectActionHandler {
   }
 
   @Override
-  public void handle(ExecutionContext context, String page, String message) {
+  public void perform(ExecutionContext context, String page, String message) {
     GenericPageObject pageObject = context.getCurrentPage();
     WebDriver driver = pageObject.getDriver();
     findElementWithMessage(message, driver);

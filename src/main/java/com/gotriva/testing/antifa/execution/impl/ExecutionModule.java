@@ -14,9 +14,9 @@ import com.gotriva.testing.antifa.execution.Executor;
 import com.gotriva.testing.antifa.factory.CompositeElementFactory;
 import com.gotriva.testing.antifa.factory.impl.FactorySubModule;
 import com.gotriva.testing.antifa.factory.impl.FactorySubModule.Factory;
-import com.gotriva.testing.antifa.handler.ActionHandler;
-import com.gotriva.testing.antifa.handler.impl.HandlerSubModule;
-import com.gotriva.testing.antifa.handler.impl.HandlerSubModule.HandlersMap;
+import com.gotriva.testing.antifa.strategy.ActionStrategy;
+import com.gotriva.testing.antifa.strategy.impl.StrategieSubModule;
+import com.gotriva.testing.antifa.strategy.impl.StrategieSubModule.strategiesMap;
 import java.lang.annotation.Retention;
 import java.util.Map;
 import java.util.Properties;
@@ -43,7 +43,7 @@ public class ExecutionModule extends AbstractModule {
 
   @Override
   protected void configure() {
-    install(new HandlerSubModule());
+    install(new StrategieSubModule());
     install(new FactorySubModule());
   }
 
@@ -80,7 +80,7 @@ public class ExecutionModule extends AbstractModule {
 
   @Provides
   public Executor providExecutor(
-      @HandlersMap Map<String, ActionHandler> handlers, @Context ExecutionContext context) {
-    return new ExecutorImpl(handlers, context);
+      @strategiesMap Map<String, ActionStrategy> strategies, @Context ExecutionContext context) {
+    return new ExecutorImpl(strategies, context);
   }
 }

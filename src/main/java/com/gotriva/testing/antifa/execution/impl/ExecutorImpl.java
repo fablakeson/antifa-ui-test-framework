@@ -4,13 +4,13 @@ import com.gotriva.testing.antifa.element.Interactable;
 import com.gotriva.testing.antifa.exception.ExecutionException;
 import com.gotriva.testing.antifa.execution.ExecutionContext;
 import com.gotriva.testing.antifa.execution.Executor;
-import com.gotriva.testing.antifa.handler.ActionHandler;
-import com.gotriva.testing.antifa.handler.InteractableActionHandler;
-import com.gotriva.testing.antifa.handler.PageObjectActionHandler;
 import com.gotriva.testing.antifa.model.Command;
 import com.gotriva.testing.antifa.model.ExecutionResult;
 import com.gotriva.testing.antifa.model.ExecutionStep;
 import com.gotriva.testing.antifa.model.GenericPageObject;
+import com.gotriva.testing.antifa.strategy.ActionStrategy;
+import com.gotriva.testing.antifa.strategy.InteractableActionStrategy;
+import com.gotriva.testing.antifa.strategy.PageObjectActionStrategy;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.List;
@@ -25,15 +25,15 @@ public class ExecutorImpl implements Executor {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ExecutorImpl.class);
 
-  /** The handler strategies for the commands names. */
-  private final Map<String, ActionHandler> handlers;
+  /** The strategies for the commands names. */
+  private final Map<String, ActionStrategy> strategies;
 
   /** The execution context for this execution. */
   private final ExecutionContext context;
 
   /** Default constructor. */
-  ExecutorImpl(Map<String, ActionHandler> handlers, ExecutionContext context) {
-    this.handlers = handlers;
+  ExecutorImpl(Map<String, ActionStrategy> strategies, ExecutionContext context) {
+    this.strategies = strategies;
     this.context = context;
   }
 
@@ -51,25 +51,25 @@ public class ExecutorImpl implements Executor {
             ExecutionStep.builder().setCommand(command).startNow();
         /** Try to execute the command */
         try {
-          /** Get handler strategy for this command. */
-          ActionHandler handler = handlers.get(command.getCommand());
-          /** Get appropriated handler type. */
-          if (handler instanceof InteractableActionHandler) {
+          /** Get strategy strategy for this command. */
+          ActionStrategy strategy = strategies.get(command.getCommand());
+          /** Get appropriated strategy type. */
+          if (strategy instanceof InteractableActionStrategy) {
             /** Get the interactable object from context. */
             Interactable interactable = getInteractableFor(command);
             /** Try handle this interactable. */
             handleInteractable(
-                (InteractableActionHandler<Interactable>) handler,
+                (InteractableActionStrategy<Interactable>) strategy,
                 interactable,
                 command.getParameter());
-          } else if (handler instanceof PageObjectActionHandler) {
+          } else if (strategy instanceof PageObjectActionStrategy) {
             /** Try handle this page context action. */
             handlePageObject(
-                (PageObjectActionHandler) handler, command.getObject(), command.getParameter());
+                (PageObjectActionStrategy) strategy, command.getObject(), command.getParameter());
           } else {
-            /** Handler not reconigsed */
+            /** strategy not reconigsed */
             throw new ExecutionException(
-                "Handler for command '" + command.getCommand() + "' not found.");
+                "strategy for command '" + command.getCommand() + "' not found.");
           }
           /** This execution step was successful. */
           result.addStep(
@@ -100,29 +100,29 @@ public class ExecutorImpl implements Executor {
   }
 
   /**
-   * Handles the page object with the given handler.
+   * Handles the page object with the given strategy.
    *
    * @param <T>
-   * @param handler
+   * @param strategy
    * @param page
    * @param url
    */
-  private <T extends PageObjectActionHandler> void handlePageObject(
-      PageObjectActionHandler handler, String page, String parameter) {
-    handler.handle(context, page, parameter);
+  private <T extends PageObjectActionStrategy> void handlePageObject(
+      PageObjectActionStrategy strategy, String page, String parameter) {
+    strategy.perform(context, page, parameter);
   }
 
   /**
-   * Handles the interactable with the given handler.
+   * Handles the interactable with the given strategy.
    *
    * @param <T>
-   * @param handler the given handler.
+   * @param strategy the given strategy.
    * @param interactable the interactable.
    * @param parameter the parameter
    */
   private <T extends Interactable> void handleInteractable(
-      InteractableActionHandler<T> handler, T interactable, String parameter) {
-    handler.handle(interactable, parameter);
+      InteractableActionStrategy<T> strategy, T interactable, String parameter) {
+    strategy.perform(interactable, parameter);
   }
 
   /**
