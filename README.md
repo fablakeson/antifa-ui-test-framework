@@ -23,14 +23,14 @@ mvn com.gotriva:antifa-test-maven-plugin:0.0.1-SNAPSHOT:ui-test \
 
 1. Create a text (.txt or whathever extension you want) file.
 
-2. Name this file with your test using `_` instead space.
+2. Name this file with your test using `_` instead space.<br>
 Ex.: `login_with_correct_credentials_then_success_message_appears.txt`
 
 3. Write your test following this instructions:
 
 - The **command** is divided in 4 parts: **action**, **object**, **type** and **parameter**.
 
-- You **must** write individal sentences for each **command**.
+- You **must** write individal sentences for each **command**.<br>
   Ex.: `Click on the login button.`.
 
 - The sentences **must** begin with an **action**.
@@ -39,12 +39,12 @@ Ex.: `login_with_correct_credentials_then_success_message_appears.txt`
 
 - The sentences **must** end with a period `.`.
 
-- Some **actions** requires a **parameter**, the parameter must be written between quotes.
+- Some **actions** requires a **parameter**, the parameter must be written between quotes.<br>
   Ex.: `Write "Hello World" on the message box.`.
   
 - You must include the **object** name in your command. The framework use this to search your object *id* on webpage.
 
-- If your **object** name is composited, the framework contatenates it with the `-` prefix for each word after the first.
+- If your **object** name is composited, the framework contatenates it with the `-` prefix for each word after the first.<br>
   Ex.: `Write "123456" on the phone number` --> `object_name: phone-number`.
 
 ## Action Verbs
