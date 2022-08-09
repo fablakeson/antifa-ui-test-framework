@@ -31,7 +31,7 @@ Ex.: `login_with_correct_credentials_then_success_message_appears.txt`
 - You **must** write an individal sentence for each **command**.<br>
   Ex.: `Click on the login button.`
 
-- Your **command** must be a valid regular english language phrase.
+- The **command** must be a valid regular english language phrase.
 
 - The **command** is divided in 4 parts: **action**, **object**, **type** and **parameter**.
 
@@ -43,7 +43,7 @@ Ex.: `login_with_correct_credentials_then_success_message_appears.txt`
 - Some **actions** requires a **parameter**, it must be written between quotes.<br>
   Ex.: `Write "Hello World" on the message box.`
   
-- You must include the **object** name in your command. The framework use this to search your object *id* on webpage.
+- You **must** include the **object** name in your command. The framework use this to search your object **id** on HTML.
 
 - If your **object** name is composited, the framework contatenates it with the `-` prefix for each word after the first.<br>
   Ex.: `Write "123456" on the phone number` &#8594; `object_name: phone-number`.
