@@ -56,7 +56,7 @@ Ex.: `login_with_correct_credentials_then_success_message_appears.txt`
 
 The roles in this framework are divided into two groups: *types* and *actions*. An **element** of some *type* is capable of perform some *actions*. The actions are generally bounded to element types. Some elements are capable of multiple actions. Each *type* has one or more *aliases* to be used on instructions and make it more readable accordingly to the context.
 
-### Element *Types* and *Actions*
+### Element Actions
 
 These are the available element *types* and *actions* on framework:
 
