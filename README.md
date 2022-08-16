@@ -23,7 +23,7 @@ mvn com.gotriva:antifa-test-maven-plugin:0.0.1-SNAPSHOT:ui-test \
 
 1. Create a text (.txt or whathever extension you want) file.
 
-2. Name this file with your test using `_` instead space.<br>
+2. Name this file with your test title using `_` instead space.<br>
 Ex.: `login_with_correct_credentials_then_success_message_appears.txt`
 
 3. Write your test following this instructions:
