@@ -100,7 +100,7 @@ Ex.: `Write "This is a test message" to message textbox.`
 
 ### Page Actions
 
-Some actions are bounded to the parent of all *elements*, the document *page*. We call these *page actions*. The page actions are:
+Some actions are bounded to the parent of all *elements*, the document *page*. We call it *page actions*. The page actions are:
 
 - <em>**Open:**</em> this action indicates the opening of a new page or visual context (dialog, modal, panel, tab). It can actively open a new page if an URL is provided.<br>
 Ex.: `Open the login page on "http://www.mywebsite.com/login".`<br>
