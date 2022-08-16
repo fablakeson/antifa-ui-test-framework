@@ -1,4 +1,4 @@
-# antifa-test-maven-plugin
+# Antifa UI Test Framework
 
 ## What is Antifa?
 
