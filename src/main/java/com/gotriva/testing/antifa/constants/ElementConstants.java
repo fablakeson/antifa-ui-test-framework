@@ -32,6 +32,4 @@ public class ElementConstants {
   public static final String FIELD = "field";
 
   public static final String TEXTBOX = "textbox";
-
-  public static final String PASSWORD = "password";
 }

@@ -2,9 +2,9 @@
 
 ## What is Antifa?
 
-Antifa is an automated interface testing framework that interprets instructions in natural language and converts them to webdriver commands, making it possible to write complete interface tests in a fast and understandable way, even for non-programmers.
+Antifa is an *extensible* automated interface testing framework that interprets instructions in natural language and converts them to webdriver commands, making it possible to write complete interface tests in a fast and understandable way, even for non-programmers.
 
-This project is under development and in an experimental stage.
+*This project is under development and in an experimental stage.*
 
 ## How to use?
 
@@ -54,10 +54,65 @@ Ex.: `login_with_correct_credentials_then_success_message_appears.txt`
 
 ## Types and Actions
 
-### Element types
+The roles in this framework are divided into two groups: *types* and *actions*. An **element** of some *type* is capable of perform some *actions*. The actions are generally bounded to element types. Some elements are capable of multiple actions. Each *type* has one or more *aliases* to be used on instructions and make it more readable accordingly to the context.
 
-- **Button:** represents a HTML button, is capable of *click* action.
+### Element *Types* and *Actions*
 
-### Element Actions
+These are the available element *types* and *actions* on framework:
+
+- **Button:** represents a HTML `input` of `button` type. Is capable of *click* action.<br>
+Alias: `button`.<br>
+Ex.: `Click on the login button.`
+
+- **Checkbox:** represents an HTML `input` of `checkbox` type. Is capable of *check* and *uncheck* actions.<br>
+Alias: `checkbox`.<br>
+Ex.: `Check agree checkbox.`<br>
+Ex.: `Uncheck user terms acceptance checkbox.`
+
+- **File:** represents an HTML `input` of `file` type. Is capable of *upload* action.<br>
+Alias: `file`.<br>
+Ex.: `Upload path "C:/Documents/MyUser/Images/photo.jpg" to user photo file.`
+
+- **Image:** represents an HTML image element. Is capable of *click* and *hover* actions.<br>
+Alias: `image`, `icon`, `figure`.<br>
+Ex.: `Click on the user profile image.`
+Ex.: `Hover on the info icon.`
+
+- **Label:** represents an HTML `label` element. Is capable of *hover*, *click* and *read* actions.<br>
+Alias: `label`, `tag`, `chip`.<br>
+Ex.: `Click on menu tag.`<br>
+Ex.: `Hover on subject chip.`<br>
+Ex.: `Read the text "Usuário" on username label.`
+
+- **Option:** represents an HTML `input` element of `radio` type. Is capable of *check* action.<br>
+Alias: `radio`, `option`.<br>
+Ex.: `Check the red option`.
+
+- **Range:** represents an HTML `input`element of type `range`. Is capable of *set* action.<br>
+Alias: `range`.<br>
+Ex.: `Set the volume range to 35%.`<br>
+Ex.: `Set the minimum price range to 750.`
+
+- **Text:** represents an HTML `input` input of type `text` or a `textarea`. Is capable of *write* action.<br>
+Alias: `text`, `input`, `field`.<br>
+Ex.: `Write the email "testuser@testmail.com" on username input.`<br>
+Ex.: `Write "This is a test message" to message textbox.`
 
 ### Page Actions
+
+Some actions are bounded to the parent of all *elements*, the document *page*. We call these *page actions*. The page actions are:
+
+- <em>**Open:**</em> this action indicates the opening of a new page or visual context (dialog, modal, panel, tab). It can actively open a new page if an URL is provided.<br>
+Ex.: `Open the login page on "http://www.mywebsite.com/login".`<br>
+Ex.: `Open the settings tab.`
+
+- <em>**Close:**</em> this action closes the current opened page or visual context, if any.<br>
+  Ex.: `Close the message page.`
+
+- <em>**Read:**</em> this action reads some visible text on page corpus.<br>
+  Ex.: `Read the text "Profile"`<br>
+  Ex.: `Read the message "Account blocked" on login status.`
+
+- <em>**Roll:**</em> this action scrolls the page *up* or *down*.<br>
+  Ex.: `Roll "down" the page.`<br>
+  Ex.: `Roll "up" the page.`

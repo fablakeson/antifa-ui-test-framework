@@ -12,7 +12,6 @@ import static com.gotriva.testing.antifa.constants.ElementConstants.LABEL;
 import static com.gotriva.testing.antifa.constants.ElementConstants.MESSAGE;
 import static com.gotriva.testing.antifa.constants.ElementConstants.OPTION;
 import static com.gotriva.testing.antifa.constants.ElementConstants.OPT_IN;
-import static com.gotriva.testing.antifa.constants.ElementConstants.PASSWORD;
 import static com.gotriva.testing.antifa.constants.ElementConstants.RADIO;
 import static com.gotriva.testing.antifa.constants.ElementConstants.RANGE;
 import static com.gotriva.testing.antifa.constants.ElementConstants.TEXTBOX;
@@ -24,7 +23,6 @@ import com.gotriva.testing.antifa.element.impl.Checkbox;
 import com.gotriva.testing.antifa.element.impl.File;
 import com.gotriva.testing.antifa.element.impl.Image;
 import com.gotriva.testing.antifa.element.impl.Label;
-import com.gotriva.testing.antifa.element.impl.Password;
 import com.gotriva.testing.antifa.element.impl.Radio;
 import com.gotriva.testing.antifa.element.impl.Range;
 import com.gotriva.testing.antifa.element.impl.Text;
@@ -69,8 +67,6 @@ public class FactorySubModule extends AbstractModule {
         .registerFactory(INPUT, (element) -> new Text(element))
         .registerFactory(FIELD, (element) -> new Text(element))
         .registerFactory(TEXTBOX, (element) -> new Text(element))
-        /** Password type names */
-        .registerFactory(PASSWORD, (element) -> new Password(element))
         /** return composite factory */
         .build();
   }
