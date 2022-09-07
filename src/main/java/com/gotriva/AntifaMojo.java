@@ -1,6 +1,6 @@
 package com.gotriva;
 
-import com.gotriva.testing.antifa.Antifa;
+import com.gotriva.nlp.antifa.Antifa;
 import java.io.File;
 import java.io.IOException;
 import java.util.stream.Stream;

@@ -1,0 +1,17 @@
+package com.gotriva.nlp.antifa.parsing;
+
+import java.util.List;
+
+import com.gotriva.nlp.antifa.model.Command;
+
+/** This class is resposible for parse the plain text instructions into {@link Command}s. */
+public interface Parser {
+
+  /**
+   * Parses the instructions into a list of commands.
+   *
+   * @param instructions the text plain instructions
+   * @return the list of commands to execute
+   */
+  public List<Command> parse(List<String> instructions);
+}
