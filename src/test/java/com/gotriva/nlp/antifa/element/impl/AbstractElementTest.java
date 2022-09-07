@@ -12,6 +12,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 /** Base class for {@link AbstractElement} implementations tess. */
 public class AbstractElementTest {
@@ -21,8 +22,10 @@ public class AbstractElementTest {
 
   @BeforeEach
   public void init() {
-    /** Initialize selenium driver */
-    driver = new ChromeDriver();
+    /** Initialize selenium headless driver */
+    ChromeOptions options = new ChromeOptions();
+    options.addArguments("--headless");
+    driver = new ChromeDriver(options);
   }
 
   @AfterEach

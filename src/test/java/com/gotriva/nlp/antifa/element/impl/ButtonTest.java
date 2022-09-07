@@ -13,7 +13,7 @@ public class ButtonTest extends AbstractElementTest {
   private Button button;
 
   @Test
-  public void test_ClickButtonTest1_then_WriteMessageButtonTest1WasClicked() {
+  public void testButtonTest1Click_thenWriteMessageButtonTest1WasClicked() {
     /** Generate test page for button */
     String path = "/button-1-test";
     String html =
@@ -29,7 +29,7 @@ public class ButtonTest extends AbstractElementTest {
   }
 
   @Test
-  public void test_ClickButtonTest2_then_WriteMessageButtonTest2WasClicked() {
+  public void testButtonTest2Click_thenWriteMessageButtonTest2WasClicked() {
     /** Generate test page for button */
     String path = "/button-2-test";
     String html =
