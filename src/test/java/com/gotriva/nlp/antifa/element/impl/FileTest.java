@@ -32,7 +32,7 @@ public class FileTest extends AbstractElementTest {
   }
 
   @Test
-  public void testFileUpload__withTempFile_thenTempFileIsUploaded() {
+  public void testUpload_withTempFile_thenTempFileIsUploaded() {
     String path = "/test-file-1";
     String html = body(input().withId("test1").withType("file")).render();
     mockPage(path, html);

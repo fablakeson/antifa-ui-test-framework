@@ -25,7 +25,7 @@ public class ImageTest extends AbstractElementTest {
   private Image image;
 
   @Test
-  public void testImageClick_thenImageTagIsClicked() {
+  public void testClick_thenImageTagIsClicked() {
     String path = "/test-image-1";
     String html =
         body(img().withId("test1").withSrc(IMAGE_SRC).attr("onclick=\"this.alt='clicked'\""))
@@ -41,7 +41,7 @@ public class ImageTest extends AbstractElementTest {
   }
 
   @Test
-  public void testImageHoverOn_thenImageTagIsHovered() {
+  public void testHoverOn_thenImageTagIsHovered() {
     String path = "/test-image-2";
     String html =
         body(img().withId("test2").withSrc(IMAGE_SRC).attr("onmouseover=\"this.alt='hovered'\""))

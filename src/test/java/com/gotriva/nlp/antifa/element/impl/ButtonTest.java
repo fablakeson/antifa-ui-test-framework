@@ -15,7 +15,7 @@ public class ButtonTest extends AbstractElementTest {
   private Button button;
 
   @Test
-  public void testButtonClick_withButtonTag_thenButtonValueIsClicked() {
+  public void testClick_withButtonTag_thenButtonValueIsClicked() {
     /** Generate test page for button */
     String path = "/button-1-test";
     String html =
@@ -35,7 +35,7 @@ public class ButtonTest extends AbstractElementTest {
   }
 
   @Test
-  public void testButtonClick_withInputButton_thenButtonValueIsClicked() {
+  public void testClick_withInputButton_thenButtonValueIsClicked() {
     /** Generate test page for button */
     String path = "/button-2-test";
     String html =
