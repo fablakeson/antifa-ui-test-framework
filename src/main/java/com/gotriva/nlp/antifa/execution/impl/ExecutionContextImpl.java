@@ -1,8 +1,8 @@
 package com.gotriva.nlp.antifa.execution.impl;
 
+import com.gotriva.nlp.antifa.element.CompositeElementFactory;
 import com.gotriva.nlp.antifa.exception.ExecutionException;
 import com.gotriva.nlp.antifa.execution.ExecutionContext;
-import com.gotriva.nlp.antifa.factory.CompositeElementFactory;
 import com.gotriva.nlp.antifa.model.GenericPageObject;
 import java.net.URL;
 import java.util.Deque;

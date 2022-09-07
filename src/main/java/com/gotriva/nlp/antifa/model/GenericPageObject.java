@@ -1,8 +1,8 @@
 package com.gotriva.nlp.antifa.model;
 
 import com.gotriva.nlp.antifa.element.AbstractElement;
+import com.gotriva.nlp.antifa.element.CompositeElementFactory;
 import com.gotriva.nlp.antifa.element.Interactable;
-import com.gotriva.nlp.antifa.factory.CompositeElementFactory;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;

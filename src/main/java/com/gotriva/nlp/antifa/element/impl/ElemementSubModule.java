@@ -1,4 +1,4 @@
-package com.gotriva.nlp.antifa.factory.impl;
+package com.gotriva.nlp.antifa.element.impl;
 
 import static com.gotriva.nlp.antifa.constants.ElementConstants.BUTTON;
 import static com.gotriva.nlp.antifa.constants.ElementConstants.CHECKBOX;
@@ -19,22 +19,14 @@ import static com.gotriva.nlp.antifa.constants.ElementConstants.TEXTBOX;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
-import com.gotriva.nlp.antifa.element.impl.Button;
-import com.gotriva.nlp.antifa.element.impl.Checkbox;
-import com.gotriva.nlp.antifa.element.impl.File;
-import com.gotriva.nlp.antifa.element.impl.Image;
-import com.gotriva.nlp.antifa.element.impl.Label;
-import com.gotriva.nlp.antifa.element.impl.Radio;
-import com.gotriva.nlp.antifa.element.impl.Range;
-import com.gotriva.nlp.antifa.element.impl.Text;
-import com.gotriva.nlp.antifa.factory.CompositeElementFactory;
+import com.gotriva.nlp.antifa.element.CompositeElementFactory;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import javax.inject.Qualifier;
 import javax.inject.Singleton;
 
-/** This class handles the factory bindings. */
-public class FactorySubModule extends AbstractModule {
+/** This class handles the element creation bindings. */
+public class ElemementSubModule extends AbstractModule {
 
   @Qualifier
   @Retention(RetentionPolicy.RUNTIME)

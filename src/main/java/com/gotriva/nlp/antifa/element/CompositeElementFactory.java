@@ -1,6 +1,5 @@
-package com.gotriva.nlp.antifa.factory;
+package com.gotriva.nlp.antifa.element;
 
-import com.gotriva.nlp.antifa.element.AbstractElement;
 import com.gotriva.nlp.antifa.exception.InteractableTypeNotFoundException;
 import org.openqa.selenium.WebElement;
 

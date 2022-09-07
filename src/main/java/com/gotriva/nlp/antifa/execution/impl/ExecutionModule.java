@@ -9,11 +9,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
+import com.gotriva.nlp.antifa.element.CompositeElementFactory;
+import com.gotriva.nlp.antifa.element.impl.ElemementSubModule;
+import com.gotriva.nlp.antifa.element.impl.ElemementSubModule.Factory;
 import com.gotriva.nlp.antifa.execution.ExecutionContext;
 import com.gotriva.nlp.antifa.execution.Executor;
-import com.gotriva.nlp.antifa.factory.CompositeElementFactory;
-import com.gotriva.nlp.antifa.factory.impl.FactorySubModule;
-import com.gotriva.nlp.antifa.factory.impl.FactorySubModule.Factory;
 import com.gotriva.nlp.antifa.strategy.ActionStrategy;
 import com.gotriva.nlp.antifa.strategy.impl.StrategieSubModule;
 import com.gotriva.nlp.antifa.strategy.impl.StrategieSubModule.strategiesMap;
@@ -44,7 +44,7 @@ public class ExecutionModule extends AbstractModule {
   @Override
   protected void configure() {
     install(new StrategieSubModule());
-    install(new FactorySubModule());
+    install(new ElemementSubModule());
   }
 
   @Provides
