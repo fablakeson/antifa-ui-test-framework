@@ -65,7 +65,7 @@ Alias: `button`.<br>
 Ex.: `Click on the login button.`
 
 - **Checkbox:** represents an HTML `input` of `checkbox` type. Is capable of *check* and *uncheck* actions.<br>
-Alias: `checkbox`.<br>
+Alias: `checkbox`, `opt-in`.<br>
 Ex.: `Check agree checkbox.`<br>
 Ex.: `Uncheck user terms acceptance checkbox.`
 
@@ -78,13 +78,13 @@ Alias: `image`, `icon`, `figure`.<br>
 Ex.: `Click on the user profile image.`
 Ex.: `Hover on the info icon.`
 
-- **Label:** represents an HTML `label` element. Is capable of *hover*, *click* and *read* actions.<br>
-Alias: `label`, `tag`, `chip`.<br>
+- **Label:** represents an HTML textual element. Is capable of *hover*, *click* actions.<br>
+Alias: `label`, `tag`, `header`.<br>
+Ex.: `Click on about label.`<br>
 Ex.: `Click on menu tag.`<br>
-Ex.: `Hover on subject chip.`<br>
-Ex.: `Read the text "Usuário" on username label.`
+Ex.: `Hover on page title header.`<br>
 
-- **Option:** represents an HTML `input` element of `radio` type. Is capable of *check* action.<br>
+- **Radio:** represents an HTML `input` element of `radio` type. Is capable of *check* action.<br>
 Alias: `radio`, `option`.<br>
 Ex.: `Check the red option`.
 
@@ -93,14 +93,14 @@ Alias: `range`.<br>
 Ex.: `Set the volume range to 35%.`<br>
 Ex.: `Set the minimum price range to 750.`
 
-- **Text:** represents an HTML `input` input of type `text` or a `textarea`. Is capable of *write* action.<br>
-Alias: `text`, `input`, `field`.<br>
+- **Text:** represents an HTML `input` input of type `text`, `password` or a `textarea`. Is capable of *write* action.<br>
+Alias: `textbox`, `input`, `field`.<br>
 Ex.: `Write the email "testuser@testmail.com" on username input.`<br>
 Ex.: `Write "This is a test message" to message textbox.`
 
 ### Page Actions
 
-Some actions are bounded to the parent of all *elements*, the document *page*. We call it *page actions*. The page actions are:
+Some actions are bounded to the parent of all *elements*, the document *page object*. We call it *page actions*. The page actions are:
 
 - <em>**Open:**</em> this action indicates the opening of a new page or visual context (dialog, modal, panel, tab). It can actively open a new page if an URL is provided.<br>
 Ex.: `Open the login page on "http://www.mywebsite.com/login".`<br>
@@ -110,7 +110,7 @@ Ex.: `Open the settings tab.`
   Ex.: `Close the message page.`
 
 - <em>**Read:**</em> this action reads some visible text on page corpus.<br>
-  Ex.: `Read the text "Profile"`<br>
+  Ex.: `Read the text "Profile".`<br>
   Ex.: `Read the message "Account blocked" on login status.`
 
 - <em>**Roll:**</em> this action scrolls the page *up* or *down*.<br>

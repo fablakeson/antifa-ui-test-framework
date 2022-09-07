@@ -1,19 +1,20 @@
 package com.gotriva.testing.antifa.factory.impl;
 
 import static com.gotriva.testing.antifa.constants.ElementConstants.BUTTON;
-import static com.gotriva.testing.antifa.constants.ElementConstants.CAPTION;
 import static com.gotriva.testing.antifa.constants.ElementConstants.CHECKBOX;
 import static com.gotriva.testing.antifa.constants.ElementConstants.FIELD;
+import static com.gotriva.testing.antifa.constants.ElementConstants.FIGURE;
 import static com.gotriva.testing.antifa.constants.ElementConstants.FILE;
 import static com.gotriva.testing.antifa.constants.ElementConstants.HEADER;
+import static com.gotriva.testing.antifa.constants.ElementConstants.ICON;
 import static com.gotriva.testing.antifa.constants.ElementConstants.IMAGE;
 import static com.gotriva.testing.antifa.constants.ElementConstants.INPUT;
 import static com.gotriva.testing.antifa.constants.ElementConstants.LABEL;
-import static com.gotriva.testing.antifa.constants.ElementConstants.MESSAGE;
 import static com.gotriva.testing.antifa.constants.ElementConstants.OPTION;
 import static com.gotriva.testing.antifa.constants.ElementConstants.OPT_IN;
 import static com.gotriva.testing.antifa.constants.ElementConstants.RADIO;
 import static com.gotriva.testing.antifa.constants.ElementConstants.RANGE;
+import static com.gotriva.testing.antifa.constants.ElementConstants.TAG;
 import static com.gotriva.testing.antifa.constants.ElementConstants.TEXTBOX;
 
 import com.google.inject.AbstractModule;
@@ -53,11 +54,12 @@ public class FactorySubModule extends AbstractModule {
         .registerFactory(FILE, (element) -> new File(element))
         /** Image type names */
         .registerFactory(IMAGE, (element) -> new Image(element))
+        .registerFactory(ICON, (element) -> new Image(element))
+        .registerFactory(FIGURE, (element) -> new Image(element))
         /** Label type names */
         .registerFactory(LABEL, (element) -> new Label(element))
         .registerFactory(HEADER, (element) -> new Label(element))
-        .registerFactory(CAPTION, (element) -> new Label(element))
-        .registerFactory(MESSAGE, (element) -> new Label(element))
+        .registerFactory(TAG, (element) -> new Label(element))
         /** Option type names */
         .registerFactory(RADIO, (element) -> new Radio(element))
         .registerFactory(OPTION, (element) -> new Radio(element))

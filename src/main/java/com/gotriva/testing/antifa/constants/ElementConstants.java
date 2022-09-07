@@ -13,13 +13,15 @@ public class ElementConstants {
 
   public static final String IMAGE = "image";
 
+  public static final String ICON = "icon";
+
+  public static final String FIGURE = "figure";
+
   public static final String LABEL = "label";
 
   public static final String HEADER = "header";
 
-  public static final String CAPTION = "caption";
-
-  public static final String MESSAGE = "message";
+  public static final String TAG = "tag";
 
   public static final String RADIO = "radio";
 
