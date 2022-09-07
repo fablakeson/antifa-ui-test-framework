@@ -1,8 +1,7 @@
 package com.gotriva.nlp.antifa.reporting;
 
-import java.io.File;
-
 import com.gotriva.nlp.antifa.model.ExecutionResult;
+import java.io.File;
 
 /** This class gets the {@link ExecutionResult} and writes an HTML report. */
 public interface Reporter {

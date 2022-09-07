@@ -1,9 +1,8 @@
 package com.gotriva.nlp.antifa.execution;
 
-import java.util.List;
-
 import com.gotriva.nlp.antifa.model.Command;
 import com.gotriva.nlp.antifa.model.ExecutionResult;
+import java.util.List;
 
 /** This class is responsible for executing a list of commands for a given test. */
 public interface Executor {

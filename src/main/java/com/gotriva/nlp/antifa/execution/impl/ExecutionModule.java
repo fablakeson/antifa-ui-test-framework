@@ -17,7 +17,6 @@ import com.gotriva.nlp.antifa.factory.impl.FactorySubModule.Factory;
 import com.gotriva.nlp.antifa.strategy.ActionStrategy;
 import com.gotriva.nlp.antifa.strategy.impl.StrategieSubModule;
 import com.gotriva.nlp.antifa.strategy.impl.StrategieSubModule.strategiesMap;
-
 import java.lang.annotation.Retention;
 import java.util.Map;
 import java.util.Properties;

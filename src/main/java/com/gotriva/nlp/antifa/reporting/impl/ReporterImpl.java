@@ -1,5 +1,8 @@
 package com.gotriva.nlp.antifa.reporting.impl;
 
+import com.gotriva.nlp.antifa.exception.PresentationException;
+import com.gotriva.nlp.antifa.model.ExecutionResult;
+import com.gotriva.nlp.antifa.reporting.Reporter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,10 +13,6 @@ import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.gotriva.nlp.antifa.exception.PresentationException;
-import com.gotriva.nlp.antifa.model.ExecutionResult;
-import com.gotriva.nlp.antifa.reporting.Reporter;
 
 /** This class implements the {@link Reporter}. */
 public class ReporterImpl implements Reporter {

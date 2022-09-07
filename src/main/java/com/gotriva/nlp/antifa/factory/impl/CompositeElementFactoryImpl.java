@@ -3,7 +3,6 @@ package com.gotriva.nlp.antifa.factory.impl;
 import com.google.common.collect.ImmutableMap;
 import com.gotriva.nlp.antifa.factory.CompositeElementFactory;
 import com.gotriva.nlp.antifa.factory.ElementFactory;
-
 import java.util.HashMap;
 import java.util.Map;
 

@@ -8,7 +8,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.google.inject.Provides;
 import com.gotriva.nlp.antifa.strategy.ActionStrategy;
-
 import java.lang.annotation.Retention;
 import java.util.List;
 import java.util.Map;

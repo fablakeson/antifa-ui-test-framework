@@ -1,14 +1,13 @@
 package com.gotriva.nlp.antifa.strategy.impl;
 
-import java.text.MessageFormat;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-
 import com.gotriva.nlp.antifa.exception.ActionHandleException;
 import com.gotriva.nlp.antifa.execution.ExecutionContext;
 import com.gotriva.nlp.antifa.model.GenericPageObject;
 import com.gotriva.nlp.antifa.strategy.PageObjectActionStrategy;
+import java.text.MessageFormat;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 /** This class implements a page object strategy for read on page action. */
 public class ReadPageStrategy implements PageObjectActionStrategy {

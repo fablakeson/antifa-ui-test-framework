@@ -14,7 +14,6 @@ import com.gotriva.nlp.antifa.exception.InterpretationException;
 import com.gotriva.nlp.antifa.model.Command;
 import com.gotriva.nlp.antifa.model.SemanticPath;
 import com.gotriva.nlp.antifa.parsing.Interpreter;
-
 import edu.stanford.nlp.semgraph.SemanticGraph;
 import java.util.List;
 import java.util.Optional;

@@ -1,10 +1,9 @@
 package com.gotriva.nlp.antifa.element.impl;
 
-import java.nio.file.Path;
-import org.openqa.selenium.WebElement;
-
 import com.gotriva.nlp.antifa.element.AbstractElement;
 import com.gotriva.nlp.antifa.element.Uploadable;
+import java.nio.file.Path;
+import org.openqa.selenium.WebElement;
 
 /** This class represents a interactable file input on UI. */
 public class File extends AbstractElement implements Uploadable {

@@ -2,7 +2,6 @@ package com.gotriva.nlp.antifa.model;
 
 import com.google.common.base.Objects;
 import com.gotriva.nlp.antifa.model.Command.ComponentType;
-
 import edu.stanford.nlp.trees.GrammaticalRelation;
 
 /** This class represents a step on the {@link SemanticPath} */

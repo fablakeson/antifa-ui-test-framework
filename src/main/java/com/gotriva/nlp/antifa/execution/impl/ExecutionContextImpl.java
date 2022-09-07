@@ -1,16 +1,15 @@
 package com.gotriva.nlp.antifa.execution.impl;
 
+import com.gotriva.nlp.antifa.exception.ExecutionException;
+import com.gotriva.nlp.antifa.execution.ExecutionContext;
+import com.gotriva.nlp.antifa.factory.CompositeElementFactory;
+import com.gotriva.nlp.antifa.model.GenericPageObject;
 import java.net.URL;
 import java.util.Deque;
 import java.util.LinkedList;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-
-import com.gotriva.nlp.antifa.exception.ExecutionException;
-import com.gotriva.nlp.antifa.execution.ExecutionContext;
-import com.gotriva.nlp.antifa.factory.CompositeElementFactory;
-import com.gotriva.nlp.antifa.model.GenericPageObject;
 
 /** This class implements the {@link ExecutionContext} */
 public class ExecutionContextImpl implements ExecutionContext {

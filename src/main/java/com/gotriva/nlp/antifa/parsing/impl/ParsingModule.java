@@ -8,7 +8,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.gotriva.nlp.antifa.parsing.Interpreter;
 import com.gotriva.nlp.antifa.parsing.Parser;
-
 import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import java.lang.annotation.Retention;
 import java.util.Properties;

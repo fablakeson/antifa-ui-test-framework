@@ -5,7 +5,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.gotriva.nlp.antifa.reporting.Reporter;
-
 import java.lang.annotation.Retention;
 import java.util.Properties;
 import javax.inject.Qualifier;

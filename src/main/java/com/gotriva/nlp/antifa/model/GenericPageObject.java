@@ -1,15 +1,14 @@
 package com.gotriva.nlp.antifa.model;
 
+import com.gotriva.nlp.antifa.element.AbstractElement;
+import com.gotriva.nlp.antifa.element.Interactable;
+import com.gotriva.nlp.antifa.factory.CompositeElementFactory;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
-import com.gotriva.nlp.antifa.element.AbstractElement;
-import com.gotriva.nlp.antifa.element.Interactable;
-import com.gotriva.nlp.antifa.factory.CompositeElementFactory;
 
 /** A page object model generic implementation. */
 public class GenericPageObject {

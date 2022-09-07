@@ -1,5 +1,9 @@
 package com.gotriva.nlp.antifa.parsing.impl;
 
+import com.gotriva.nlp.antifa.exception.InstructionParsingException;
+import com.gotriva.nlp.antifa.model.Command;
+import com.gotriva.nlp.antifa.parsing.Interpreter;
+import com.gotriva.nlp.antifa.parsing.Parser;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.pipeline.*;
 import edu.stanford.nlp.semgraph.SemanticGraph;
@@ -14,11 +18,6 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.gotriva.nlp.antifa.exception.InstructionParsingException;
-import com.gotriva.nlp.antifa.model.Command;
-import com.gotriva.nlp.antifa.parsing.Interpreter;
-import com.gotriva.nlp.antifa.parsing.Parser;
 
 /** This class implements the {@link Parser}. */
 public class ParserImpl implements Parser {

@@ -1,11 +1,10 @@
 package com.gotriva.nlp.antifa.strategy.impl;
 
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-
 import com.gotriva.nlp.antifa.execution.ExecutionContext;
 import com.gotriva.nlp.antifa.model.GenericPageObject;
 import com.gotriva.nlp.antifa.strategy.PageObjectActionStrategy;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
 
 /** This class implements a page object strategy for scroll page action. */
 public class RollPageStrategy implements PageObjectActionStrategy {

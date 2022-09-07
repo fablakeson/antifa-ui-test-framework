@@ -1,11 +1,10 @@
 package com.gotriva.nlp.antifa.element.impl;
 
+import com.gotriva.nlp.antifa.element.AbstractElement;
+import com.gotriva.nlp.antifa.element.Settable;
 import java.util.Optional;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
-
-import com.gotriva.nlp.antifa.element.AbstractElement;
-import com.gotriva.nlp.antifa.element.Settable;
 
 /** This class represents a range input on UI. */
 public class Range extends AbstractElement implements Settable {

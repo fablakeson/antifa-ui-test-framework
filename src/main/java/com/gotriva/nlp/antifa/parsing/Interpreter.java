@@ -1,7 +1,6 @@
 package com.gotriva.nlp.antifa.parsing;
 
 import com.gotriva.nlp.antifa.model.Command;
-
 import edu.stanford.nlp.semgraph.SemanticGraph;
 
 /**

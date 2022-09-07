@@ -1,14 +1,5 @@
 package com.gotriva.nlp.antifa.execution.impl;
 
-import java.io.IOException;
-import java.text.MessageFormat;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import org.openqa.selenium.By;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.gotriva.nlp.antifa.element.Interactable;
 import com.gotriva.nlp.antifa.exception.ExecutionException;
 import com.gotriva.nlp.antifa.execution.ExecutionContext;
@@ -20,6 +11,14 @@ import com.gotriva.nlp.antifa.model.GenericPageObject;
 import com.gotriva.nlp.antifa.strategy.ActionStrategy;
 import com.gotriva.nlp.antifa.strategy.InteractableActionStrategy;
 import com.gotriva.nlp.antifa.strategy.PageObjectActionStrategy;
+import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import org.openqa.selenium.By;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** This class implements {@link Executor}. */
 public class ExecutorImpl implements Executor {

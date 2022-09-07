@@ -1,11 +1,10 @@
 package com.gotriva.nlp.antifa.strategy.impl;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-
 import com.gotriva.nlp.antifa.exception.PageObjectActionException;
 import com.gotriva.nlp.antifa.execution.ExecutionContext;
 import com.gotriva.nlp.antifa.strategy.PageObjectActionStrategy;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /** This class implements a page object strategy for open page action. */
 public class OpenPageStrategy implements PageObjectActionStrategy {

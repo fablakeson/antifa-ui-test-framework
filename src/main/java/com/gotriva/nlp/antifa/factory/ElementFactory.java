@@ -1,8 +1,7 @@
 package com.gotriva.nlp.antifa.factory;
 
-import org.openqa.selenium.WebElement;
-
 import com.gotriva.nlp.antifa.element.AbstractElement;
+import org.openqa.selenium.WebElement;
 
 /** This interface represents a concrete interactable element factory */
 public interface ElementFactory<T extends AbstractElement> {
