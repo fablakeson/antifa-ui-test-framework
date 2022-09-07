@@ -6,7 +6,7 @@ import org.openqa.selenium.WebElement;
 
 public class Text extends AbstractElement implements Writable {
 
-  public Text(WebElement element) {
+  Text(WebElement element) {
     super(element);
   }
 

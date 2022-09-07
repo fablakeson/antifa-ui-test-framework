@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
 /** This class represents an interactable check input on UI. */
 public class Checkbox extends AbstractElement implements Checkable {
 
-  public Checkbox(WebElement element) {
+  Checkbox(WebElement element) {
     super(element);
   }
 

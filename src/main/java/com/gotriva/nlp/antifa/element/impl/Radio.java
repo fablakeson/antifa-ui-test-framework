@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
 /** This class represents a radio button on UI. */
 public class Radio extends AbstractElement implements Checkable {
 
-  public Radio(WebElement element) {
+  Radio(WebElement element) {
     super(element);
   }
 

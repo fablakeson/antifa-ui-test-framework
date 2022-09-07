@@ -8,7 +8,7 @@ import org.openqa.selenium.WebElement;
 /** This class represents a interactable file input on UI. */
 public class File extends AbstractElement implements Uploadable {
 
-  public File(WebElement element) {
+  File(WebElement element) {
     super(element);
   }
 

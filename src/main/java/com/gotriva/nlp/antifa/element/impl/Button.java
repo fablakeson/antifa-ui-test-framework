@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
 /** This class represents an interactable button on UI. */
 public class Button extends AbstractElement implements Clickable {
 
-  public Button(WebElement element) {
+  Button(WebElement element) {
     super(element);
   }
 

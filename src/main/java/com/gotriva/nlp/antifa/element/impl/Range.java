@@ -9,7 +9,7 @@ import org.openqa.selenium.WebElement;
 /** This class represents a range input on UI. */
 public class Range extends AbstractElement implements Settable {
 
-  public Range(WebElement element) {
+  Range(WebElement element) {
     super(element);
   }
 

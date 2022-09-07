@@ -11,7 +11,7 @@ import org.openqa.selenium.interactions.Actions;
 /** This class represents an interactable label on UI. */
 public class Label extends AbstractElement implements Clickable, Hoverable {
 
-  public Label(WebElement element) {
+  Label(WebElement element) {
     super(element);
   }
 

@@ -11,7 +11,7 @@ import org.openqa.selenium.interactions.Actions;
 /** This class represents an interactable image on UI. */
 public class Image extends AbstractElement implements Clickable, Hoverable {
 
-  public Image(WebElement element) {
+  Image(WebElement element) {
     super(element);
   }
 
