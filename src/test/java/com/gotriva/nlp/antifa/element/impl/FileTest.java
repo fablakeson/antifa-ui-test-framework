@@ -20,12 +20,12 @@ public class FileTest extends AbstractElementTest {
   private File file;
 
   @BeforeAll
-  public static void before() throws IOException {
+  public static void beforeAll() throws IOException {
     testFile = java.io.File.createTempFile("antifa_test_", ".tmp");
   }
 
   @AfterAll
-  public static void after() {
+  public static void afterAll() {
     if (testFile != null && testFile.exists()) {
       testFile.delete();
     }

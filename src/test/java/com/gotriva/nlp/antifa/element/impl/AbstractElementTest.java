@@ -21,7 +21,7 @@ public class AbstractElementTest {
   protected WebDriver driver;
 
   @BeforeEach
-  public void init() {
+  public void beforeEach() {
     /** Initialize selenium headless driver */
     ChromeOptions options = new ChromeOptions();
     options.addArguments("--headless");
@@ -29,7 +29,7 @@ public class AbstractElementTest {
   }
 
   @AfterEach
-  public void close() {
+  public void afterEach() {
     /** Clise selenium driver */
     driver.close();
   }

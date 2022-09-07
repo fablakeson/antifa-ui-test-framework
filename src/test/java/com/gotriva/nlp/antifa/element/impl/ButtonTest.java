@@ -15,13 +15,13 @@ public class ButtonTest extends AbstractElementTest {
   private Button button;
 
   @Test
-  public void testButtonTest1Click_thenWriteMessageButtonTest1WasClicked() {
+  public void testButtonClick_withButtonTag_thenButtonValueIsClicked() {
     /** Generate test page for button */
     String path = "/button-1-test";
     String html =
         body(button()
                 .withId("test1")
-                .attr("onclick=\"this.dataset.value='test1'\"")
+                .attr("onclick=\"this.dataset.value='clicked\'\"")
                 .withText("Test 1"))
             .render();
     mockPage(path, html);
@@ -31,11 +31,11 @@ public class ButtonTest extends AbstractElementTest {
     button = new Button(element);
     button.click();
 
-    assertEquals("test1", element.getAttribute("data-value"));
+    assertEquals("clicked", element.getAttribute("data-value"));
   }
 
   @Test
-  public void testButtonTest2Click_thenWriteMessageButtonTest2WasClicked() {
+  public void testButtonClick_withInputButton_thenButtonValueIsClicked() {
     /** Generate test page for button */
     String path = "/button-2-test";
     String html =
@@ -43,7 +43,7 @@ public class ButtonTest extends AbstractElementTest {
                 .withId("test2")
                 .withType("checkbox")
                 .withValue("Test 2")
-                .attr("onclick=\"this.dataset.value='test2'\""))
+                .attr("onclick=\"this.dataset.value='clicked'\""))
             .render();
     mockPage(path, html);
     navigateTo(path);
@@ -52,6 +52,6 @@ public class ButtonTest extends AbstractElementTest {
     button = new Button(element);
     button.click();
 
-    assertEquals("test2", element.getAttribute("data-value"));
+    assertEquals("clicked", element.getAttribute("data-value"));
   }
 }
