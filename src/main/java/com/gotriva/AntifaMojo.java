@@ -34,7 +34,9 @@ public class AntifaMojo extends AbstractMojo {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AntifaMojo.class);
 
-  // TODO: Add unitary tests to each class.
+  // TODO: Add unitary tests execution module.
+  // TODO: Add unitary tests to parsing module.
+  // TODO: Add unitary tests to page strategies.
   // TODO: Remove unnecessary comments (like this)
 
   /**
