@@ -17,11 +17,4 @@ public class Radio extends AbstractElement implements Checkable {
       element.click();
     }
   }
-
-  @Override
-  public void uncheck() {
-    if (element.isSelected()) {
-      element.click();
-    }
-  }
 }
