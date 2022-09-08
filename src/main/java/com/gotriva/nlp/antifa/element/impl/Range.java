@@ -23,7 +23,7 @@ public class Range extends AbstractElement implements Settable {
       setRelativeValue(Double.parseDouble(value.replace("%", "")) / 100.0);
     } else {
       /** Value is absolute */
-      setAbsuluteValue(Integer.parseInt(value));
+      setAbsuluteValue(Double.parseDouble(value));
     }
   }
 
@@ -34,8 +34,8 @@ public class Range extends AbstractElement implements Settable {
    */
   private void setRelativeValue(Double percent) {
     /** Get the absolute value */
-    Integer range = getMax() - getMin();
-    Integer value = (int) (range * percent);
+    Double range = getMax() - getMin();
+    Double value = range * percent;
     setAbsuluteValue(value);
   }
 
@@ -44,11 +44,16 @@ public class Range extends AbstractElement implements Settable {
    *
    * @param value the value to set.
    */
-  private void setAbsuluteValue(Integer value) {
+  private void setAbsuluteValue(Double value) {
+    value = sanitize(value);
     /** Get the closest <= value */
-    for (Integer currentValue = getValue(); currentValue < value; currentValue = increment())
+    for (Double currentValue = getValue();
+        Double.compare(currentValue, value) < 0;
+        currentValue = increment())
       ;
-    for (Integer currentValue = getValue(); currentValue > value; currentValue = decrement())
+    for (Double currentValue = getValue();
+        Double.compare(currentValue, value) > 0;
+        currentValue = decrement())
       ;
   }
 
@@ -58,32 +63,37 @@ public class Range extends AbstractElement implements Settable {
   }
 
   /** Gets element value property. */
-  private Integer getValue() {
-    return Integer.parseInt(element.getAttribute("value"));
+  private Double getValue() {
+    return Double.parseDouble(element.getAttribute("value"));
+  }
+
+  /** Grants that value will be bounded to Min and Max */
+  private Double sanitize(Double value) {
+    return Math.max(Math.min(value, getMax()), getMin());
   }
 
   /** Gets element max property. */
-  private Integer getMax() {
+  private Double getMax() {
     return Optional.ofNullable(element.getAttribute("max"))
-        .map(Integer::parseInt)
-        .orElse(Integer.MAX_VALUE);
+        .map(Double::parseDouble)
+        .orElse(Double.MAX_VALUE);
   }
 
   /** Gets element min property. */
-  private Integer getMin() {
+  private Double getMin() {
     return Optional.ofNullable(element.getAttribute("min"))
-        .map(Integer::parseInt)
-        .orElse(Integer.MIN_VALUE);
+        .map(Double::parseDouble)
+        .orElse(Double.MIN_VALUE);
   }
 
   /** Increment current range step. */
-  private Integer increment() {
+  private Double increment() {
     element.sendKeys(Keys.RIGHT);
     return getValue();
   }
 
   /** Decrement current range step. */
-  private Integer decrement() {
+  private Double decrement() {
     element.sendKeys(Keys.LEFT);
     return getValue();
   }
