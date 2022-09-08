@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
+/** Tests for {@link File} class. */
 @WireMockTest(httpPort = 8001)
 public class FileTest extends AbstractElementTest {
 

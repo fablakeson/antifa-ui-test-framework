@@ -7,6 +7,7 @@ import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
+/** Tests for {@link Label} class. */
 @WireMockTest(httpPort = 8001)
 public class LabelTest extends AbstractElementTest {
 

@@ -7,7 +7,7 @@ import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
-/** Test for {@link Button} class. */
+/** Tests for {@link Button} class. */
 @WireMockTest(httpPort = 8001)
 public class ButtonTest extends AbstractElementTest {
 

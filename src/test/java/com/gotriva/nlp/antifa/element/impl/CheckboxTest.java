@@ -8,7 +8,7 @@ import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebElement;
 
-/** Test for {@link Checkbox} class. */
+/** Tests for {@link Checkbox} class. */
 @WireMockTest(httpPort = 8001)
 public class CheckboxTest extends AbstractElementTest {
 
