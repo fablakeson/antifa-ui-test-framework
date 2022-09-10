@@ -1,0 +1,33 @@
+<executionResult>
+  <testName>${testName}</testName>
+  <startTime>$result.startTime</startTime>
+  <endTime>$result.endTime</endTime>
+  <elapsedTime unit="ms">$result.elapsedTime</elapsedTime>
+  <status>$result.status</status>
+  #if ($result.staus == "FAIL")
+  <failReason>$result.failReason</failReason>
+  #end
+  <steps>
+    #foreach( $step in $result.steps )
+    <step>
+      <startTime>$step.startTime</startTime>
+      <endTime>$step.endTime</endTime>
+      <elapsedTime>$step.elapsedTime</elapsedTime>
+      <result>$step.result</result>
+      #if ($step.screenshot)
+      <screenshot content-type="image/jpeg">$step.screenshot</screenshot>
+      #end
+      <command>
+        <instruction>$step.command.instruction</instruction>
+        <action>$step.command.action</action>
+        #if ($step.command.parameter)
+        <parameter>$step.command.parameter</parameter>
+        #end
+        #if ($step.command.type)
+        <type>$step.command.type</type>
+        #end
+      </command>
+    </step>
+    #end
+  </steps>
+</executionResult>

@@ -2,6 +2,7 @@ package com.gotriva.nlp.antifa.reporting.impl;
 
 import com.gotriva.nlp.antifa.exception.PresentationException;
 import com.gotriva.nlp.antifa.model.ExecutionResult;
+import com.gotriva.nlp.antifa.reporting.OutputFormat;
 import com.gotriva.nlp.antifa.reporting.Reporter;
 import java.io.File;
 import java.io.FileWriter;
@@ -11,22 +12,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-/** This class implements the {@link Reporter}. */
-public class ReporterImpl implements Reporter {
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(ReporterImpl.class);
+public abstract class AbstractReporter implements Reporter {
 
   /** The file name split tokens */
   private static final String SPLIT_TOKENS = "( |_)";
 
-  /** The template file name */
-  private static final String TEMPLATE_FILE_NAME = "templates/report.html";
-
   /** The file name template */
-  private static final String CREATED_FILE_NAME_PATTERN = "antifa_test_{0}_{1,number,#}.html";
+  private static final String CREATED_FILE_NAME_PATTERN = "antifa_test_{0}_{1,number,#}.{2}";
 
   /** The velocity engine */
   private final VelocityEngine velocity;
@@ -35,28 +28,37 @@ public class ReporterImpl implements Reporter {
   private final VelocityContext context;
 
   /** Default constructor. */
-  public ReporterImpl(VelocityEngine velocity, VelocityContext context) {
+  AbstractReporter(VelocityEngine velocity, VelocityContext context) {
     this.velocity = velocity;
     this.context = context;
   }
 
+  /**
+   * @return The template file name.
+   */
+  protected abstract String getTemplateFile();
+
+  /**
+   * @return The output file format.
+   */
+  protected abstract OutputFormat getOutputFormat();
+
+  /* (non-Javadoc)
+   * @see com.gotriva.nlp.antifa.reporting.Reporter#writeReport(com.gotriva.nlp.antifa.model.ExecutionResult, java.lang.String, java.io.File)
+   */
   @Override
   public File writeReport(ExecutionResult result, String testName, File outputDirectory) {
-    if (!outputDirectory.isDirectory()) {
-      throw new PresentationException("the output directory is not valid");
-    }
     File file = new File(outputDirectory, getFileName(testName));
     try (FileWriter writer = new FileWriter(file)) {
       velocity.init();
-      Template template = velocity.getTemplate(TEMPLATE_FILE_NAME);
+      Template template = velocity.getTemplate(getTemplateFile());
       context.put("testName", formatTestName(testName));
       context.put("result", result);
       template.merge(context, writer);
+      return file;
     } catch (IOException | RuntimeException ex) {
-      LOGGER.error("Error creating report.", ex);
-      throw new PresentationException(ex.getMessage(), ex);
+      throw new PresentationException("Error creating HTML report.", ex);
     }
-    return file;
   }
 
   /**
@@ -64,7 +66,10 @@ public class ReporterImpl implements Reporter {
    */
   private String getFileName(String testName) {
     return MessageFormat.format(
-        CREATED_FILE_NAME_PATTERN, formatFileName(testName), System.currentTimeMillis());
+        CREATED_FILE_NAME_PATTERN,
+        formatFileName(testName),
+        System.currentTimeMillis(),
+        getOutputFormat().name().toLowerCase());
   }
 
   /**

@@ -4,6 +4,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.google.inject.name.Named;
 import com.gotriva.nlp.antifa.reporting.Reporter;
 import java.lang.annotation.Retention;
 import java.util.Properties;
@@ -41,7 +42,14 @@ public class ReportingModule extends AbstractModule {
   }
 
   @Provides
-  public Reporter provideReportWriter(VelocityEngine velocity, VelocityContext context) {
-    return new ReporterImpl(velocity, context);
+  @Named("HTML")
+  public Reporter provideHtmlReporter(VelocityEngine velocity, VelocityContext context) {
+    return new HtmlReporterImpl(velocity, context);
+  }
+
+  @Provides
+  @Named("XML")
+  public Reporter provideXmlReporter(VelocityEngine velocity, VelocityContext context) {
+    return new XmlReporterImpl(velocity, context);
   }
 }

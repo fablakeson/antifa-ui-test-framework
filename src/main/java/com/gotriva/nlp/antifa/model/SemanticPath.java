@@ -115,7 +115,8 @@ public class SemanticPath {
 
     /** Optional components */
     if (knowledgeFrame.containsKey(Command.ComponentType.PARAMETER)) {
-      commandBuilder.setParameter(concatString(knowledgeFrame.get(Command.ComponentType.PARAMETER)));
+      commandBuilder.setParameter(
+          concatString(knowledgeFrame.get(Command.ComponentType.PARAMETER)));
     }
     if (knowledgeFrame.containsKey(Command.ComponentType.TYPE)) {
       commandBuilder.setType(concatString(knowledgeFrame.get(Command.ComponentType.TYPE)));

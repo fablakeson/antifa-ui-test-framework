@@ -5,7 +5,7 @@ package com.gotriva.nlp.antifa.model;
  *
  * <ol>
  *   <li>A mandatory <b>instruction</b>, the original natural language instruction for command.
- *   <li>A mandatory <b>command</b>, the command name to be performed.
+ *   <li>A mandatory <b>action</b>, the action name to be performed.
  *   <li>A mandatory <b>object</b>, the object that should perform the command.
  *   <li>An <em>optional</em> <b>parameter</b>, some actions can have a parameter like a text input.
  *   <li>An <em>optional</em> <b>type</b>, the specific type of the object that should perform the
@@ -15,8 +15,8 @@ package com.gotriva.nlp.antifa.model;
 public class Command {
 
   public enum ComponentType {
-    /** Represents the command name to call on the semantic structure. */
-    COMMAND,
+    /** Represents the action name to call on the semantic structure. */
+    ACTION,
     /** Represents the command call parameter on the semantic structure. */
     PARAMETER,
     /** Represents the target object of command call on the semantic structure. */
@@ -34,8 +34,8 @@ public class Command {
 
     /** The instruction of the builder. */
     private String instruction;
-    /** The command of the builder. */
-    private String command;
+    /** The action of the builder. */
+    private String action;
     /** The parameter of the builder. */
     private String parameter;
     /** The object of the builder. */
@@ -54,8 +54,8 @@ public class Command {
       return this;
     }
 
-    public Builder setCommand(String command) {
-      this.command = command;
+    public Builder setAction(String action) {
+      this.action = action;
       return this;
     }
 
@@ -76,9 +76,9 @@ public class Command {
 
     public Command build() {
       /** Assert that name and object are not null */
-      assert instruction != null && command != null && object != null
+      assert instruction != null && action != null && object != null
           : "'instruction', 'command' and 'object' must be not null.";
-      return new Command(instruction, command, parameter, object, type);
+      return new Command(instruction, action, parameter, object, type);
     }
   }
 
@@ -86,7 +86,7 @@ public class Command {
   private String instruction;
 
   /** The name of the command. */
-  private final String command;
+  private final String action;
 
   /** The parameter of the command. */
   private String parameter;
@@ -98,10 +98,9 @@ public class Command {
   private final String type;
 
   /** Default all args constructor for an command. */
-  private Command(
-      String instruction, String command, String parameter, String object, String type) {
+  private Command(String instruction, String action, String parameter, String object, String type) {
     this.instruction = instruction;
-    this.command = command;
+    this.action = action;
     this.parameter = parameter;
     this.object = object;
     this.type = type;
@@ -115,8 +114,8 @@ public class Command {
   }
 
   /** Getters and Setters */
-  public String getCommand() {
-    return command;
+  public String getAction() {
+    return action;
   }
 
   public String getParameter() {
@@ -151,8 +150,8 @@ public class Command {
   public String toString() {
     return "Command [instruction="
         + instruction
-        + ", command="
-        + command
+        + ", action="
+        + action
         + ", object="
         + object
         + ", parameter="

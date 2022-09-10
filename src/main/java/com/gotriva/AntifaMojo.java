@@ -1,12 +1,16 @@
 package com.gotriva;
 
 import com.gotriva.nlp.antifa.Antifa;
+import com.gotriva.nlp.antifa.reporting.OutputFormat;
 import java.io.File;
 import java.io.IOException;
 import java.util.stream.Stream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
+import org.apache.maven.plugins.annotations.LifecyclePhase;
+import org.apache.maven.plugins.annotations.Mojo;
+import org.apache.maven.plugins.annotations.Parameter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,36 +28,34 @@ import org.slf4j.LoggerFactory;
  * the License.
  */
 
-/**
- * Goal which touches a timestamp file.
- *
- * @goal ui-test
- * @phase test
- */
+/** The Antifa UI test plugin Mojo */
+@Mojo(name = "ui-test", defaultPhase = LifecyclePhase.INTEGRATION_TEST, requiresProject = false)
 public class AntifaMojo extends AbstractMojo {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AntifaMojo.class);
 
-  // TODO: Add unitary tests execution module.
+  // TODO: Add unitary tests to execution module.
   // TODO: Add unitary tests to parsing module.
   // TODO: Add unitary tests to page strategies.
   // TODO: Remove unnecessary comments (like this)
 
-  /**
-   * Location of the input files.
-   *
-   * @parameter default-value="${project.basedir}/src/test/resources/antifa"
-   * @required
-   */
+  /** Location of the input files. */
+  @Parameter(
+      property = "inputDirectory",
+      defaultValue = "${project.basedir}/src/test/resources/antifa",
+      required = true)
   private File inputDirectory;
 
-  /**
-   * Location of the output files.
-   *
-   * @parameter default-value="${project.build.directory}"
-   * @required
-   */
+  /** Location of the output files. */
+  @Parameter(
+      property = "outputDirectory",
+      defaultValue = "${project.build.directory}",
+      required = true)
   private File outputDirectory;
+
+  /** Output file format (HTML|XML). */
+  @Parameter(property = "outputFormat", defaultValue = "HTML", required = true)
+  private OutputFormat outputFormat;
 
   /*
    * (non-Javadoc)
@@ -75,7 +77,10 @@ public class AntifaMojo extends AbstractMojo {
     }
     LOGGER.info("Output files on directory: {}", outputDirectory.getAbsolutePath());
 
-    Antifa antifa = Antifa.instance(outputDirectory);
+    /** Output result */
+    LOGGER.info("Output result as: " + outputFormat);
+
+    Antifa antifa = Antifa.instance(outputDirectory, outputFormat);
 
     /** For each test file */
     Stream.of(inputDirectory.listFiles())
@@ -85,8 +90,7 @@ public class AntifaMojo extends AbstractMojo {
               try {
                 antifa.execute(getTestName(file.getName()), file);
               } catch (IOException e) {
-                LOGGER.error("Error executing file " + file.getName(), e);
-                throw new RuntimeException(e);
+                throw new RuntimeException("Error executing file " + file.getName(), e);
               }
             });
 

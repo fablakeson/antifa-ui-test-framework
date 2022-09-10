@@ -52,7 +52,7 @@ public class ExecutorImpl implements Executor {
         /** Try to execute the command */
         try {
           /** Get strategy strategy for this command. */
-          ActionStrategy strategy = strategies.get(command.getCommand());
+          ActionStrategy strategy = strategies.get(command.getAction());
           /** Get appropriated strategy type. */
           if (strategy instanceof InteractableActionStrategy) {
             /** Get the interactable object from context. */
@@ -69,7 +69,7 @@ public class ExecutorImpl implements Executor {
           } else {
             /** strategy not reconigsed */
             throw new ExecutionException(
-                "strategy for command '" + command.getCommand() + "' not found.");
+                "strategy for command '" + command.getAction() + "' not found.");
           }
           /** This execution step was successful. */
           result.addStep(

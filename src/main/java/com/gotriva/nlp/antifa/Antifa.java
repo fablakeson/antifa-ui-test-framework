@@ -2,12 +2,15 @@ package com.gotriva.nlp.antifa;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.name.Names;
 import com.gotriva.nlp.antifa.execution.Executor;
 import com.gotriva.nlp.antifa.execution.impl.ExecutionModule;
 import com.gotriva.nlp.antifa.model.Command;
 import com.gotriva.nlp.antifa.model.ExecutionResult;
 import com.gotriva.nlp.antifa.parsing.Parser;
 import com.gotriva.nlp.antifa.parsing.impl.ParsingModule;
+import com.gotriva.nlp.antifa.reporting.OutputFormat;
 import com.gotriva.nlp.antifa.reporting.Reporter;
 import com.gotriva.nlp.antifa.reporting.impl.ReportingModule;
 import java.io.BufferedReader;
@@ -36,8 +39,11 @@ public final class Antifa {
   /** The output directory. */
   private final File outputDirectory;
 
-  public Antifa(File outputDirectory) {
+  private final OutputFormat outputFormat;
+
+  public Antifa(File outputDirectory, OutputFormat outputFormat) {
     this.outputDirectory = outputDirectory;
+    this.outputFormat = outputFormat;
   }
 
   /**
@@ -46,8 +52,8 @@ public final class Antifa {
    * @param outputDirectory the report output directory
    * @return the antifa instance.
    */
-  public static Antifa instance(File outputDirectory) {
-    return new Antifa(outputDirectory);
+  public static Antifa instance(File outputDirectory, OutputFormat outputFormat) {
+    return new Antifa(outputDirectory, outputFormat);
   }
 
   public void execute(String testName, String instructions) {
@@ -128,6 +134,6 @@ public final class Antifa {
   }
 
   private Reporter getReportWriter() {
-    return INJECTOR.getInstance(Reporter.class);
+    return INJECTOR.getInstance(Key.get(Reporter.class, Names.named(outputFormat.name())));
   }
 }

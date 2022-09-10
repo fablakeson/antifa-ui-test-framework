@@ -1,6 +1,6 @@
 package com.gotriva.nlp.antifa.parsing.impl;
 
-import static com.gotriva.nlp.antifa.model.Command.ComponentType.COMMAND;
+import static com.gotriva.nlp.antifa.model.Command.ComponentType.ACTION;
 import static com.gotriva.nlp.antifa.model.Command.ComponentType.OBJECT;
 import static com.gotriva.nlp.antifa.model.Command.ComponentType.PARAMETER;
 import static com.gotriva.nlp.antifa.model.Command.ComponentType.TYPE;
@@ -34,20 +34,20 @@ public class InterpreterImpl implements Interpreter {
           /** Actions with parameter + type and composite object names */
           SemanticPath.builder()
               /** COMMAND -- obj --> TYPE */
-              .newStep(builder().from(COMMAND).with(DIRECT_OBJECT).to(TYPE))
+              .newStep(builder().from(ACTION).with(DIRECT_OBJECT).to(TYPE))
               /** TYPE -- compound --> OBJECT */
               .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
               /** OBJECT -- compound --> OBJECT */
               .newStep(builder().from(OBJECT).with(COMPOUND_MODIFIER).to(OBJECT))
               /** COMMAND -- obl --> PARAMETER */
-              .newStep(builder().from(COMMAND).with(OBLIQUE_MODIFIER).to(PARAMETER))
+              .newStep(builder().from(ACTION).with(OBLIQUE_MODIFIER).to(PARAMETER))
               /** Ex: open the login page at theUrl. */
               .build(),
           SemanticPath.builder()
               /** COMMAND -- obj --> PARAMETER */
-              .newStep(builder().from(COMMAND).with(DIRECT_OBJECT).to(PARAMETER))
+              .newStep(builder().from(ACTION).with(DIRECT_OBJECT).to(PARAMETER))
               /** COMMAND -- obl --> TYPE */
-              .newStep(builder().from(COMMAND).with(OBLIQUE_MODIFIER).to(TYPE))
+              .newStep(builder().from(ACTION).with(OBLIQUE_MODIFIER).to(TYPE))
               /** TYPE -- compound --> OBJECT */
               .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
               /** OBJECT -- compound --> OBJECT */
@@ -58,18 +58,18 @@ public class InterpreterImpl implements Interpreter {
           /** Actions with parameter + type */
           SemanticPath.builder()
               /** COMMAND -- obj --> TYPE */
-              .newStep(builder().from(COMMAND).with(DIRECT_OBJECT).to(TYPE))
+              .newStep(builder().from(ACTION).with(DIRECT_OBJECT).to(TYPE))
               /** TYPE -- compound --> OBJECT */
               .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
               /** COMMAND -- obl --> PARAMETER */
-              .newStep(builder().from(COMMAND).with(OBLIQUE_MODIFIER).to(PARAMETER))
+              .newStep(builder().from(ACTION).with(OBLIQUE_MODIFIER).to(PARAMETER))
               /** Ex: open the login page at theUrl. */
               .build(),
           SemanticPath.builder()
               /** COMMAND -- obj --> PARAMETER */
-              .newStep(builder().from(COMMAND).with(DIRECT_OBJECT).to(PARAMETER))
+              .newStep(builder().from(ACTION).with(DIRECT_OBJECT).to(PARAMETER))
               /** COMMAND -- obl --> TYPE */
-              .newStep(builder().from(COMMAND).with(OBLIQUE_MODIFIER).to(TYPE))
+              .newStep(builder().from(ACTION).with(OBLIQUE_MODIFIER).to(TYPE))
               /** TYPE -- compound --> OBJECT */
               .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
               /** Ex: write passwordText to the passoword input */
@@ -78,7 +78,7 @@ public class InterpreterImpl implements Interpreter {
           /** Actions with parameter and no type */
           SemanticPath.builder()
               /** COMMAND -- obj --> PARAMETER */
-              .newStep(builder().from(COMMAND).with(DIRECT_OBJECT).to(PARAMETER))
+              .newStep(builder().from(ACTION).with(DIRECT_OBJECT).to(PARAMETER))
               /** PARAMETER -- obj --> OBJECT */
               .newStep(builder().from(PARAMETER).with(COMPOUND_MODIFIER).to(OBJECT))
               /** Ex: write the passoword passwordText */
@@ -87,7 +87,7 @@ public class InterpreterImpl implements Interpreter {
           /** Actions with type without paramter */
           SemanticPath.builder()
               /** COMMAND -- obl --> TYPE */
-              .newStep(builder().from(COMMAND).with(OBLIQUE_MODIFIER).to(TYPE))
+              .newStep(builder().from(ACTION).with(OBLIQUE_MODIFIER).to(TYPE))
               /** TYPE -- compound --> OBJECT */
               .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
               /** Ex: click on the login button */
@@ -96,7 +96,7 @@ public class InterpreterImpl implements Interpreter {
           /** Actions without type and parameter */
           SemanticPath.builder()
               /** COMMAND -- obl --> OBJECT */
-              .newStep(builder().from(COMMAND).with(OBLIQUE_MODIFIER).to(OBJECT))
+              .newStep(builder().from(ACTION).with(OBLIQUE_MODIFIER).to(OBJECT))
               /** Ex: click on login */
               .build());
 
