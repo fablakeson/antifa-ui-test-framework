@@ -75,8 +75,8 @@ public class SemanticPath {
     IndexedWord root = graph.getFirstRoot();
 
     /** Sets the action root */
-    Map<Command.ComponentType, Deque<IndexedWord>> actionsMap = new HashMap<>();
-    putOrAppend(actionsMap, Command.ComponentType.COMMAND, root);
+    Map<Command.ComponentType, Deque<IndexedWord>> knowledgeFrame = new HashMap<>();
+    putOrAppend(knowledgeFrame, Command.ComponentType.ACTION, root);
 
     LOGGER.debug("My root is: {}", root);
 
@@ -85,7 +85,7 @@ public class SemanticPath {
       LOGGER.debug("Current step: {}", step);
 
       /** Get source. */
-      IndexedWord source = getFirst(actionsMap, step.getSource());
+      IndexedWord source = getFirst(knowledgeFrame, step.getSource());
       LOGGER.debug("Source: {}", source);
 
       /** Get edge. */
@@ -104,24 +104,24 @@ public class SemanticPath {
       }
 
       /** Add destination to the graph */
-      putOrAppend(actionsMap, step.getDestination(), destination);
+      putOrAppend(knowledgeFrame, step.getDestination(), destination);
     }
 
-    /** Build command from actions map with mandatory fields. */
+    /** Build command from knowledge frame map with mandatory fields. */
     final Command.Builder commandBuilder =
         Command.builder()
-            .setCommand(concatString(actionsMap.get(Command.ComponentType.COMMAND)))
-            .setObject(concatString(actionsMap.get(Command.ComponentType.OBJECT)));
+            .setAction(concatString(knowledgeFrame.get(Command.ComponentType.ACTION)))
+            .setObject(concatString(knowledgeFrame.get(Command.ComponentType.OBJECT)));
 
     /** Optional components */
-    if (actionsMap.containsKey(Command.ComponentType.PARAMETER)) {
-      commandBuilder.setParameter(concatString(actionsMap.get(Command.ComponentType.PARAMETER)));
+    if (knowledgeFrame.containsKey(Command.ComponentType.PARAMETER)) {
+      commandBuilder.setParameter(concatString(knowledgeFrame.get(Command.ComponentType.PARAMETER)));
     }
-    if (actionsMap.containsKey(Command.ComponentType.TYPE)) {
-      commandBuilder.setType(concatString(actionsMap.get(Command.ComponentType.TYPE)));
+    if (knowledgeFrame.containsKey(Command.ComponentType.TYPE)) {
+      commandBuilder.setType(concatString(knowledgeFrame.get(Command.ComponentType.TYPE)));
     }
 
-    LOGGER.debug("Map: {}", actionsMap);
+    LOGGER.debug("Map: {}", knowledgeFrame);
     LOGGER.debug("========================================");
 
     return Optional.of(commandBuilder.build());
