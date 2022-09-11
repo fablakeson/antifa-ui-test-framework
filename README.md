@@ -1,5 +1,7 @@
 # Antifa UI Test Framework
 
+![build workflow](https://github.com/fablakeson/antifa-ui-test-framework/actions/workflows/maven.yml/badge.svg)
+
 ## What is Antifa?
 
 Antifa (Automated NLP-based Test Integration Framework Application) is an automated interface testing framework that interprets instructions in natural language and converts them to webdriver commands, making it possible to write complete interface tests in a fast and understandable way, even for non-programmers.
