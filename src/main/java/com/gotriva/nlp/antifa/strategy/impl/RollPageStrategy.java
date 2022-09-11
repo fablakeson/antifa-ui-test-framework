@@ -20,7 +20,7 @@ public class RollPageStrategy implements PageObjectActionStrategy {
   }
 
   @Override
-  public void perform(ExecutionContext context, String page, String direction) {
+  public void perform(ExecutionContext context, String page, String direction, String type) {
     GenericPageObject currentPage = context.getCurrentPage();
     WebDriver driver = currentPage.getDriver();
     switch (direction) {

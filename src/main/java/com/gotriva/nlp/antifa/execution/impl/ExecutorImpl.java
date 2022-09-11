@@ -1,5 +1,6 @@
 package com.gotriva.nlp.antifa.execution.impl;
 
+import com.gotriva.nlp.antifa.element.ElementMetadata;
 import com.gotriva.nlp.antifa.element.Interactable;
 import com.gotriva.nlp.antifa.exception.ExecutionException;
 import com.gotriva.nlp.antifa.execution.ExecutionContext;
@@ -16,7 +17,6 @@ import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import org.openqa.selenium.By;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,12 +47,29 @@ public class ExecutorImpl implements Executor {
       /** Commands must be executed at the given order. */
       for (Command command : commands) {
         /** Start and end time for this command execution. */
-        final ExecutionStep.Builder executionStep =
-            ExecutionStep.builder().setCommand(command).startNow();
+        final ExecutionStep.Builder executionStep = ExecutionStep.builder().startNow();
         /** Try to execute the command */
         try {
           /** Get strategy strategy for this command. */
           ActionStrategy strategy = strategies.get(command.getAction());
+          if (Objects.isNull(strategy)) {
+            throw new ExecutionException("Strategy not found: " + command.getAction());
+          }
+          /** Add command to execution step. */
+          executionStep.setCommand(
+              /** Build a new command for output */
+              Command.builder()
+                  .setAction(command.getAction())
+                  .setObject(command.getObject())
+                  .setType(command.getType())
+                  .setParameter(command.getParameter())
+                  /** Replace the instruction if is repleceable */
+                  .setInstruction(
+                      strategy.isReplaceable()
+                          ? replaceElementId(command)
+                          : command.getInstruction())
+                  .build());
+
           /** Get appropriated strategy type. */
           if (strategy instanceof InteractableActionStrategy) {
             /** Get the interactable object from context. */
@@ -65,15 +82,21 @@ public class ExecutorImpl implements Executor {
           } else if (strategy instanceof PageObjectActionStrategy) {
             /** Try handle this page context action. */
             handlePageObject(
-                (PageObjectActionStrategy) strategy, command.getObject(), command.getParameter());
+                (PageObjectActionStrategy) strategy,
+                command.getObject(),
+                command.getParameter(),
+                command.getType());
           } else {
             /** strategy not reconigsed */
             throw new ExecutionException(
                 "strategy for command '" + command.getAction() + "' not found.");
           }
-          /** This execution step was successful. */
-          result.addStep(
-              executionStep.endNow().withSuccess().setScreenshot(context.getScreenshot()));
+
+          /** This execution step was successful, add screenshot if is printable. */
+          if (strategy.isPrintable()) {
+            executionStep.setScreenshot(context.getScreenshot());
+          }
+          result.addStep(executionStep.endNow().withSuccess());
           LOGGER.debug("Executing command: {} ... SUCCESS", command);
         } catch (Exception e) {
           /** This execution step was failed. */
@@ -108,8 +131,8 @@ public class ExecutorImpl implements Executor {
    * @param url
    */
   private <T extends PageObjectActionStrategy> void handlePageObject(
-      PageObjectActionStrategy strategy, String page, String parameter) {
-    strategy.perform(context, page, parameter);
+      PageObjectActionStrategy strategy, String object, String parameter, String type) {
+    strategy.perform(context, object, parameter, type);
   }
 
   /**
@@ -137,17 +160,38 @@ public class ExecutorImpl implements Executor {
     GenericPageObject pageObject = context.getCurrentPage();
     /** Check if current object not exists on page */
     if (!pageObject.hasElement(command.getObject())) {
+      /** Get object metadata */
+      ElementMetadata metadata = context.getMetadata(command.getObject());
+      /** Fail if metadata is empty */
+      if (Objects.isNull(metadata)) {
+        throw new ExecutionException(
+            MessageFormat.format("Element '{0}' is not defined.", command.getObject()));
+      }
       /** Fail if type is not present */
       if (Objects.isNull(command.getType())) {
         throw new ExecutionException(
             MessageFormat.format(
-                "Command 'type' must be present when object '{0}' is referenced at first time.",
+                "Command 'type' must be present when element '{0}' is referenced at first time.",
                 command.getObject()));
       }
       /** Creates the object on this page */
-      pageObject.addElement(command.getObject(), By.id(command.getObject()), command.getType());
+      pageObject.addElement(command.getObject(), metadata.getLocator(), command.getType());
     }
     /** returns the interactable element */
     return pageObject.getElement(command.getObject());
+  }
+
+  /**
+   * Replace element id by element label on instruction.
+   *
+   * @param command the command with instruction
+   * @return the instruction with element id label replaced.
+   */
+  private String replaceElementId(Command command) {
+    if (!command.getObject().startsWith("@")) {
+      return command.getInstruction();
+    }
+    ElementMetadata metadata = context.getMetadata(command.getObject());
+    return command.getInstruction().replace(command.getObject(), metadata.getLabel());
   }
 }

@@ -45,6 +45,7 @@ public class StrategieSubModule extends AbstractModule {
         .add(new ClosePageStrategy())
         .add(new ReadPageStrategy())
         .add(new RollPageStrategy())
+        .add(new DefinePageStrategy())
         /** return list */
         .build();
   }

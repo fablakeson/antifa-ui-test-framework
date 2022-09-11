@@ -1,9 +1,15 @@
-# This is a basic test
-
+# Start test at page login
 Open the login page at "http://localhost:8000/login.html".
-Write "teste@mail.com.br" to username input.
-Write "wrongpass" to the password input.
-Click on the login button.
+
+# Element definitions
+Define @username as "User Name" located by "#username".
+Define @password as "User Password" located by "#password".
+Define @submit as "Submit" located by "#login".
+
+# Test instructions
+Write "teste@mail.com.br" to @username input.
+Write "wrongpass" to the @password input.
+Click on the @submit button.
 Read the message "Login with success!!!"
 
 # here the test ends

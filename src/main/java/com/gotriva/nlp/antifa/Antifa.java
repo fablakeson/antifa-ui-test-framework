@@ -91,6 +91,8 @@ public final class Antifa {
    * @return
    */
   private List<Command> parseInstructions(List<String> instructions) {
+    List<Command> commands = getParser().parse(instructions);
+    LOGGER.info("Parsed instructions to commands:\n{}", commands);
     return getParser().parse(instructions);
   }
 
@@ -101,7 +103,9 @@ public final class Antifa {
    * @return
    */
   private ExecutionResult executeCommands(List<Command> commands) {
-    return getExecutor().execute(commands);
+    ExecutionResult result = getExecutor().execute(commands);
+    LOGGER.info("Executed commands and returned result:\n{}", result);
+    return result;
   }
 
   /**

@@ -8,7 +8,10 @@ public interface PageObjectActionStrategy extends ActionStrategy {
   /**
    * Handles the current execution page actions.
    *
-   * @param context the execution context
+   * @param context the execution context.
+   * @param object the command object.
+   * @param parameter the command parameter.
+   * @param type the command type.
    */
-  void perform(ExecutionContext context, String page, String parameter);
+  void perform(ExecutionContext context, String object, String parameter, String type);
 }

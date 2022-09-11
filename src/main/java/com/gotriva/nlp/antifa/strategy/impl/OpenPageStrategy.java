@@ -17,8 +17,9 @@ public class OpenPageStrategy implements PageObjectActionStrategy {
     return "open";
   }
 
+  // TODO: enable open new tabs using variation.
   @Override
-  public void perform(ExecutionContext context, String page, String url) {
+  public void perform(ExecutionContext context, String page, String url, String variation) {
     /** Check if URL is given */
     if (url != null) {
       try {

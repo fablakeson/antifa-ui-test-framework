@@ -9,7 +9,7 @@ public interface InteractableActionStrategy<T extends Interactable> extends Acti
    * Handle some interactable action with a given paramter.
    *
    * @param interactable the interactable that performs the action
-   * @param string the optional action parameter
+   * @param parameter the optional action parameter
    */
-  void perform(T interactable, String string);
+  void perform(T interactable, String parameter);
 }

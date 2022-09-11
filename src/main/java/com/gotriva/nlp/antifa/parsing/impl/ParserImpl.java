@@ -1,6 +1,5 @@
 package com.gotriva.nlp.antifa.parsing.impl;
 
-import com.gotriva.nlp.antifa.exception.InstructionParsingException;
 import com.gotriva.nlp.antifa.model.Command;
 import com.gotriva.nlp.antifa.parsing.Interpreter;
 import com.gotriva.nlp.antifa.parsing.Parser;
@@ -9,12 +8,16 @@ import edu.stanford.nlp.pipeline.*;
 import edu.stanford.nlp.semgraph.SemanticGraph;
 import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations.BasicDependenciesAnnotation;
 import edu.stanford.nlp.util.CoreMap;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +26,12 @@ import org.slf4j.LoggerFactory;
 public class ParserImpl implements Parser {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ParserImpl.class);
+
+  /** Pattern to find quoted parameters. */
+  private static final Pattern QUOTE_PATTERN = Pattern.compile("\"(.*?)\"|(@[\\w\\d]+)");
+
+  /** Pattern to find parameters replacement. */
+  private static final Pattern PARAMETER_PATTERN = Pattern.compile("(#param\\d{1,})");
 
   /** The NLP pipeline processor. */
   private final StanfordCoreNLP pipeline;
@@ -48,7 +57,7 @@ public class ParserImpl implements Parser {
     List<String> instructionsCopy = new ArrayList<>(instructions);
 
     /** Replace parameters */
-    Map<String, String> parameters = prepareInstructions(instructionsCopy);
+    Map<String, String> parameters = replaceParameters(instructionsCopy);
 
     /** Concatenate the instructions into one text. */
     String instructionsText = String.join("\n", instructionsCopy);
@@ -72,23 +81,12 @@ public class ParserImpl implements Parser {
       LOGGER.debug("dependencyParse: {}", dependencyParse);
       /** Try to interpret the graph as a command */
       Command command = interpreter.intepret(dependencyParse);
-      /** Replace parameter value (if any) */
-      if (command.hasParameter()) {
-        String parameterValue = parameters.get(command.getParameter());
-        String originalInstruction =
-            StringUtils.capitalize(
-                sentence
-                    .toString()
-                    .replace(
-                        command.getParameter(), MessageFormat.format("\"{0}\"", parameterValue)));
-        command.setParameter(parameterValue);
-        command.setInstruction(originalInstruction);
-      } else {
-        command.setInstruction(StringUtils.capitalize(sentence.toString()));
-      }
-      // Print action
+      /** Restore command parameters */
+      command.setInstruction(StringUtils.capitalize(sentence.toString()));
+      command = restoreParameters(command, parameters);
+      /** Print action */
       LOGGER.debug("command: {}", command);
-      // add action to list
+      /** add action to list */
       commands.add(command);
     }
 
@@ -96,38 +94,63 @@ public class ParserImpl implements Parser {
   }
 
   /**
-   * Replaces the instructions parameters for variable names and lower case instruction text.
+   * Restore quoted parameters original values on command.
+   *
+   * @param command the command with values to be restored.
+   * @param parameters the parameters replacement map.
+   * @return the replaced command.
+   */
+  private Command restoreParameters(Command command, Map<String, String> parameters) {
+    /** Check if command fields where replaced by parameters. */
+    LOGGER.debug("Restoring: {}", command);
+    Matcher matcher = PARAMETER_PATTERN.matcher(command.getInstruction());
+    if (!matcher.find()) {
+      return command;
+    }
+    return Command.builder()
+        .setAction(command.getAction())
+        .setParameter(parameters.getOrDefault(command.getParameter(), command.getParameter()))
+        .setType(parameters.getOrDefault(command.getType(), command.getType()))
+        .setObject(parameters.getOrDefault(command.getObject(), command.getObject()))
+        .setInstruction(
+            matcher.replaceAll(
+                (result) -> {
+                  String originalValue = parameters.get(result.group());
+                  return originalValue.startsWith("@")
+                      ? originalValue
+                      : "\"" + originalValue + "\"";
+                }))
+        .build();
+  }
+
+  /**
+   * Replace instructions quoted parameters inplace.
    *
    * @param instructions the instructions to be replaced.
-   * @return the map of replaced parameters
+   * @return the replacement map.
    */
-  private Map<String, String> prepareInstructions(List<String> instructions) {
+  private Map<String, String> replaceParameters(List<String> instructions) {
     Map<String, String> parameters = new HashMap<>();
-    for (int i = 0; i < instructions.size(); ++i) {
-      final String instruction = instructions.get(i);
-      final int parameterStart = instruction.indexOf("\"");
-      if (parameterStart >= 0) {
-        final int parameterEnd = instruction.indexOf("\"", parameterStart + 1);
-        if (parameterEnd <= 0) {
-          throw new InstructionParsingException(
-              "Parameter must have a closing quote: " + instruction);
-        }
-        /** Register parameter */
-        String parameterName = "param" + i;
-        String parameterValue = instruction.substring(parameterStart + 1, parameterEnd);
-        parameters.put(parameterName, parameterValue);
-        /** Replace parameters */
-        final String newInstruction =
-            instruction.substring(0, parameterStart)
-                + parameterName
-                + instruction.substring(parameterEnd + 1);
-        instructions.set(i, newInstruction.toLowerCase());
-        LOGGER.debug("Instruction: {} --> {}", instruction, instructions.get(i));
-      } else {
-        LOGGER.debug("Instruction: {}", instruction);
-        instructions.set(i, instruction.toLowerCase());
-      }
+    AtomicInteger counter = new AtomicInteger(0);
+    ListIterator<String> iterator = instructions.listIterator();
+
+    while (iterator.hasNext()) {
+      String currentInstruction = iterator.next();
+      Matcher matcher = QUOTE_PATTERN.matcher(currentInstruction);
+      String newInstruction =
+          matcher
+              .replaceAll(
+                  (result) -> {
+                    String parameter = "#param" + counter.getAndIncrement();
+                    parameters.put(
+                        parameter, Optional.ofNullable(result.group(1)).orElse(result.group(2)));
+                    return parameter;
+                  })
+              .toLowerCase();
+      iterator.set(newInstruction);
+      LOGGER.debug("Replaced: {} -> {}", currentInstruction, newInstruction);
     }
+
     return parameters;
   }
 }

@@ -1,10 +1,12 @@
 package com.gotriva.nlp.antifa.parsing.impl;
 
 import static com.gotriva.nlp.antifa.model.Command.ComponentType.ACTION;
+import static com.gotriva.nlp.antifa.model.Command.ComponentType.BYPASS;
 import static com.gotriva.nlp.antifa.model.Command.ComponentType.OBJECT;
 import static com.gotriva.nlp.antifa.model.Command.ComponentType.PARAMETER;
 import static com.gotriva.nlp.antifa.model.Command.ComponentType.TYPE;
 import static com.gotriva.nlp.antifa.model.Step.builder;
+import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.CLAUSAL_MODIFIER;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.COMPOUND_MODIFIER;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.DIRECT_OBJECT;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.OBLIQUE_MODIFIER;
@@ -17,6 +19,7 @@ import com.gotriva.nlp.antifa.parsing.Interpreter;
 import edu.stanford.nlp.semgraph.SemanticGraph;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 /** This class implements the {@link Interpreter}. */
 public class InterpreterImpl implements Interpreter {
@@ -31,44 +34,31 @@ public class InterpreterImpl implements Interpreter {
            * be Depth-First traversals.
            */
 
-          /** Actions with parameter + type and composite object names */
-          SemanticPath.builder()
-              /** COMMAND -- obj --> TYPE */
-              .newStep(builder().from(ACTION).with(DIRECT_OBJECT).to(TYPE))
-              /** TYPE -- compound --> OBJECT */
-              .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
-              /** OBJECT -- compound --> OBJECT */
-              .newStep(builder().from(OBJECT).with(COMPOUND_MODIFIER).to(OBJECT))
-              /** COMMAND -- obl --> PARAMETER */
-              .newStep(builder().from(ACTION).with(OBLIQUE_MODIFIER).to(PARAMETER))
-              /** Ex: open the login page at theUrl. */
-              .build(),
-          SemanticPath.builder()
-              /** COMMAND -- obj --> PARAMETER */
-              .newStep(builder().from(ACTION).with(DIRECT_OBJECT).to(PARAMETER))
-              /** COMMAND -- obl --> TYPE */
-              .newStep(builder().from(ACTION).with(OBLIQUE_MODIFIER).to(TYPE))
-              /** TYPE -- compound --> OBJECT */
-              .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
-              /** OBJECT -- compound --> OBJECT */
-              .newStep(builder().from(OBJECT).with(COMPOUND_MODIFIER).to(OBJECT))
-              /** Ex: write passwordText to the passoword input */
-              .build(),
-
           /** Actions with parameter + type */
           SemanticPath.builder()
-              /** COMMAND -- obj --> TYPE */
+              /** ACTION -- obj --> OBJECT */
+              .newStep(builder().from(ACTION).with(DIRECT_OBJECT).to(OBJECT))
+              /** ACTION -- obl --> PARAMETER */
+              .newStep(builder().from(ACTION).with(OBLIQUE_MODIFIER).to(PARAMETER))
+              /** PARAMETER -- acl --> BYPASS */
+              .newStep(builder().from(PARAMETER).with(CLAUSAL_MODIFIER).to(BYPASS))
+              /** BYPASS -- obl --> TYPE */
+              .newStep(builder().from(BYPASS).with(OBLIQUE_MODIFIER).to(TYPE))
+              /** Ex: Define @submit as "Submit" located by "input[type='submit']". */
+              .build(),
+          SemanticPath.builder()
+              /** ACTION -- obj --> TYPE */
               .newStep(builder().from(ACTION).with(DIRECT_OBJECT).to(TYPE))
               /** TYPE -- compound --> OBJECT */
               .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
-              /** COMMAND -- obl --> PARAMETER */
+              /** ACTION -- obl --> PARAMETER */
               .newStep(builder().from(ACTION).with(OBLIQUE_MODIFIER).to(PARAMETER))
-              /** Ex: open the login page at theUrl. */
+              /** Ex: Open the login page at "http://www.google.com". */
               .build(),
           SemanticPath.builder()
-              /** COMMAND -- obj --> PARAMETER */
+              /** ACTION -- obj --> PARAMETER */
               .newStep(builder().from(ACTION).with(DIRECT_OBJECT).to(PARAMETER))
-              /** COMMAND -- obl --> TYPE */
+              /** ACTION -- obl --> TYPE */
               .newStep(builder().from(ACTION).with(OBLIQUE_MODIFIER).to(TYPE))
               /** TYPE -- compound --> OBJECT */
               .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
@@ -77,7 +67,7 @@ public class InterpreterImpl implements Interpreter {
 
           /** Actions with parameter and no type */
           SemanticPath.builder()
-              /** COMMAND -- obj --> PARAMETER */
+              /** ACTION -- obj --> PARAMETER */
               .newStep(builder().from(ACTION).with(DIRECT_OBJECT).to(PARAMETER))
               /** PARAMETER -- obj --> OBJECT */
               .newStep(builder().from(PARAMETER).with(COMPOUND_MODIFIER).to(OBJECT))
@@ -86,7 +76,7 @@ public class InterpreterImpl implements Interpreter {
 
           /** Actions with type without paramter */
           SemanticPath.builder()
-              /** COMMAND -- obl --> TYPE */
+              /** ACTION -- obl --> TYPE */
               .newStep(builder().from(ACTION).with(OBLIQUE_MODIFIER).to(TYPE))
               /** TYPE -- compound --> OBJECT */
               .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
@@ -95,7 +85,7 @@ public class InterpreterImpl implements Interpreter {
 
           /** Actions without type and parameter */
           SemanticPath.builder()
-              /** COMMAND -- obl --> OBJECT */
+              /** ACTION -- obl --> OBJECT */
               .newStep(builder().from(ACTION).with(OBLIQUE_MODIFIER).to(OBJECT))
               /** Ex: click on login */
               .build());
@@ -118,9 +108,11 @@ public class InterpreterImpl implements Interpreter {
         .filter(Optional::isPresent)
         .findFirst()
         .map(Optional::get)
-        .orElseThrow(
-            () ->
-                new InterpretationException(
-                    "No interpretations found for given context: " + context));
+        .orElseThrow(interpretationException(context));
+  }
+
+  private Supplier<InterpretationException> interpretationException(SemanticGraph context) {
+    return () ->
+        new InterpretationException("No interpretations found for given context:\n" + context);
   }
 }

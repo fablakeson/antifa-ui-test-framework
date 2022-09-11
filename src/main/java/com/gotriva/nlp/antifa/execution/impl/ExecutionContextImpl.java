@@ -1,12 +1,15 @@
 package com.gotriva.nlp.antifa.execution.impl;
 
 import com.gotriva.nlp.antifa.element.CompositeElementFactory;
+import com.gotriva.nlp.antifa.element.ElementMetadata;
 import com.gotriva.nlp.antifa.exception.ExecutionException;
 import com.gotriva.nlp.antifa.execution.ExecutionContext;
 import com.gotriva.nlp.antifa.model.GenericPageObject;
 import java.net.URL;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -17,6 +20,9 @@ public class ExecutionContextImpl implements ExecutionContext {
   /** The stack of pages on context. */
   private Deque<GenericPageObject> pageStack;
 
+  /** The element metadata map. */
+  private Map<String, ElementMetadata> elementMetadata;
+
   /** The associated context web driver */
   private WebDriver driver;
 
@@ -26,6 +32,7 @@ public class ExecutionContextImpl implements ExecutionContext {
   /** Default constructor. */
   ExecutionContextImpl(WebDriver driver, CompositeElementFactory factory) {
     this.pageStack = new LinkedList<>();
+    this.elementMetadata = new HashMap<>();
     this.driver = driver;
     this.factory = factory;
   }
@@ -35,11 +42,13 @@ public class ExecutionContextImpl implements ExecutionContext {
    *
    * @return
    */
+  @Override
   public GenericPageObject getCurrentPage() {
     return pageStack.peekFirst();
   }
 
   /** Closes the current execution context page. */
+  @Override
   public GenericPageObject closeCurrentPage() {
     /** Checks if context has any open page. */
     if (pageStack.isEmpty()) {
@@ -50,6 +59,7 @@ public class ExecutionContextImpl implements ExecutionContext {
   }
 
   /** Creates a new page on context. */
+  @Override
   public GenericPageObject openPage(String name) {
     /** Adds new page to the top. */
     pageStack.addFirst(
@@ -59,6 +69,7 @@ public class ExecutionContextImpl implements ExecutionContext {
   }
 
   /** Creates a new page on context for the given URL. */
+  @Override
   public GenericPageObject openPage(String name, URL url) {
     /** Adds new page to the top. */
     pageStack.addFirst(
@@ -77,6 +88,7 @@ public class ExecutionContextImpl implements ExecutionContext {
    *
    * @return the screenshot image base-64 representation
    */
+  @Override
   public String getScreenshot() {
     return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BASE64);
   }
@@ -84,5 +96,15 @@ public class ExecutionContextImpl implements ExecutionContext {
   @Override
   public void close() {
     driver.close();
+  }
+
+  @Override
+  public void setMetadata(String element, ElementMetadata metadata) {
+    elementMetadata.put(element, metadata);
+  }
+
+  @Override
+  public ElementMetadata getMetadata(String element) {
+    return elementMetadata.get(element);
   }
 }
