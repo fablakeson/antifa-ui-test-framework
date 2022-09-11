@@ -161,11 +161,10 @@ public class ExecutorImpl implements Executor {
     /** Check if current object not exists on page */
     if (!pageObject.hasElement(command.getObject())) {
       /** Get object metadata */
-      ElementMetadata metadata = context.getMetadata(command.getObject());
+      ElementMetadata metadata = getMetadata(command.getObject());
       /** Fail if metadata is empty */
       if (Objects.isNull(metadata)) {
-        throw new ExecutionException(
-            MessageFormat.format("Element '{0}' is not defined.", command.getObject()));
+        throw new ExecutionException("Element \"" + command.getObject() + "\" is not defined.");
       }
       /** Fail if type is not present */
       if (Objects.isNull(command.getType())) {
@@ -188,10 +187,21 @@ public class ExecutorImpl implements Executor {
    * @return the instruction with element id label replaced.
    */
   private String replaceElementId(Command command) {
-    if (!command.getObject().startsWith("@")) {
+    ElementMetadata metadata = getMetadata(command.getObject());
+    if (Objects.isNull(metadata)) {
+      /** Return not replaced instruction for error logging. */
       return command.getInstruction();
     }
-    ElementMetadata metadata = context.getMetadata(command.getObject());
     return command.getInstruction().replace(command.getObject(), metadata.getLabel());
+  }
+
+  /**
+   * Return metadata for given element.
+   *
+   * @param element the element.
+   * @return the element metadata.
+   */
+  private ElementMetadata getMetadata(String element) {
+    return context.getMetadata(element);
   }
 }

@@ -23,10 +23,4 @@ public class DefinePageStrategy implements PageObjectActionStrategy {
     /** Should not print define as it not changes the page. */
     return false;
   }
-
-  @Override
-  public boolean isReplaceable() {
-    /** Should not replace this action strategy instruction. */
-    return false;
-  }
 }

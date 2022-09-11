@@ -14,4 +14,10 @@ public interface PageObjectActionStrategy extends ActionStrategy {
    * @param type the command type.
    */
   void perform(ExecutionContext context, String object, String parameter, String type);
+
+  @Override
+  public default boolean isReplaceable() {
+    /** page action objects doesn't need to be replaced. */
+    return false;
+  }
 }
