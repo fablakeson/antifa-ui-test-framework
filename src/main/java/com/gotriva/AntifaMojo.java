@@ -34,8 +34,9 @@ public class AntifaMojo extends AbstractMojo {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(AntifaMojo.class);
 
+  // TODO: Add unitary tests to parsing module (4 strategies left).
+  // TODO: Update README with define action.
   // TODO: Add unitary tests to execution module.
-  // TODO: Add unitary tests to parsing module.
   // TODO: Add unitary tests to page strategies.
   // TODO: Remove unnecessary comments (like this)
 
@@ -85,16 +86,17 @@ public class AntifaMojo extends AbstractMojo {
     /** For each test file */
     Stream.of(inputDirectory.listFiles())
         /** execute tests for files */
-        .forEach(
-            file -> {
-              try {
-                antifa.execute(getTestName(file.getName()), file);
-              } catch (IOException e) {
-                throw new RuntimeException("Error executing file " + file.getName(), e);
-              }
-            });
+        .forEach(file -> executeTest(antifa, file));
 
     LOGGER.info("All done!");
+  }
+
+  private void executeTest(Antifa antifa, File testFile) {
+    try {
+      antifa.execute(getTestName(testFile.getName()), testFile);
+    } catch (IOException e) {
+      throw new RuntimeException("Error executing file " + testFile.getName(), e);
+    }
   }
 
   private String getTestName(String fileName) {
