@@ -37,7 +37,7 @@ public class InterpreterImplTest {
   }
 
   @ParameterizedTest
-  @MethodSource({"clickInstructions", "checkInstructions"})
+  @MethodSource({"clickInstructions", "checkInstructions", "uncheckInstructions"})
   public void testInterpret_withInstruction_thenReturnCommand(
       String instruction, Command expecteCommand) {
     SemanticGraph context = semanticGraph(instruction);
@@ -54,30 +54,48 @@ public class InterpreterImplTest {
             .setInstruction(null)
             .setAction("click")
             .setType("button")
-            .setObject("#parameter")
+            .setObject("#param1")
             .build();
     return Stream.of(
         /** Single click */
-        Arguments.of("click on the #parameter button.", expectedCommand),
-        Arguments.of("click the #parameter button.", expectedCommand),
-        Arguments.of("click on #parameter button.", expectedCommand),
-        Arguments.of("click #parameter button.", expectedCommand));
+        Arguments.of("click on the #param1 button.", expectedCommand),
+        Arguments.of("click the #param1 button.", expectedCommand),
+        Arguments.of("click on #param1 button.", expectedCommand),
+        Arguments.of("click #param1 button.", expectedCommand));
   }
 
+  /** Check instructions for test. */
   public static Stream<Arguments> checkInstructions() {
     final Command expectedCommand =
         Command.builder()
             .setInstruction(null)
             .setAction("check")
-            .setType("checkbox")
-            .setObject("#parameter")
+            .setType("radio")
+            .setObject("#param1")
             .build();
     return Stream.of(
         /** Single check */
-        Arguments.of("check on the #parameter checkbox.", expectedCommand),
-        Arguments.of("check the #parameter checkbox.", expectedCommand),
-        Arguments.of("check on #parameter checkbox.", expectedCommand),
-        Arguments.of("check #parameter checkbox.", expectedCommand));
+        Arguments.of("check on the #param1 radio.", expectedCommand),
+        Arguments.of("check the #param1 radio.", expectedCommand),
+        Arguments.of("check on #param1 radio.", expectedCommand),
+        Arguments.of("check #param1 radio.", expectedCommand));
+  }
+
+  /** Uncheck instructions for test. */
+  public static Stream<Arguments> uncheckInstructions() {
+    final Command expectedCommand =
+        Command.builder()
+            .setInstruction(null)
+            .setAction("uncheck")
+            .setType("checkbox")
+            .setObject("#param1")
+            .build();
+    return Stream.of(
+        /** Single uncheck */
+        Arguments.of("uncheck on the #param1 checkbox.", expectedCommand),
+        Arguments.of("uncheck the #param1 checkbox.", expectedCommand),
+        Arguments.of("uncheck on #param1 checkbox.", expectedCommand),
+        Arguments.of("uncheck #param1 checkbox.", expectedCommand));
   }
 
   private static SemanticGraph semanticGraph(String instruction) {

@@ -7,6 +7,7 @@ import static com.gotriva.nlp.antifa.model.Command.ComponentType.OBJECT;
 import static com.gotriva.nlp.antifa.model.Command.ComponentType.PARAMETER;
 import static com.gotriva.nlp.antifa.model.Command.ComponentType.TYPE;
 import static com.gotriva.nlp.antifa.model.Step.builder;
+import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.ADJECTIVAL_MODIFIER;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.CLAUSAL_MODIFIER;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.COMPOUND_MODIFIER;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.DETERMINER;
@@ -90,6 +91,13 @@ public class InterpreterImpl implements Interpreter {
               /** TYPE -- compound --> OBJECT */
               .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
               /** Ex: click on the login button */
+              .build(),
+          SemanticPath.builder()
+              /** TYPE -- amod --> ACTION */
+              .newStep(builder().from(TYPE).with(ADJECTIVAL_MODIFIER).to(ACTION))
+              /** TYPE -- compound --> OBJECT */
+              .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
+              /** Ex: Uncheck #param1 checkbox. */
               .build());
 
   /** The default constructor. */

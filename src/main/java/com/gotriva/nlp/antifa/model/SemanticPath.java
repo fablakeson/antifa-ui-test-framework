@@ -76,7 +76,7 @@ public class SemanticPath {
 
     /** Sets the action root */
     Map<Command.ComponentType, Deque<IndexedWord>> knowledgeFrame = new HashMap<>();
-    putOrAppend(knowledgeFrame, Command.ComponentType.ACTION, root);
+    putOrAppend(knowledgeFrame, steps.get(0).getSource(), root);
 
     LOGGER.debug("My root is: {}", root);
 
