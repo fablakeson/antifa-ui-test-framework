@@ -9,6 +9,7 @@ import static com.gotriva.nlp.antifa.model.Command.ComponentType.TYPE;
 import static com.gotriva.nlp.antifa.model.Step.builder;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.ADJECTIVAL_MODIFIER;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.ADVERBIAL_MODIFIER;
+import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.CASE_MARKER;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.CLAUSAL_MODIFIER;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.COMPOUND_MODIFIER;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.DETERMINER;
@@ -116,6 +117,17 @@ public class InterpreterImpl implements Interpreter {
               /** TYPE -- compound --> OBJECT */
               .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
               /** Ex: close the login page. */
+              .build(),
+
+          /** Actions without type */
+          SemanticPath.builder()
+              /** ACTION -- obj --> PARAMETER */
+              .newStep(builder().from(ACTION).with(DIRECT_OBJECT).to(PARAMETER))
+              /** PARAMETER -- obl --> OBJECT */
+              .newStep(builder().from(ACTION).with(OBLIQUE_MODIFIER).to(OBJECT))
+              /** OBJECT -- case --> NO_OP */
+              .newStep(builder().from(OBJECT).with(CASE_MARKER).to(NO_OP))
+              /** Ex: read #param on page. */
               .build());
 
   /** The default constructor. */

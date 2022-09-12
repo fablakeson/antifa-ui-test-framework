@@ -32,7 +32,7 @@ public class InterpreterImplTest {
   private InterpreterImpl interpreter;
 
   @BeforeEach
-  public void before() {
+  public void beforeEach() {
     interpreter = new InterpreterImpl();
   }
 
@@ -44,7 +44,8 @@ public class InterpreterImplTest {
     "hoverInstructions",
     "defineInstructions",
     "closeInstructions",
-    "openInstructions"
+    "openInstructions",
+    "readInstructions"
   })
   public void testInterpret_withInstruction_thenReturnCommand(
       String instruction, Command expecteCommand) {
@@ -148,7 +149,7 @@ public class InterpreterImplTest {
             .setType("page")
             .build();
     return Stream.of(
-        /** Single define */
+        /** Single close */
         Arguments.of("close the login page.", expectedCommand),
         Arguments.of("close login page.", expectedCommand));
   }
@@ -164,9 +165,24 @@ public class InterpreterImplTest {
             .setType("page")
             .build();
     return Stream.of(
-        /** Single define */
+        /** Single open */
         Arguments.of("open the home page at #param1.", expectedCommand),
         Arguments.of("open home page at #param1.", expectedCommand));
+  }
+
+  /** Read instructions for test. */
+  static Stream<Arguments> readInstructions() {
+    final Command expectedCommand =
+        Command.builder()
+            .setInstruction(null)
+            .setAction("read")
+            .setObject("page")
+            .setParameter("#param1")
+            .build();
+    return Stream.of(
+        /** Single read */
+        Arguments.of("read #param1 on the page.", expectedCommand),
+        Arguments.of("read #param1 on page.", expectedCommand));
   }
 
   private static SemanticGraph semanticGraph(String instruction) {
