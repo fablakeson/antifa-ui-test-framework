@@ -42,7 +42,8 @@ public class InterpreterImplTest {
     "checkInstructions",
     "uncheckInstructions",
     "hoverInstructions",
-    "defineInstructions"
+    "defineInstructions",
+    "closeInstructions"
   })
   public void testInterpret_withInstruction_thenReturnCommand(
       String instruction, Command expecteCommand) {
@@ -134,6 +135,20 @@ public class InterpreterImplTest {
     return Stream.of(
         /** Single define */
         Arguments.of("define #param1 as #param2 located by #param3.", expectedCommand));
+  }
+
+  static Stream<Arguments> closeInstructions() {
+    final Command expectedCommand =
+        Command.builder()
+            .setInstruction(null)
+            .setAction("close")
+            .setObject("login")
+            .setType("page")
+            .build();
+    return Stream.of(
+        /** Single define */
+        Arguments.of("close the login page.", expectedCommand),
+        Arguments.of("close login page.", expectedCommand));
   }
 
   private static SemanticGraph semanticGraph(String instruction) {
