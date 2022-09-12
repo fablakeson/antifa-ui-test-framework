@@ -41,7 +41,8 @@ public class InterpreterImplTest {
     "clickInstructions",
     "checkInstructions",
     "uncheckInstructions",
-    "hoverInstructions"
+    "hoverInstructions",
+    "defineInstructions"
   })
   public void testInterpret_withInstruction_thenReturnCommand(
       String instruction, Command expecteCommand) {
@@ -118,6 +119,21 @@ public class InterpreterImplTest {
         Arguments.of("hover the #param1 image.", expectedCommand),
         Arguments.of("hover on #param1 image.", expectedCommand),
         Arguments.of("hover #param1 image.", expectedCommand));
+  }
+
+  /** Define instructions for test. */
+  static Stream<Arguments> defineInstructions() {
+    final Command expectedCommand =
+        Command.builder()
+            .setInstruction(null)
+            .setAction("define")
+            .setType("#param3")
+            .setObject("#param1")
+            .setParameter("#param2")
+            .build();
+    return Stream.of(
+        /** Single define */
+        Arguments.of("define #param1 as #param2 located by #param3.", expectedCommand));
   }
 
   private static SemanticGraph semanticGraph(String instruction) {
