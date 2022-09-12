@@ -37,7 +37,7 @@ public class InterpreterImplTest {
   }
 
   @ParameterizedTest
-  @MethodSource({"clickInstructions"})
+  @MethodSource({"clickInstructions", "checkInstructions"})
   public void testInterpret_withInstruction_thenReturnCommand(
       String instruction, Command expecteCommand) {
     SemanticGraph context = semanticGraph(instruction);
@@ -54,14 +54,30 @@ public class InterpreterImplTest {
             .setInstruction(null)
             .setAction("click")
             .setType("button")
-            .setObject("#element")
+            .setObject("#parameter")
             .build();
     return Stream.of(
         /** Single click */
-        Arguments.of("click on the #element button.", expectedCommand),
-        Arguments.of("click the #element button.", expectedCommand),
-        Arguments.of("click on #element button.", expectedCommand),
-        Arguments.of("click #element button.", expectedCommand));
+        Arguments.of("click on the #parameter button.", expectedCommand),
+        Arguments.of("click the #parameter button.", expectedCommand),
+        Arguments.of("click on #parameter button.", expectedCommand),
+        Arguments.of("click #parameter button.", expectedCommand));
+  }
+
+  public static Stream<Arguments> checkInstructions() {
+    final Command expectedCommand =
+        Command.builder()
+            .setInstruction(null)
+            .setAction("check")
+            .setType("checkbox")
+            .setObject("#parameter")
+            .build();
+    return Stream.of(
+        /** Single check */
+        Arguments.of("check on the #parameter checkbox.", expectedCommand),
+        Arguments.of("check the #parameter checkbox.", expectedCommand),
+        Arguments.of("check on #parameter checkbox.", expectedCommand),
+        Arguments.of("check #parameter checkbox.", expectedCommand));
   }
 
   private static SemanticGraph semanticGraph(String instruction) {
