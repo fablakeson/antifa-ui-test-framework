@@ -2,6 +2,7 @@ package com.gotriva.nlp.antifa.model;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 
 /** This class represents a step on {@link ExecutionResult}. */
 public class ExecutionStep {
@@ -157,6 +158,24 @@ public class ExecutionStep {
 
   public Long getElapsedTime() {
     return ChronoUnit.MILLIS.between(getStartTime(), getEndTime());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(command, endTime, result, screenshot, startTime);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof ExecutionStep) {
+      ExecutionStep other = (ExecutionStep) obj;
+      return Objects.equals(this.command, other.command)
+          && Objects.equals(this.endTime, other.endTime)
+          && Objects.equals(this.result, other.result)
+          && Objects.equals(this.screenshot, other.screenshot)
+          && Objects.equals(this.startTime, other.startTime);
+    }
+    return false;
   }
 
   @Override

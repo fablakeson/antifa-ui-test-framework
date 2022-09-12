@@ -1,8 +1,8 @@
 package com.gotriva.nlp.antifa.model;
 
-import com.google.common.base.Objects;
 import com.gotriva.nlp.antifa.model.Command.ComponentType;
 import edu.stanford.nlp.trees.GrammaticalRelation;
+import java.util.Objects;
 
 /** This class represents a step on the {@link SemanticPath} */
 public class Step {
@@ -87,16 +87,18 @@ public class Step {
   /** Override methods */
   @Override
   public boolean equals(Object obj) {
-    if (obj != null && obj instanceof Step) {
+    if (obj instanceof Step) {
       Step other = (Step) obj;
-      return Objects.equal(source, other.source) && Objects.equal(destination, other.destination);
+      return Objects.equals(this.source, other.source)
+          && Objects.equals(this.edge, other.edge)
+          && Objects.equals(this.destination, other.destination);
     }
     return false;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hashCode(source, destination);
+    return Objects.hash(source, edge, destination);
   }
 
   @Override

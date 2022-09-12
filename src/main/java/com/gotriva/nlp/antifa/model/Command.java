@@ -1,5 +1,7 @@
 package com.gotriva.nlp.antifa.model;
 
+import java.util.Objects;
+
 /**
  * This class represents an interpreted command. The command consists in 5 components:
  *
@@ -76,8 +78,7 @@ public class Command {
 
     public Command build() {
       /** Assert that name and object are not null */
-      assert instruction != null && action != null && object != null
-          : "'instruction', 'command' and 'object' must be not null.";
+      assert action != null && object != null : "'command' and 'object' must be not null.";
       return new Command(instruction, action, parameter, object, type);
     }
   }
@@ -144,6 +145,23 @@ public class Command {
 
   public String getInstruction() {
     return instruction;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(instruction, action, object, parameter, type);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof Command) {
+      Command other = (Command) obj;
+      return Objects.equals(this.instruction, other.instruction)
+          && Objects.equals(this.action, other.action)
+          && Objects.equals(this.object, other.object)
+          && Objects.equals(this.parameter, other.parameter);
+    }
+    return false;
   }
 
   @Override

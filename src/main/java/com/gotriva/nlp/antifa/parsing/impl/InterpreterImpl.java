@@ -2,12 +2,14 @@ package com.gotriva.nlp.antifa.parsing.impl;
 
 import static com.gotriva.nlp.antifa.model.Command.ComponentType.ACTION;
 import static com.gotriva.nlp.antifa.model.Command.ComponentType.BYPASS;
+import static com.gotriva.nlp.antifa.model.Command.ComponentType.NO_OP;
 import static com.gotriva.nlp.antifa.model.Command.ComponentType.OBJECT;
 import static com.gotriva.nlp.antifa.model.Command.ComponentType.PARAMETER;
 import static com.gotriva.nlp.antifa.model.Command.ComponentType.TYPE;
 import static com.gotriva.nlp.antifa.model.Step.builder;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.CLAUSAL_MODIFIER;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.COMPOUND_MODIFIER;
+import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.DETERMINER;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.DIRECT_OBJECT;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.OBLIQUE_MODIFIER;
 
@@ -34,7 +36,7 @@ public class InterpreterImpl implements Interpreter {
            * be Depth-First traversals.
            */
 
-          /** Actions with parameter + type */
+          /** Actions with parameter */
           SemanticPath.builder()
               /** ACTION -- obj --> OBJECT */
               .newStep(builder().from(ACTION).with(DIRECT_OBJECT).to(OBJECT))
@@ -62,32 +64,32 @@ public class InterpreterImpl implements Interpreter {
               .newStep(builder().from(ACTION).with(OBLIQUE_MODIFIER).to(TYPE))
               /** TYPE -- compound --> OBJECT */
               .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
-              /** Ex: write passwordText to the passoword input */
+              /** Ex: Write passwordText to the passoword input */
               .build(),
 
-          /** Actions with parameter and no type */
+          /** Actions without paramter */
           SemanticPath.builder()
-              /** ACTION -- obj --> PARAMETER */
-              .newStep(builder().from(ACTION).with(DIRECT_OBJECT).to(PARAMETER))
-              /** PARAMETER -- obj --> OBJECT */
-              .newStep(builder().from(PARAMETER).with(COMPOUND_MODIFIER).to(OBJECT))
-              /** Ex: write the passoword passwordText */
+              /** ACTION -- obj --> TYPE */
+              .newStep(builder().from(ACTION).with(DIRECT_OBJECT).to(TYPE))
+              /** TYPE -- obj --> OBJECT */
+              .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
+              /** TYPE -- det --> NO_OP */
+              .newStep(builder().from(TYPE).with(DETERMINER).to(NO_OP))
+              /** Ex: Click the #submit button. */
               .build(),
-
-          /** Actions with type without paramter */
+          SemanticPath.builder()
+              /** ACTION -- obj --> TYPE */
+              .newStep(builder().from(ACTION).with(DIRECT_OBJECT).to(TYPE))
+              /** TYPE -- compound --> OBJECT */
+              .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
+              /** Ex: Click #home link. */
+              .build(),
           SemanticPath.builder()
               /** ACTION -- obl --> TYPE */
               .newStep(builder().from(ACTION).with(OBLIQUE_MODIFIER).to(TYPE))
               /** TYPE -- compound --> OBJECT */
               .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
               /** Ex: click on the login button */
-              .build(),
-
-          /** Actions without type and parameter */
-          SemanticPath.builder()
-              /** ACTION -- obl --> OBJECT */
-              .newStep(builder().from(ACTION).with(OBLIQUE_MODIFIER).to(OBJECT))
-              /** Ex: click on login */
               .build());
 
   /** The default constructor. */
