@@ -13,6 +13,7 @@ import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.CLAUSAL_MO
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.COMPOUND_MODIFIER;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.DETERMINER;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.DIRECT_OBJECT;
+import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.NOMINAL_MODIFIER;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.OBLIQUE_MODIFIER;
 
 import com.google.common.collect.ImmutableList;
@@ -67,6 +68,15 @@ public class InterpreterImpl implements Interpreter {
               /** TYPE -- compound --> OBJECT */
               .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
               /** Ex: Write passwordText to the passoword input */
+              .build(),
+          SemanticPath.builder()
+              /** TYPE -- compound --> OBJECT */
+              .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
+              /** TYPE -- compound --> ACTION */
+              .newStep(builder().from(TYPE).with(ADJECTIVAL_MODIFIER).to(ACTION))
+              /** TYPE -- compound --> PARAMETER */
+              .newStep(builder().from(TYPE).with(NOMINAL_MODIFIER).to(PARAMETER))
+              /* Ex: Open home page at #param1. */
               .build(),
 
           /** Actions without paramter */
