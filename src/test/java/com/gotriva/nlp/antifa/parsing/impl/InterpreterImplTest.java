@@ -37,7 +37,12 @@ public class InterpreterImplTest {
   }
 
   @ParameterizedTest
-  @MethodSource({"clickInstructions", "checkInstructions", "uncheckInstructions"})
+  @MethodSource({
+    "clickInstructions",
+    "checkInstructions",
+    "uncheckInstructions",
+    "hoverInstructions"
+  })
   public void testInterpret_withInstruction_thenReturnCommand(
       String instruction, Command expecteCommand) {
     SemanticGraph context = semanticGraph(instruction);
@@ -48,7 +53,7 @@ public class InterpreterImplTest {
   }
 
   /** Click instructions for test. */
-  public static Stream<Arguments> clickInstructions() {
+  static Stream<Arguments> clickInstructions() {
     final Command expectedCommand =
         Command.builder()
             .setInstruction(null)
@@ -65,7 +70,7 @@ public class InterpreterImplTest {
   }
 
   /** Check instructions for test. */
-  public static Stream<Arguments> checkInstructions() {
+  static Stream<Arguments> checkInstructions() {
     final Command expectedCommand =
         Command.builder()
             .setInstruction(null)
@@ -82,7 +87,7 @@ public class InterpreterImplTest {
   }
 
   /** Uncheck instructions for test. */
-  public static Stream<Arguments> uncheckInstructions() {
+  static Stream<Arguments> uncheckInstructions() {
     final Command expectedCommand =
         Command.builder()
             .setInstruction(null)
@@ -96,6 +101,23 @@ public class InterpreterImplTest {
         Arguments.of("uncheck the #param1 checkbox.", expectedCommand),
         Arguments.of("uncheck on #param1 checkbox.", expectedCommand),
         Arguments.of("uncheck #param1 checkbox.", expectedCommand));
+  }
+
+  /** Hover instructions for test. */
+  static Stream<Arguments> hoverInstructions() {
+    final Command expectedCommand =
+        Command.builder()
+            .setInstruction(null)
+            .setAction("hover")
+            .setType("image")
+            .setObject("#param1")
+            .build();
+    return Stream.of(
+        /** Single hover */
+        Arguments.of("hover on the #param1 image.", expectedCommand),
+        Arguments.of("hover the #param1 image.", expectedCommand),
+        Arguments.of("hover on #param1 image.", expectedCommand),
+        Arguments.of("hover #param1 image.", expectedCommand));
   }
 
   private static SemanticGraph semanticGraph(String instruction) {
