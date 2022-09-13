@@ -10,6 +10,6 @@ Define @submit as "Submit" located by "#login".
 Write "teste@mail.com.br" to @username input.
 Write "wrongpass" to the @password input.
 Click on the @submit button.
-Read the message "Login with success!!!"
+Read "Login with success!!!" on page.
 
 # here the test ends
