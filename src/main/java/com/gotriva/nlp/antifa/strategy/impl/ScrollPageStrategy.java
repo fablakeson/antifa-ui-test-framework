@@ -7,16 +7,16 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 
 /** This class implements a page object strategy for scroll page action. */
-public class RollPageStrategy implements PageObjectActionStrategy {
+public class ScrollPageStrategy implements PageObjectActionStrategy {
 
   private static final int SCROLLED_PIXELS = 350;
 
   /** Default constructor */
-  RollPageStrategy() {}
+  ScrollPageStrategy() {}
 
   @Override
   public String getAction() {
-    return "roll";
+    return "scroll";
   }
 
   @Override

@@ -128,6 +128,13 @@ public class InterpreterImpl implements Interpreter {
               /** OBJECT -- case --> NO_OP */
               .newStep(builder().from(OBJECT).with(CASE_MARKER).to(NO_OP))
               /** Ex: read #param on page. */
+              .build(),
+          SemanticPath.builder()
+              /** ACTION -- advmod --> OBJECT */
+              .newStep(builder().from(ACTION).with(ADVERBIAL_MODIFIER).to(OBJECT))
+              /** OBJECT -- case --> PARAMETER */
+              .newStep(builder().from(OBJECT).with(CASE_MARKER).to(PARAMETER))
+              /** Ex: scroll down the page. */
               .build());
 
   /** The default constructor. */
