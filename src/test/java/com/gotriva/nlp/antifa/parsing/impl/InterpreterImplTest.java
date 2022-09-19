@@ -46,7 +46,8 @@ public class InterpreterImplTest {
     "closeInstructions",
     "openInstructions",
     "readInstructions",
-    "scrollInstructions"
+    "scrollInstructions",
+    "setInstructions"
   })
   public void testInterpret_withInstruction_thenReturnCommand(
       String instruction, Command expecteCommand) {
@@ -206,6 +207,21 @@ public class InterpreterImplTest {
         /** Single scroll */
         Arguments.of("scroll down the page.", expectedScrollDownCommand),
         Arguments.of("scroll up the page.", expectedScrollUpCommand));
+  }
+
+  /** Sets instructions for test. */
+  static Stream<Arguments> setInstructions() {
+    final Command expectedCommand =
+        Command.builder()
+            .setInstruction(null)
+            .setAction("set")
+            .setObject("#param2")
+            .setParameter("#param1")
+            .setType("range")
+            .build();
+    return Stream.of(
+        /** Single set */
+        Arguments.of("set #param2 range to #param1.", expectedCommand));
   }
 
   private static SemanticGraph semanticGraph(String instruction) {
