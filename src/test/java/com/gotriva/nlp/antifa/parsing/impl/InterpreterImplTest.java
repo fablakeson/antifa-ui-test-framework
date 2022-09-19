@@ -49,7 +49,8 @@ public class InterpreterImplTest {
     "readInstructions",
     "scrollInstructions",
     "setInstructions",
-    "uploadInstructions"
+    "uploadInstructions",
+    "writeInstructions",
   })
   public void testInterpret_withInstruction_thenReturnCommand(
       String instruction, Command expecteCommand) {
@@ -238,7 +239,24 @@ public class InterpreterImplTest {
             .build();
     return Stream.of(
         /** Single upload */
+        Arguments.of("upload #value1 to the #param2 file.", expectedCommand),
         Arguments.of("upload #value1 to #param2 file.", expectedCommand));
+  }
+
+  /** Write instructions for test. */
+  static Stream<Arguments> writeInstructions() {
+    final Command expectedCommand =
+        Command.builder()
+            .setInstruction(null)
+            .setAction("write")
+            .setObject("#param2")
+            .setParameter("#param1")
+            .setType("input")
+            .build();
+    return Stream.of(
+        /** Single set */
+        Arguments.of("write #param1 to the #param2 input.", expectedCommand),
+        Arguments.of("write #param1 to #param2 input.", expectedCommand));
   }
 
   /**

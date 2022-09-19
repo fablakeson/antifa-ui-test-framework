@@ -89,6 +89,15 @@ public class InterpreterImpl implements Interpreter {
               .newStep(builder().from(TYPE).with(NUMERIC_MODIFIER).to(OBJECT))
               /** Ex: Upload #param1 to #param2 file. */
               .build(),
+          SemanticPath.builder()
+              /** PARAMETER -- compound --> ACTION */
+              .newStep(builder().from(PARAMETER).with(COMPOUND_MODIFIER).to(ACTION))
+              /** PARAMETER -- obl --> TYPE */
+              .newStep(builder().from(PARAMETER).with(OBLIQUE_MODIFIER).to(TYPE))
+              /** TYPE -- nummod --> OBJECT */
+              .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
+              /** Ex: Upload #param1 to the #param2 file. */
+              .build(),
 
           /** Actions without paramter */
           SemanticPath.builder()
