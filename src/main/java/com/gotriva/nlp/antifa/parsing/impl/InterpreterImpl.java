@@ -31,15 +31,10 @@ import java.util.function.Supplier;
 /** This class implements the {@link Interpreter}. */
 public class InterpreterImpl implements Interpreter {
 
-  // TODO: Test the semantic paths
-
   /** The semantic paths list for {@link SemanticGraph} traversals. */
   private static final List<SemanticPath> SEMANTIC_PATHS =
       ImmutableList.of(
-          /**
-           * List goes from the most complete actions to the most simple actions. Paths must always
-           * be Depth-First traversals.
-           */
+          /** List goes from the most complete actions to the most simple actions. */
 
           /** Actions with parameter */
           SemanticPath.builder()
