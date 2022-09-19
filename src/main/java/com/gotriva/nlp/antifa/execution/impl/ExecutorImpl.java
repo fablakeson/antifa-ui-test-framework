@@ -82,10 +82,7 @@ public class ExecutorImpl implements Executor {
           } else if (strategy instanceof PageObjectActionStrategy) {
             /** Try handle this page context action. */
             handlePageObject(
-                (PageObjectActionStrategy) strategy,
-                command.getObject(),
-                command.getParameter(),
-                command.getType());
+                (PageObjectActionStrategy) strategy, command.getObject(), command.getParameter());
           } else {
             /** strategy not reconigsed */
             throw new ExecutionException(
@@ -131,8 +128,8 @@ public class ExecutorImpl implements Executor {
    * @param url
    */
   private <T extends PageObjectActionStrategy> void handlePageObject(
-      PageObjectActionStrategy strategy, String object, String parameter, String type) {
-    strategy.perform(context, object, parameter, type);
+      PageObjectActionStrategy strategy, String object, String parameter) {
+    strategy.perform(context, object, parameter);
   }
 
   /**

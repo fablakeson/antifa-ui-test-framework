@@ -1,5 +1,9 @@
 package com.gotriva.nlp.antifa.model;
 
+import static com.gotriva.nlp.antifa.constants.DefaultConstants.DEFAULT_SEPARATOR;
+import static com.gotriva.nlp.antifa.model.Command.ComponentType.ACTION;
+import static com.gotriva.nlp.antifa.model.Command.ComponentType.TYPE;
+
 import com.google.common.collect.ImmutableList;
 import edu.stanford.nlp.ling.IndexedWord;
 import edu.stanford.nlp.semgraph.SemanticGraph;
@@ -105,12 +109,17 @@ public class SemanticPath {
 
       /** Add destination to the graph */
       putOrAppend(knowledgeFrame, step.getDestination(), destination);
+
+      /** Check if knowledge frame is valid */
+      if (!isValid(knowledgeFrame)) {
+        return Optional.empty();
+      }
     }
 
     /** Build command from knowledge frame map with mandatory fields. */
     final Command.Builder commandBuilder =
         Command.builder()
-            .setAction(concatString(knowledgeFrame.get(Command.ComponentType.ACTION)))
+            .setAction(concatString(knowledgeFrame.get(ACTION)))
             .setObject(concatString(knowledgeFrame.get(Command.ComponentType.OBJECT)));
 
     /** Optional components */
@@ -118,8 +127,8 @@ public class SemanticPath {
       commandBuilder.setParameter(
           concatString(knowledgeFrame.get(Command.ComponentType.PARAMETER)));
     }
-    if (knowledgeFrame.containsKey(Command.ComponentType.TYPE)) {
-      commandBuilder.setType(concatString(knowledgeFrame.get(Command.ComponentType.TYPE)));
+    if (knowledgeFrame.containsKey(TYPE)) {
+      commandBuilder.setType(concatString(knowledgeFrame.get(TYPE)));
     }
 
     LOGGER.debug("Map: {}", knowledgeFrame);
@@ -171,6 +180,28 @@ public class SemanticPath {
    * @return the contatenated string
    */
   private String concatString(Deque<IndexedWord> list) {
-    return list.stream().map(IndexedWord::originalText).collect(Collectors.joining("-"));
+    return list.stream()
+        .map(IndexedWord::originalText)
+        .collect(Collectors.joining(DEFAULT_SEPARATOR));
+  }
+
+  /**
+   * Check if interpretation is valid.
+   *
+   * @param knowledgeFrame the knowledge frame to be checked.
+   * @return true if interpretation is valid, false otherwise
+   */
+  private boolean isValid(Map<Command.ComponentType, Deque<IndexedWord>> knowledgeFrame) {
+    /** Check if ACTION is valid. */
+    if (knowledgeFrame.containsKey(ACTION)
+        && getFirst(knowledgeFrame, ACTION).originalText().startsWith("#")) {
+      return false;
+    }
+    /** Check if TYPE is valid. */
+    if (knowledgeFrame.containsKey(TYPE)
+        && getFirst(knowledgeFrame, TYPE).originalText().startsWith("#")) {
+      return false;
+    }
+    return true;
   }
 }

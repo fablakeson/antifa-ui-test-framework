@@ -25,7 +25,7 @@ public class ReadPageStrategy implements PageObjectActionStrategy {
 
   // TODO: enable read message on specific element.
   @Override
-  public void perform(ExecutionContext context, String page, String message, String element) {
+  public void perform(ExecutionContext context, String page, String message) {
     GenericPageObject pageObject = context.getCurrentPage();
     WebDriver driver = pageObject.getDriver();
     findElementWithMessage(message, driver);

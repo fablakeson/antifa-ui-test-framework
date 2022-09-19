@@ -15,7 +15,7 @@ public class ClosePageStrategy implements PageObjectActionStrategy {
   }
 
   @Override
-  public void perform(ExecutionContext context, String object, String parameter, String type) {
+  public void perform(ExecutionContext context, String object, String parameter) {
     context.closeCurrentPage();
   }
 }

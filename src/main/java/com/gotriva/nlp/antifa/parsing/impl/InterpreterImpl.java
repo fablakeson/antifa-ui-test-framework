@@ -15,6 +15,7 @@ import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.COMPOUND_M
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.DETERMINER;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.DIRECT_OBJECT;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.NOMINAL_MODIFIER;
+import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.NUMERIC_MODIFIER;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.OBLIQUE_MODIFIER;
 
 import com.google.common.collect.ImmutableList;
@@ -48,8 +49,8 @@ public class InterpreterImpl implements Interpreter {
               .newStep(builder().from(ACTION).with(OBLIQUE_MODIFIER).to(PARAMETER))
               /** PARAMETER -- acl --> BYPASS */
               .newStep(builder().from(PARAMETER).with(CLAUSAL_MODIFIER).to(BYPASS))
-              /** BYPASS -- obl --> TYPE */
-              .newStep(builder().from(BYPASS).with(OBLIQUE_MODIFIER).to(TYPE))
+              /** BYPASS -- obl --> PARAMETER */
+              .newStep(builder().from(BYPASS).with(OBLIQUE_MODIFIER).to(PARAMETER))
               /** Ex: Define @submit as "Submit" located by "input[type='submit']". */
               .build(),
           SemanticPath.builder()
@@ -78,6 +79,15 @@ public class InterpreterImpl implements Interpreter {
               /** TYPE -- compound --> PARAMETER */
               .newStep(builder().from(TYPE).with(NOMINAL_MODIFIER).to(PARAMETER))
               /* Ex: Open home page at #param1. */
+              .build(),
+          SemanticPath.builder()
+              /** PARAMETER -- compound --> ACTION */
+              .newStep(builder().from(PARAMETER).with(COMPOUND_MODIFIER).to(ACTION))
+              /** PARAMETER -- obl --> TYPE */
+              .newStep(builder().from(PARAMETER).with(OBLIQUE_MODIFIER).to(TYPE))
+              /** TYPE -- nummod --> OBJECT */
+              .newStep(builder().from(TYPE).with(NUMERIC_MODIFIER).to(OBJECT))
+              /** Ex: Upload #param1 to #param2 file. */
               .build(),
 
           /** Actions without paramter */
@@ -119,7 +129,7 @@ public class InterpreterImpl implements Interpreter {
               /** Ex: close the login page. */
               .build(),
 
-          /** Actions without type */
+          /** Actions without type (Page Actions) */
           SemanticPath.builder()
               /** ACTION -- obj --> PARAMETER */
               .newStep(builder().from(ACTION).with(DIRECT_OBJECT).to(PARAMETER))

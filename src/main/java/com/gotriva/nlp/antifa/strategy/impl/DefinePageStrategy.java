@@ -1,5 +1,6 @@
 package com.gotriva.nlp.antifa.strategy.impl;
 
+import com.gotriva.nlp.antifa.constants.DefaultConstants;
 import com.gotriva.nlp.antifa.element.ElementMetadata;
 import com.gotriva.nlp.antifa.execution.ExecutionContext;
 import com.gotriva.nlp.antifa.strategy.PageObjectActionStrategy;
@@ -14,7 +15,10 @@ public class DefinePageStrategy implements PageObjectActionStrategy {
   }
 
   @Override
-  public void perform(ExecutionContext context, String element, String label, String locator) {
+  public void perform(ExecutionContext context, String element, String metadata) {
+    String[] parts = metadata.split(DefaultConstants.DEFAULT_SEPARATOR);
+    String locator = parts[0];
+    String label = parts[1];
     context.setMetadata(element, ElementMetadata.of(label, By.cssSelector(locator)));
   }
 

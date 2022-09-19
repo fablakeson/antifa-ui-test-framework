@@ -1,5 +1,6 @@
 package com.gotriva.nlp.antifa.parsing.impl;
 
+import static com.gotriva.nlp.antifa.constants.DefaultConstants.DEFAULT_SEPARATOR;
 import static com.gotriva.nlp.antifa.constants.PipelinePropertiesConstants.ANNOTATORS;
 import static com.gotriva.nlp.antifa.constants.PipelinePropertiesConstants.ANNOTATORS_VALUE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -133,9 +134,8 @@ public class InterpreterImplTest {
         Command.builder()
             .setInstruction(null)
             .setAction("define")
-            .setType("#param3")
             .setObject("#param1")
-            .setParameter("#param2")
+            .setParameter("#param3" + DEFAULT_SEPARATOR + "#param2")
             .build();
     return Stream.of(
         /** Single define */
@@ -222,7 +222,8 @@ public class InterpreterImplTest {
             .build();
     return Stream.of(
         /** Single set */
-        Arguments.of("set #param2 range to #param1.", expectedCommand));
+        Arguments.of("set #param2 range to #param1.", expectedCommand),
+        Arguments.of("set the #param2 range to #param1.", expectedCommand));
   }
 
   /** Upload instructions for test. */
@@ -232,14 +233,20 @@ public class InterpreterImplTest {
             .setInstruction(null)
             .setAction("upload")
             .setObject("#param2")
-            .setParameter("#param1")
+            .setParameter("#value1")
             .setType("file")
             .build();
     return Stream.of(
-        /** Single set */
-        Arguments.of("upload #param1 to #param2 file input.", expectedCommand));
+        /** Single upload */
+        Arguments.of("upload #value1 to #param2 file.", expectedCommand));
   }
 
+  /**
+   * Helper function to get a semantic graph from a single instruction.
+   *
+   * @param instruction the instruction.
+   * @return the semantic graph.
+   */
   private static SemanticGraph semanticGraph(String instruction) {
     Annotation annotation = new Annotation(instruction);
     PIPELINE.annotate(annotation);

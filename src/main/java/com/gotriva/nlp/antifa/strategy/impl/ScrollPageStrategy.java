@@ -20,7 +20,7 @@ public class ScrollPageStrategy implements PageObjectActionStrategy {
   }
 
   @Override
-  public void perform(ExecutionContext context, String page, String direction, String type) {
+  public void perform(ExecutionContext context, String page, String direction) {
     GenericPageObject currentPage = context.getCurrentPage();
     WebDriver driver = currentPage.getDriver();
     switch (direction) {
