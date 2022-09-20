@@ -133,7 +133,7 @@ public class ParserImpl implements Parser {
     Map<String, String> parameters = new HashMap<>();
     AtomicInteger counter = new AtomicInteger(0);
     ListIterator<String> iterator = instructions.listIterator();
-
+    // TODO: add prefix #object to objects and #param for params
     while (iterator.hasNext()) {
       String currentInstruction = iterator.next();
       Matcher matcher = QUOTE_PATTERN.matcher(currentInstruction);

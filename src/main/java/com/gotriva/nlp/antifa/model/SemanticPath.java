@@ -202,6 +202,7 @@ public class SemanticPath {
         && getFirst(knowledgeFrame, TYPE).originalText().startsWith("#")) {
       return false;
     }
+    // TODO: use prefix #param to check param and #object to check object
     return true;
   }
 }

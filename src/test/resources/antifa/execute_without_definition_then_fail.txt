@@ -1,7 +1,7 @@
 # Start test at page login
 Open the login page at "http://localhost:8000/login.html".
 
-# Element definitions (not used)
+# Page elements definitions (not used)
 #Define @username as "User Name" located by "#username".
 #Define @password as "User Password" located by "#password".
 #Define @submit as "Submit" located by "#login".
