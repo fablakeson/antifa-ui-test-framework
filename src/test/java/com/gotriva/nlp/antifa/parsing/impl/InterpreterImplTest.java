@@ -68,14 +68,14 @@ public class InterpreterImplTest {
             .setInstruction(null)
             .setAction("click")
             .setType("button")
-            .setObject("#param1")
+            .setObject("#object1")
             .build();
     return Stream.of(
         /** Single click */
-        Arguments.of("click on the #param1 button.", expectedCommand),
-        Arguments.of("click the #param1 button.", expectedCommand),
-        Arguments.of("click on #param1 button.", expectedCommand),
-        Arguments.of("click #param1 button.", expectedCommand));
+        Arguments.of("click on the #object1 button.", expectedCommand),
+        Arguments.of("click the #object1 button.", expectedCommand),
+        Arguments.of("click on #object1 button.", expectedCommand),
+        Arguments.of("click #object1 button.", expectedCommand));
   }
 
   /** Check instructions for test. */
@@ -85,14 +85,14 @@ public class InterpreterImplTest {
             .setInstruction(null)
             .setAction("check")
             .setType("radio")
-            .setObject("#param1")
+            .setObject("#object1")
             .build();
     return Stream.of(
         /** Single check */
-        Arguments.of("check on the #param1 radio.", expectedCommand),
-        Arguments.of("check the #param1 radio.", expectedCommand),
-        Arguments.of("check on #param1 radio.", expectedCommand),
-        Arguments.of("check #param1 radio.", expectedCommand));
+        Arguments.of("check on the #object1 radio.", expectedCommand),
+        Arguments.of("check the #object1 radio.", expectedCommand),
+        Arguments.of("check on #object1 radio.", expectedCommand),
+        Arguments.of("check #object1 radio.", expectedCommand));
   }
 
   /** Uncheck instructions for test. */
@@ -102,14 +102,14 @@ public class InterpreterImplTest {
             .setInstruction(null)
             .setAction("uncheck")
             .setType("checkbox")
-            .setObject("#param1")
+            .setObject("#object1")
             .build();
     return Stream.of(
         /** Single uncheck */
-        Arguments.of("uncheck on the #param1 checkbox.", expectedCommand),
-        Arguments.of("uncheck the #param1 checkbox.", expectedCommand),
-        Arguments.of("uncheck on #param1 checkbox.", expectedCommand),
-        Arguments.of("uncheck #param1 checkbox.", expectedCommand));
+        Arguments.of("uncheck on the #object1 checkbox.", expectedCommand),
+        Arguments.of("uncheck the #object1 checkbox.", expectedCommand),
+        Arguments.of("uncheck on #object1 checkbox.", expectedCommand),
+        Arguments.of("uncheck #object1 checkbox.", expectedCommand));
   }
 
   /** Hover instructions for test. */
@@ -119,14 +119,14 @@ public class InterpreterImplTest {
             .setInstruction(null)
             .setAction("hover")
             .setType("image")
-            .setObject("#param1")
+            .setObject("#object1")
             .build();
     return Stream.of(
         /** Single hover */
-        Arguments.of("hover on the #param1 image.", expectedCommand),
-        Arguments.of("hover the #param1 image.", expectedCommand),
-        Arguments.of("hover on #param1 image.", expectedCommand),
-        Arguments.of("hover #param1 image.", expectedCommand));
+        Arguments.of("hover on the #object1 image.", expectedCommand),
+        Arguments.of("hover the #object1 image.", expectedCommand),
+        Arguments.of("hover on #object1 image.", expectedCommand),
+        Arguments.of("hover #object1 image.", expectedCommand));
   }
 
   /** Define instructions for test. */
@@ -135,12 +135,12 @@ public class InterpreterImplTest {
         Command.builder()
             .setInstruction(null)
             .setAction("define")
-            .setObject("#param1")
+            .setObject("#object1")
             .setParameter("#param3" + DEFAULT_SEPARATOR + "#param2")
             .build();
     return Stream.of(
         /** Single define */
-        Arguments.of("define #param1 as #param2 located by #param3.", expectedCommand));
+        Arguments.of("define #object1 as #param2 located by #param3.", expectedCommand));
   }
 
   /** Close instructions for test. */
@@ -217,14 +217,14 @@ public class InterpreterImplTest {
         Command.builder()
             .setInstruction(null)
             .setAction("set")
-            .setObject("#param2")
+            .setObject("#object1")
             .setParameter("#param1")
             .setType("range")
             .build();
     return Stream.of(
         /** Single set */
-        Arguments.of("set #param2 range to #param1.", expectedCommand),
-        Arguments.of("set the #param2 range to #param1.", expectedCommand));
+        Arguments.of("set #object1 range to #param1.", expectedCommand),
+        Arguments.of("set the #object1 range to #param1.", expectedCommand));
   }
 
   /** Upload instructions for test. */
@@ -233,14 +233,14 @@ public class InterpreterImplTest {
         Command.builder()
             .setInstruction(null)
             .setAction("upload")
-            .setObject("#param2")
-            .setParameter("#value1")
+            .setObject("#object1")
+            .setParameter("#param1")
             .setType("file")
             .build();
     return Stream.of(
         /** Single upload */
-        Arguments.of("upload #value1 to the #param2 file.", expectedCommand),
-        Arguments.of("upload #value1 to #param2 file.", expectedCommand));
+        Arguments.of("upload #param1 to the #object1 file.", expectedCommand),
+        Arguments.of("upload #param1 to #object1 file.", expectedCommand));
   }
 
   /** Write instructions for test. */
@@ -249,14 +249,14 @@ public class InterpreterImplTest {
         Command.builder()
             .setInstruction(null)
             .setAction("write")
-            .setObject("#param2")
+            .setObject("#object1")
             .setParameter("#param1")
             .setType("input")
             .build();
     return Stream.of(
         /** Single set */
-        Arguments.of("write #param1 to the #param2 input.", expectedCommand),
-        Arguments.of("write #param1 to #param2 input.", expectedCommand));
+        Arguments.of("write #param1 to the #object1 input.", expectedCommand),
+        Arguments.of("write #param1 to #object1 input.", expectedCommand));
   }
 
   /**

@@ -2,6 +2,8 @@ package com.gotriva.nlp.antifa.model;
 
 import static com.gotriva.nlp.antifa.constants.DefaultConstants.DEFAULT_SEPARATOR;
 import static com.gotriva.nlp.antifa.model.Command.ComponentType.ACTION;
+import static com.gotriva.nlp.antifa.model.Command.ComponentType.OBJECT;
+import static com.gotriva.nlp.antifa.model.Command.ComponentType.PARAMETER;
 import static com.gotriva.nlp.antifa.model.Command.ComponentType.TYPE;
 
 import com.google.common.collect.ImmutableList;
@@ -120,12 +122,11 @@ public class SemanticPath {
     final Command.Builder commandBuilder =
         Command.builder()
             .setAction(concatString(knowledgeFrame.get(ACTION)))
-            .setObject(concatString(knowledgeFrame.get(Command.ComponentType.OBJECT)));
+            .setObject(concatString(knowledgeFrame.get(OBJECT)));
 
     /** Optional components */
-    if (knowledgeFrame.containsKey(Command.ComponentType.PARAMETER)) {
-      commandBuilder.setParameter(
-          concatString(knowledgeFrame.get(Command.ComponentType.PARAMETER)));
+    if (knowledgeFrame.containsKey(PARAMETER)) {
+      commandBuilder.setParameter(concatString(knowledgeFrame.get(PARAMETER)));
     }
     if (knowledgeFrame.containsKey(TYPE)) {
       commandBuilder.setType(concatString(knowledgeFrame.get(TYPE)));
@@ -193,16 +194,37 @@ public class SemanticPath {
    */
   private boolean isValid(Map<Command.ComponentType, Deque<IndexedWord>> knowledgeFrame) {
     /** Check if ACTION is valid. */
-    if (knowledgeFrame.containsKey(ACTION)
-        && getFirst(knowledgeFrame, ACTION).originalText().startsWith("#")) {
+    if (hasPrefix(knowledgeFrame, ACTION, "#")) {
       return false;
     }
     /** Check if TYPE is valid. */
-    if (knowledgeFrame.containsKey(TYPE)
-        && getFirst(knowledgeFrame, TYPE).originalText().startsWith("#")) {
+    if (hasPrefix(knowledgeFrame, TYPE, "#")) {
       return false;
     }
-    // TODO: use prefix #param to check param and #object to check object
+    /** Check if PARAMETER is valid */
+    if (hasPrefix(knowledgeFrame, PARAMETER, "#object")) {
+      return false;
+    }
+    /** Check if OBJECT is valid */
+    if (hasPrefix(knowledgeFrame, OBJECT, "#param")) {
+      return false;
+    }
     return true;
+  }
+
+  /**
+   * Check if given type is found on knowledge frame within given prefix.
+   *
+   * @param knowledgeFrame the knowledge frame
+   * @param type the command component type
+   * @param prefix the string prefix
+   * @return true if it have the prefix, false otherwise.
+   */
+  private boolean hasPrefix(
+      Map<Command.ComponentType, Deque<IndexedWord>> knowledgeFrame,
+      Command.ComponentType type,
+      String prefix) {
+    return knowledgeFrame.containsKey(type)
+        && getFirst(knowledgeFrame, type).originalText().startsWith(prefix);
   }
 }

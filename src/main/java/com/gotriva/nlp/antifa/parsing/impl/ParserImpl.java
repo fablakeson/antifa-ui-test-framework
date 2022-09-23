@@ -14,7 +14,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,7 +30,7 @@ public class ParserImpl implements Parser {
   private static final Pattern QUOTE_PATTERN = Pattern.compile("\"(.*?)\"|(@[\\w\\d]+)");
 
   /** Pattern to find parameters replacement. */
-  private static final Pattern PARAMETER_PATTERN = Pattern.compile("(#param\\d{1,})");
+  private static final Pattern PARAMETER_PATTERN = Pattern.compile("(#\\.+\\d{1,})");
 
   /** The NLP pipeline processor. */
   private final StanfordCoreNLP pipeline;
@@ -133,7 +132,6 @@ public class ParserImpl implements Parser {
     Map<String, String> parameters = new HashMap<>();
     AtomicInteger counter = new AtomicInteger(0);
     ListIterator<String> iterator = instructions.listIterator();
-    // TODO: add prefix #object to objects and #param for params
     while (iterator.hasNext()) {
       String currentInstruction = iterator.next();
       Matcher matcher = QUOTE_PATTERN.matcher(currentInstruction);
@@ -141,9 +139,16 @@ public class ParserImpl implements Parser {
           matcher
               .replaceAll(
                   (result) -> {
-                    String parameter = "#param" + counter.getAndIncrement();
-                    parameters.put(
-                        parameter, Optional.ofNullable(result.group(1)).orElse(result.group(2)));
+                    final String parameter;
+                    final String value;
+                    if (result.group(1) != null) {
+                      parameter = "#param" + counter.getAndIncrement();
+                      value = result.group(1);
+                    } else {
+                      parameter = "#object" + counter.getAndIncrement();
+                      value = result.group(2);
+                    }
+                    parameters.put(parameter, value);
                     return parameter;
                   })
               .toLowerCase();
