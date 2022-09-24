@@ -2,7 +2,7 @@
 
 ![build workflow](https://github.com/fablakeson/antifa-ui-test-framework/actions/workflows/maven.yml/badge.svg)
 
-## What is Antifa?
+## What is Antifa Framework?
 
 Antifa (Automated NLP-based Test Integration Framework Application) is an automated interface testing framework that interprets instructions in natural language and converts them to webdriver commands, making it possible to write complete interface tests in a fast and understandable way, even for non-programmers.
 
@@ -32,7 +32,7 @@ Ex.: `login_with_correct_credentials_then_success_message_appears.txt`
 3. Write your test following this instructions:
 
 - You **must** write an individal sentence for each *command*.<br>
-  Ex.: `Click on the @login button.`
+  Ex.: `Click on the @Login button.`
 
 - The *command* **must** be a valid regular english language phrase.
 
@@ -48,10 +48,10 @@ Ex.: `login_with_correct_credentials_then_success_message_appears.txt`
 - Your **must** *declare* the page elements before interact with then (see *declare* action on next section).
 
 - Some *actions* requires a *parameter*, it *must* be written between quotes.<br>
-  Ex.: `Write "Hello World" on the @message box.`
+  Ex.: `Write "Hello World" on the @Message box.`
   
 - If you are **interacting** with the *object* for the **first time**, you **must** inform the *type alias* after the *name*.<br>
-  Ex.: `Write "123456" on the @phoneNumber input.`<br>
+  Ex.: `Write "123456" on the @PhoneNumber input.`<br>
   The *input type alias* follows *@phoneNumber name*. The *types* are described on the next section.
 
 ## Types and Actions
@@ -64,41 +64,41 @@ These are the available element *types* and *actions* on framework:
 
 - **Button:** represents a HTML `input` of `button` type. Is capable of *click* action.<br>
 Alias: `button`.<br>
-Ex.: `Click on the login button.`
+Ex.: `Click on the @Login button.`
 
 - **Checkbox:** represents an HTML `input` of `checkbox` type. Is capable of *check* and *uncheck* actions.<br>
 Alias: `checkbox`, `opt-in`.<br>
-Ex.: `Check agree checkbox.`<br>
-Ex.: `Uncheck user terms acceptance checkbox.`
+Ex.: `Check @Agree checkbox.`<br>
+Ex.: `Uncheck the @UserTermsAcceptance opt-in.`
 
 - **File:** represents an HTML `input` of `file` type. Is capable of *upload* action.<br>
 Alias: `file`.<br>
-Ex.: `Upload path "C:/Documents/MyUser/Images/photo.jpg" to user photo file.`
+Ex.: `Upload path "C:/Documents/MyUser/Images/photo.jpg" to @UserPhoto file.`
 
 - **Image:** represents an HTML image element. Is capable of *click* and *hover* actions.<br>
 Alias: `image`, `icon`, `figure`.<br>
-Ex.: `Click on the user profile image.`
-Ex.: `Hover on the info icon.`
+Ex.: `Click on the @UserProfile image.`<br>
+Ex.: `Hover on @Info icon.`
 
 - **Label:** represents an HTML textual element. Is capable of *hover*, *click* actions.<br>
 Alias: `label`, `tag`, `header`.<br>
-Ex.: `Click on about label.`<br>
-Ex.: `Click on menu tag.`<br>
-Ex.: `Hover on page title header.`<br>
+Ex.: `Click on @About label.`<br>
+Ex.: `Click on @Menu tag.`<br>
+Ex.: `Hover on @PageTitle header.`<br>
 
 - **Radio:** represents an HTML `input` element of `radio` type. Is capable of *check* action.<br>
 Alias: `radio`, `option`.<br>
-Ex.: `Check the red option`.
+Ex.: `Check the @Red option`.
 
 - **Range:** represents an HTML `input`element of type `range`. Is capable of *set* action.<br>
 Alias: `range`.<br>
-Ex.: `Set the volume range to 35%.`<br>
-Ex.: `Set the minimum price range to 750.`
+Ex.: `Set @Volume range to 35%.`<br>
+Ex.: `Set @MinimumPrice range to 750.`
 
 - **Text:** represents an HTML `input` input of type `text`, `password` or a `textarea`. Is capable of *write* action.<br>
 Alias: `textbox`, `input`, `field`.<br>
-Ex.: `Write the email "testuser@testmail.com" on username input.`<br>
-Ex.: `Write "This is a test message" to message textbox.`
+Ex.: `Write "testuser@testmail.com" to @Username input.`<br>
+Ex.: `Write "This is a test message" to @Message textbox.`
 
 ### Page Actions
 
@@ -200,3 +200,25 @@ File: `antifa_test_login_with_correct_info_then_success_1663981217806.xml`
   </steps>
 </executionResult>
 ```
+
+## Reasons to use Antifa Framework
+
+Here is a short list of reasons why you should consider adopting this framework:
+
+1. Write tests faster using natural language, you don't even need to know programming.
+
+2. It is agnostic to automation frameworks, you can use whatever automation framework you prefer (Selenium, Appium, UiAutomator, etc) without changing your test files.*
+
+3. It's free and always will be! This is a community-maintained project and you can also help evolve it.
+
+4. You support the anti-fascist struggle and want to make that clear to your organization and coworkers!
+
+<small>* At current state we only support Selenium, but it other implementations should be added in future.</small>
+
+## Are you a real NERD? Really? Then read our paper!
+
+* [ANTIFA: An NLP-based Automated User Interface Test Framework](#)
+
+## Just one more thing:
+
+Please consider giving us a ⭐ to keep our ❤️ warm, thanks.
