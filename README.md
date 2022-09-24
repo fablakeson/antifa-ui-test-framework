@@ -205,7 +205,7 @@ File: `antifa_test_login_with_correct_info_then_success_1663981217806.xml`
 
 Here is a short list of reasons why you should consider adopting this framework:
 
-1. Write tests faster using natural language, you don't even need to know programming.
+1. Write tests faster using natural language, you don't even need to know a programming language.
 
 2. It is agnostic to automation frameworks, you can use whatever automation framework you prefer (Selenium, Appium, UiAutomator, etc) without changing your test files.*
 
