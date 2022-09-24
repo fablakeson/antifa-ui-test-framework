@@ -179,6 +179,7 @@ File: `antifa_test_login_with_correct_info_then_success_1663981217806.xml`
       <command>
         <instruction>Open the login page at "http://some-website/login.html".</instruction>
         <action>open</action>
+        <object>login</object>
         <parameter>http://some-website/login.html</parameter>
         <type>page</type>
       </command>
@@ -191,6 +192,7 @@ File: `antifa_test_login_with_correct_info_then_success_1663981217806.xml`
       <command>
         <instruction>Define @username as "User Name" located by "#username".</instruction>
         <action>define</action>
+        <object>@username</object>
         <parameter>#username	User Name</parameter>
       </command>
     </step>

@@ -20,6 +20,7 @@
       <command>
         <instruction>$step.command.instruction</instruction>
         <action>$step.command.action</action>
+        <object>$step.command.object</object>
         #if ($step.command.parameter)
         <parameter>$step.command.parameter</parameter>
         #end
