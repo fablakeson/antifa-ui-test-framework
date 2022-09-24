@@ -108,7 +108,7 @@ Some actions are bounded to the parent of all *elements*, the document *page obj
 
   * The **name** must have the prefix `@` (*at*) and should not have spaces. You can use any naming convention you want (camelCase, snake_case, PascalCase), but use just one of then for good readability.<br>
   * The **label** must be enclosed in double quotes (`"`) and can contains any characters except double quotes.<br>
-  * The **locator** must be a valid *CSS Locator* and must be enclosed in double quotes as well.<br><br>
+  * The **locator** must be a valid *CSS Locator* and must be enclosed in double quotes as well.<br>
 
   Look the examples below:
 
