@@ -126,9 +126,9 @@ Ex.: `Open the settings tab.`
 - <em>**Read:**</em> this action reads some visible text on page corpus.<br>
   Ex.: `Read "Login with success!" on the page.`<br>
 
-- <em>**Roll:**</em> this action scrolls the page *up* or *down*.<br>
-  Ex.: `Roll "down" the page.`<br>
-  Ex.: `Roll "up" the page.`
+- <em>**Scroll:**</em> this action scrolls the page *up* or *down*.<br>
+  Ex.: `Scroll "down" the page.`<br>
+  Ex.: `Scroll "up" the page.`
 
 
 ## Example Test Input File
