@@ -18,7 +18,8 @@ Antifa (Automated NLP-based Test Integration Framework Application) is an automa
 ```
 mvn com.gotriva:antifa-test-maven-plugin:0.0.1-SNAPSHOT:ui-test \
     -DinputDirectory=<your_input_directory> \
-    -DoutputDirectory=<your_output_directory>
+    -DoutputDirectory=<your_output_directory> \
+    -DoutputFormat=<HTML|XML>
 ```
 
 ## How to write tests?
@@ -31,7 +32,7 @@ Ex.: `login_with_correct_credentials_then_success_message_appears.txt`
 3. Write your test following this instructions:
 
 - You **must** write an individal sentence for each *command*.<br>
-  Ex.: `Click on the login button.`
+  Ex.: `Click on the @login button.`
 
 - The *command* **must** be a valid regular english language phrase.
 
@@ -42,17 +43,16 @@ Ex.: `login_with_correct_credentials_then_success_message_appears.txt`
 
 - The sentences **must** end with a period `.`
 
+- Your test **should** start with the *open* command.
+
+- Your **must** *declare* the page elements before interact with then (see *declare* action on next section).
+
 - Some *actions* requires a *parameter*, it *must* be written between quotes.<br>
-  Ex.: `Write "Hello World" on the message box.`
+  Ex.: `Write "Hello World" on the @message box.`
   
-- You **must** include the *object* name in your command. The framework use this to search the element *id* on HTML.
-
-- If your *object* name is composited, the framework puts a hyphen `-` between the words after the first.<br>
-  Ex.: `Write "123456" on the phone number.` &#8594; `object_name: phone-number`.
-
-- If you are interacting with the *object* for the **first time**, you **must** inform the *type* after the *name*.<br>
-  Ex.: `Write "123456" on the phone number input.` &#8594; `type_name: input/text`.<br>
-  Possible *types* are described on the next section.
+- If you are **interacting** with the *object* for the **first time**, you **must** inform the *type alias* after the *name*.<br>
+  Ex.: `Write "123456" on the @phoneNumber input.`<br>
+  The *input type alias* follows *@phoneNumber name*. The *types* are described on the next section.
 
 ## Types and Actions
 
@@ -104,7 +104,19 @@ Ex.: `Write "This is a test message" to message textbox.`
 
 Some actions are bounded to the parent of all *elements*, the document *page object*. We call it *page actions*. The page actions are:
 
-- <em>**Open:**</em> this action indicates the opening of a new page or visual context (dialog, modal, panel, tab). It can actively open a new page if an URL is provided.<br>
+- <em>**Declare**:</em> this actions associates a **name** to a reader friendly **label** and a HTML element found by a given **locator**.
+
+  * The **name** must have the prefix `@` (*at*) and should not have spaces. You can use any naming convention you want (camelCase, snake_case, PascalCase), but use just one of then for good readability.<br>
+  * The **label** must be enclosed in double quotes (`"`) and can contains any characters except double quotes.<br>
+  * The **locator** must be a valid *CSS Locator* and must be enclosed in double quotes as well.<br><br>
+
+  Look the examples below:
+
+  Ex.: `Declare @UserName as "User Name" located by "input[name=username]".`<br>
+  Ex.: `Declare @Password as "Password" located by "#password".`<br>
+  Ex.: `Declare @Submit as "Submit" located by "input[type=submit]".`
+
+- <em>**Open:**</em> this action indicates the opening of a new page or visual context (dialog, modal, panel, tab). It can actively open a new page if an URL is provided. Using this declaration on to begin your tests.<br>
 Ex.: `Open the login page on "http://www.mywebsite.com/login".`<br>
 Ex.: `Open the settings tab.`
 
@@ -112,9 +124,72 @@ Ex.: `Open the settings tab.`
   Ex.: `Close the message page.`
 
 - <em>**Read:**</em> this action reads some visible text on page corpus.<br>
-  Ex.: `Read the text "Profile".`<br>
-  Ex.: `Read the message "Account blocked" on login status.`
+  Ex.: `Read "Login with success!" on the page.`<br>
 
 - <em>**Roll:**</em> this action scrolls the page *up* or *down*.<br>
   Ex.: `Roll "down" the page.`<br>
   Ex.: `Roll "up" the page.`
+
+
+## Example Test File
+
+
+File: `login_with_correct_info_then_success.txt`
+```
+### Your test may have comments like this
+
+### Start test at page login
+Open the login page at "http://some-website/login.html".
+
+## Page elements definitions
+Define @username as "User Name" located by "#username".
+Define @password as "User Password" located by "#password".
+Define @submit as "Submit" located by "#login".
+
+## Test instructions
+Write "teste@mail.com.br" to @username input.
+Write "testpassword" to the @password input.
+Click on the @submit button.
+Read "Login with success!!!" on the page.
+
+## Here your test ends
+```
+
+## Example Test Output (XML)
+
+```xml
+<executionResult>
+  <testName>Login with correct info then success</testName>
+  <startTime>2022-09-23T22:00:16.633797901</startTime>
+  <endTime>2022-09-23T22:00:17.731487390</endTime>
+  <elapsedTime unit="ms">1097</elapsedTime>
+  <status>SUCCESS</status>
+  <steps>
+    <step>
+      <startTime>2022-09-23T22:00:16.633797901</startTime>
+      <endTime>2022-09-23T22:00:17.068923189</endTime>
+      <elapsedTime>435</elapsedTime>
+      <result>SUCCESS</result>
+      <screenshot content-type="image/jpeg">iVBORw0KG...pYQAAAAASUVORK5CYII=</screenshot>
+      <command>
+        <instruction>Open the login page at "http://some-website/login.html".</instruction>
+        <action>open</action>
+        <parameter>http://some-website/login.html</parameter>
+        <type>page</type>
+      </command>
+    </step>
+    <step>
+      <startTime>2022-09-23T22:00:17.068956434</startTime>
+      <endTime>2022-09-23T22:00:17.068982205</endTime>
+      <elapsedTime>0</elapsedTime>
+      <result>SUCCESS</result>
+      <command>
+        <instruction>Define @username as "User Name" located by "#username".</instruction>
+        <action>define</action>
+        <parameter>#username	User Name</parameter>
+      </command>
+    </step>
+    ...
+  </steps>
+</executionResult>
+```
