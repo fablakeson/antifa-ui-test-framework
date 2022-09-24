@@ -12,7 +12,7 @@
     <step>
       <startTime>$step.startTime</startTime>
       <endTime>$step.endTime</endTime>
-      <elapsedTime>$step.elapsedTime</elapsedTime>
+      <elapsedTime unit="ms">$step.elapsedTime</elapsedTime>
       <result>$step.result</result>
       #if ($step.screenshot)
       <screenshot content-type="image/jpeg">$step.screenshot</screenshot>

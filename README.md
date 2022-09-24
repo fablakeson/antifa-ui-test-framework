@@ -131,7 +131,7 @@ Ex.: `Open the settings tab.`
   Ex.: `Roll "up" the page.`
 
 
-## Example Test File
+## Example Test Input File
 
 
 File: `login_with_correct_info_then_success.txt`
@@ -157,6 +157,11 @@ Read "Login with success!!!" on the page.
 
 ## Example Test Output (XML)
 
+Test output contains the capitalized **test name** and some general **test stats**. For each step it includes the **start time** and **end time** of each instruction, the **status** (SUCCESS or FAIL), the **elapsed time** (ms), the **screenshot** `base64` and the interpreted **command**. In cases of FAIL, it includes the **fail reason** mesasge.
+
+The **file name** is identified by the `antifa_test_` prefix and a **test time milisecs** suffix.
+
+File: `antifa_test_login_with_correct_info_then_success_1663981217806.xml`
 ```xml
 <executionResult>
   <testName>Login with correct info then success</testName>
@@ -168,7 +173,7 @@ Read "Login with success!!!" on the page.
     <step>
       <startTime>2022-09-23T22:00:16.633797901</startTime>
       <endTime>2022-09-23T22:00:17.068923189</endTime>
-      <elapsedTime>435</elapsedTime>
+      <elapsedTime unit="ms">435</elapsedTime>
       <result>SUCCESS</result>
       <screenshot content-type="image/jpeg">iVBORw0KG...pYQAAAAASUVORK5CYII=</screenshot>
       <command>
@@ -181,7 +186,7 @@ Read "Login with success!!!" on the page.
     <step>
       <startTime>2022-09-23T22:00:17.068956434</startTime>
       <endTime>2022-09-23T22:00:17.068982205</endTime>
-      <elapsedTime>0</elapsedTime>
+      <elapsedTime unit="ms">0</elapsedTime>
       <result>SUCCESS</result>
       <command>
         <instruction>Define @username as "User Name" located by "#username".</instruction>
