@@ -1,5 +1,6 @@
 package com.gotriva.nlp.antifa.parsing.impl;
 
+import com.gotriva.nlp.antifa.constants.DefaultConstants;
 import com.gotriva.nlp.antifa.model.Command;
 import com.gotriva.nlp.antifa.parsing.Interpreter;
 import com.gotriva.nlp.antifa.parsing.Parser;
@@ -30,7 +31,7 @@ public class ParserImpl implements Parser {
   private static final Pattern QUOTE_PATTERN = Pattern.compile("\"(.*?)\"|(@[\\w\\d]+)");
 
   /** Pattern to find parameters replacement. */
-  private static final Pattern PARAMETER_PATTERN = Pattern.compile("(#\\.+\\d{1,})");
+  private static final Pattern PARAMETER_PATTERN = Pattern.compile("(#.+?\\d{1,})");
 
   /** The NLP pipeline processor. */
   private final StanfordCoreNLP pipeline;
@@ -56,7 +57,7 @@ public class ParserImpl implements Parser {
     List<String> instructionsCopy = new ArrayList<>(instructions);
 
     /** Replace parameters */
-    Map<String, String> parameters = replaceParameters(instructionsCopy);
+    Map<String, String> parameters = replace(instructionsCopy);
 
     /** Concatenate the instructions into one text. */
     String instructionsText = String.join("\n", instructionsCopy);
@@ -82,7 +83,7 @@ public class ParserImpl implements Parser {
       Command command = interpreter.intepret(dependencyParse);
       /** Restore command parameters */
       command.setInstruction(StringUtils.capitalize(sentence.toString()));
-      command = restoreParameters(command, parameters);
+      command = restore(command, parameters);
       /** Print action */
       LOGGER.debug("command: {}", command);
       /** add action to list */
@@ -92,14 +93,16 @@ public class ParserImpl implements Parser {
     return commands;
   }
 
+  // TODO: Add methods below to a testable helper class.
+
   /**
-   * Restore quoted parameters original values on command.
+   * Restore replaced tokens to original values on command.
    *
    * @param command the command with values to be restored.
    * @param parameters the parameters replacement map.
    * @return the replaced command.
    */
-  private Command restoreParameters(Command command, Map<String, String> parameters) {
+  private Command restore(Command command, Map<String, String> parameters) {
     /** Check if command fields where replaced by parameters. */
     LOGGER.debug("Restoring: {}", command);
     Matcher matcher = PARAMETER_PATTERN.matcher(command.getInstruction());
@@ -108,18 +111,47 @@ public class ParserImpl implements Parser {
     }
     return Command.builder()
         .setAction(command.getAction())
-        .setParameter(parameters.getOrDefault(command.getParameter(), command.getParameter()))
+        .setParameter(restore(command.getParameter(), parameters))
+        .setObject(restore(command.getObject(), parameters))
         .setType(parameters.getOrDefault(command.getType(), command.getType()))
-        .setObject(parameters.getOrDefault(command.getObject(), command.getObject()))
-        .setInstruction(
-            matcher.replaceAll(
-                (result) -> {
-                  String originalValue = parameters.get(result.group());
-                  return originalValue.startsWith("@")
-                      ? originalValue
-                      : "\"" + originalValue + "\"";
-                }))
+        .setInstruction(restore(matcher, parameters))
         .build();
+  }
+
+  /**
+   * Restore replaced tokens to original values on parameter.
+   *
+   * @param parameter the possible replaced tokens parameter.
+   * @param parameters the replacements map.
+   * @return the original parameter.
+   */
+  private String restore(String parameter, Map<String, String> parameters) {
+    if (parameter == null) {
+      return parameter;
+    }
+    String[] parts = parameter.split(DefaultConstants.DEFAULT_SEPARATOR);
+    for (int i = 0; i < parts.length; ++i) {
+      String originalPart = parameters.get(parts[i]);
+      if (originalPart != null) {
+        parts[i] = originalPart;
+      }
+    }
+    return String.join(DefaultConstants.DEFAULT_SEPARATOR, parts);
+  }
+
+  /**
+   * Restore replaced tokens on a matched regex string.
+   *
+   * @param matcher the regex string matcher.
+   * @param parameters the replacements map.
+   * @return the original string.
+   */
+  private String restore(Matcher matcher, Map<String, String> parameters) {
+    return matcher.replaceAll(
+        (result) -> {
+          String originalValue = parameters.get(result.group());
+          return originalValue.startsWith("@") ? originalValue : "\"" + originalValue + "\"";
+        });
   }
 
   /**
@@ -128,34 +160,43 @@ public class ParserImpl implements Parser {
    * @param instructions the instructions to be replaced.
    * @return the replacement map.
    */
-  private Map<String, String> replaceParameters(List<String> instructions) {
+  private Map<String, String> replace(List<String> instructions) {
     Map<String, String> parameters = new HashMap<>();
     AtomicInteger counter = new AtomicInteger(0);
     ListIterator<String> iterator = instructions.listIterator();
     while (iterator.hasNext()) {
       String currentInstruction = iterator.next();
       Matcher matcher = QUOTE_PATTERN.matcher(currentInstruction);
-      String newInstruction =
-          matcher
-              .replaceAll(
-                  (result) -> {
-                    final String parameter;
-                    final String value;
-                    if (result.group(1) != null) {
-                      parameter = "#param" + counter.getAndIncrement();
-                      value = result.group(1);
-                    } else {
-                      parameter = "#object" + counter.getAndIncrement();
-                      value = result.group(2);
-                    }
-                    parameters.put(parameter, value);
-                    return parameter;
-                  })
-              .toLowerCase();
+      String newInstruction = replace(matcher, counter, parameters).toLowerCase();
       iterator.set(newInstruction);
       LOGGER.debug("Replaced: {} -> {}", currentInstruction, newInstruction);
     }
 
     return parameters;
+  }
+
+  /**
+   * Replace found tokens on matcher.
+   *
+   * @param matcher the matching tokens.
+   * @param counter the replacement counter.
+   * @param parameters the parameters map.
+   * @return the replaced string.
+   */
+  private String replace(Matcher matcher, AtomicInteger counter, Map<String, String> parameters) {
+    return matcher.replaceAll(
+        (result) -> {
+          final String parameter;
+          final String value;
+          if (result.group(1) != null) {
+            parameter = "#param" + counter.getAndIncrement();
+            value = result.group(1);
+          } else {
+            parameter = "#object" + counter.getAndIncrement();
+            value = result.group(2);
+          }
+          parameters.put(parameter, value);
+          return parameter;
+        });
   }
 }
