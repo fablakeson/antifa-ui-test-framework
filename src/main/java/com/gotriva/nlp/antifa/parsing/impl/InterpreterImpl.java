@@ -2,7 +2,6 @@ package com.gotriva.nlp.antifa.parsing.impl;
 
 import static com.gotriva.nlp.antifa.model.Command.ComponentType.ACTION;
 import static com.gotriva.nlp.antifa.model.Command.ComponentType.BYPASS;
-import static com.gotriva.nlp.antifa.model.Command.ComponentType.NO_OP;
 import static com.gotriva.nlp.antifa.model.Command.ComponentType.OBJECT;
 import static com.gotriva.nlp.antifa.model.Command.ComponentType.PARAMETER;
 import static com.gotriva.nlp.antifa.model.Command.ComponentType.TYPE;
@@ -12,7 +11,6 @@ import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.ADVERBIAL_
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.CASE_MARKER;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.CLAUSAL_MODIFIER;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.COMPOUND_MODIFIER;
-import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.DETERMINER;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.DIRECT_OBJECT;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.NOMINAL_MODIFIER;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.NUMERIC_MODIFIER;
@@ -46,7 +44,7 @@ public class InterpreterImpl implements Interpreter {
               .newStep(builder().from(PARAMETER).with(CLAUSAL_MODIFIER).to(BYPASS))
               /** BYPASS -- obl --> PARAMETER */
               .newStep(builder().from(BYPASS).with(OBLIQUE_MODIFIER).to(PARAMETER))
-              /** Ex: Define @submit as "Submit" located by "input[type='submit']". */
+              /** Ex: Define #object1 as #param2 located by #param3. */
               .build(),
           SemanticPath.builder()
               /** ACTION -- obj --> TYPE */
@@ -55,7 +53,7 @@ public class InterpreterImpl implements Interpreter {
               .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
               /** ACTION -- obl --> PARAMETER */
               .newStep(builder().from(ACTION).with(OBLIQUE_MODIFIER).to(PARAMETER))
-              /** Ex: Open the login page at "http://www.google.com". */
+              /** Ex: Open the login page at #param1. */
               .build(),
           SemanticPath.builder()
               /** ACTION -- obj --> PARAMETER */
@@ -64,14 +62,14 @@ public class InterpreterImpl implements Interpreter {
               .newStep(builder().from(ACTION).with(OBLIQUE_MODIFIER).to(TYPE))
               /** TYPE -- compound --> OBJECT */
               .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
-              /** Ex: Write passwordText to the passoword input */
+              /** Ex: Write #param1 to the #object2 input */
               .build(),
           SemanticPath.builder()
               /** TYPE -- compound --> OBJECT */
               .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
-              /** TYPE -- compound --> ACTION */
+              /** TYPE -- amod --> ACTION */
               .newStep(builder().from(TYPE).with(ADJECTIVAL_MODIFIER).to(ACTION))
-              /** TYPE -- compound --> PARAMETER */
+              /** TYPE -- nmod --> PARAMETER */
               .newStep(builder().from(TYPE).with(NOMINAL_MODIFIER).to(PARAMETER))
               /* Ex: Open home page at #param1. */
               .build(),
@@ -82,7 +80,7 @@ public class InterpreterImpl implements Interpreter {
               .newStep(builder().from(PARAMETER).with(OBLIQUE_MODIFIER).to(TYPE))
               /** TYPE -- nummod --> OBJECT */
               .newStep(builder().from(TYPE).with(NUMERIC_MODIFIER).to(OBJECT))
-              /** Ex: Upload #param1 to #param2 file. */
+              /** Ex: Upload #param1 to #object2 file. */
               .build(),
           SemanticPath.builder()
               /** PARAMETER -- compound --> ACTION */
@@ -91,32 +89,23 @@ public class InterpreterImpl implements Interpreter {
               .newStep(builder().from(PARAMETER).with(OBLIQUE_MODIFIER).to(TYPE))
               /** TYPE -- nummod --> OBJECT */
               .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
-              /** Ex: Upload #param1 to the #param2 file. */
+              /** Ex: Upload #param1 to the #object2 file. */
               .build(),
 
           /** Actions without paramter */
           SemanticPath.builder()
               /** ACTION -- obj --> TYPE */
               .newStep(builder().from(ACTION).with(DIRECT_OBJECT).to(TYPE))
-              /** TYPE -- obj --> OBJECT */
-              .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
-              /** TYPE -- det --> NO_OP */
-              .newStep(builder().from(TYPE).with(DETERMINER).to(NO_OP))
-              /** Ex: Click the #submit button. */
-              .build(),
-          SemanticPath.builder()
-              /** ACTION -- obj --> TYPE */
-              .newStep(builder().from(ACTION).with(DIRECT_OBJECT).to(TYPE))
               /** TYPE -- compound --> OBJECT */
               .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
-              /** Ex: Click #home link. */
+              /** Ex: Click the #object1 button. */
               .build(),
           SemanticPath.builder()
               /** ACTION -- obl --> TYPE */
               .newStep(builder().from(ACTION).with(OBLIQUE_MODIFIER).to(TYPE))
               /** TYPE -- compound --> OBJECT */
               .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
-              /** Ex: click on the login button */
+              /** Ex: click on the #object1 button. */
               .build(),
           SemanticPath.builder()
               /** TYPE -- amod --> ACTION */
@@ -137,10 +126,8 @@ public class InterpreterImpl implements Interpreter {
           SemanticPath.builder()
               /** ACTION -- obj --> PARAMETER */
               .newStep(builder().from(ACTION).with(DIRECT_OBJECT).to(PARAMETER))
-              /** PARAMETER -- obl --> OBJECT */
+              /** ACTION -- obl --> OBJECT */
               .newStep(builder().from(ACTION).with(OBLIQUE_MODIFIER).to(OBJECT))
-              /** OBJECT -- case --> NO_OP */
-              .newStep(builder().from(OBJECT).with(CASE_MARKER).to(NO_OP))
               /** Ex: read #param on page. */
               .build(),
           SemanticPath.builder()
