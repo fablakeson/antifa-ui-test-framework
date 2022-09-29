@@ -29,6 +29,10 @@ public class ElementConstants {
 
   public static final String RANGE = "range";
 
+  public static final String LIST = "list";
+
+  public static final String OPTIONS = "options";
+
   public static final String INPUT = "input";
 
   public static final String FIELD = "field";

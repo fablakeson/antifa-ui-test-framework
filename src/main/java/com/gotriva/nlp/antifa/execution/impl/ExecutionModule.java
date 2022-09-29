@@ -15,8 +15,8 @@ import com.gotriva.nlp.antifa.element.impl.ElemementSubModule.Factory;
 import com.gotriva.nlp.antifa.execution.ExecutionContext;
 import com.gotriva.nlp.antifa.execution.Executor;
 import com.gotriva.nlp.antifa.strategy.ActionStrategy;
-import com.gotriva.nlp.antifa.strategy.impl.StrategieSubModule;
-import com.gotriva.nlp.antifa.strategy.impl.StrategieSubModule.strategiesMap;
+import com.gotriva.nlp.antifa.strategy.impl.StrategiesSubModule;
+import com.gotriva.nlp.antifa.strategy.impl.StrategiesSubModule.strategiesMap;
 import java.lang.annotation.Retention;
 import java.util.Map;
 import java.util.Properties;
@@ -43,7 +43,7 @@ public class ExecutionModule extends AbstractModule {
 
   @Override
   protected void configure() {
-    install(new StrategieSubModule());
+    install(new StrategiesSubModule());
     install(new ElemementSubModule());
   }
 

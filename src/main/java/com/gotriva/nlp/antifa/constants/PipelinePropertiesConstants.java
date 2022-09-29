@@ -5,5 +5,5 @@ public class PipelinePropertiesConstants {
 
   public static final String ANNOTATORS = "annotators";
 
-  public static final String ANNOTATORS_VALUE = "tokenize,ssplit,pos,parse";
+  public static final String ANNOTATORS_VALUE = "tokenize,pos,parse";
 }

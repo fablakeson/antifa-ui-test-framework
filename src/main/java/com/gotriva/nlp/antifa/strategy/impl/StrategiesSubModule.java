@@ -16,7 +16,7 @@ import javax.inject.Qualifier;
 import javax.inject.Singleton;
 
 /** Provides strategy classes bindings. */
-public class StrategieSubModule extends AbstractModule {
+public class StrategiesSubModule extends AbstractModule {
 
   @Qualifier
   @Retention(RUNTIME)
@@ -40,6 +40,7 @@ public class StrategieSubModule extends AbstractModule {
         .add(new UncheckStrategy())
         .add(new UploadStrategy())
         .add(new WriteStrategy())
+        .add(new SelectStrategy())
         /** Page Object strategies */
         .add(new OpenPageStrategy())
         .add(new ClosePageStrategy())

@@ -10,7 +10,9 @@ import static com.gotriva.nlp.antifa.constants.ElementConstants.ICON;
 import static com.gotriva.nlp.antifa.constants.ElementConstants.IMAGE;
 import static com.gotriva.nlp.antifa.constants.ElementConstants.INPUT;
 import static com.gotriva.nlp.antifa.constants.ElementConstants.LABEL;
+import static com.gotriva.nlp.antifa.constants.ElementConstants.LIST;
 import static com.gotriva.nlp.antifa.constants.ElementConstants.OPTION;
+import static com.gotriva.nlp.antifa.constants.ElementConstants.OPTIONS;
 import static com.gotriva.nlp.antifa.constants.ElementConstants.OPT_IN;
 import static com.gotriva.nlp.antifa.constants.ElementConstants.RADIO;
 import static com.gotriva.nlp.antifa.constants.ElementConstants.RANGE;
@@ -57,6 +59,9 @@ public class ElemementSubModule extends AbstractModule {
         .registerFactory(OPTION, (element) -> new Radio(element))
         /** Range type names */
         .registerFactory(RANGE, (element) -> new Range(element))
+        /** Select type names */
+        .registerFactory(LIST, (element) -> new Selection(element))
+        .registerFactory(OPTIONS, (element) -> new Selection(element))
         /** Text type names */
         .registerFactory(INPUT, (element) -> new Text(element))
         .registerFactory(FIELD, (element) -> new Text(element))

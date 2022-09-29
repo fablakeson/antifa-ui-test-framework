@@ -51,6 +51,7 @@ public class InterpreterImplTest {
     "setInstructions",
     "uploadInstructions",
     "writeInstructions",
+    "selectInstructions",
   })
   public void testInterpret_withInstruction_thenReturnCommand(
       String instruction, Command expecteCommand) {
@@ -257,6 +258,21 @@ public class InterpreterImplTest {
         /** Single set */
         Arguments.of("write #param1 to the #object1 input.", expectedCommand),
         Arguments.of("write #param1 to #object1 input.", expectedCommand));
+  }
+
+  static Stream<Arguments> selectInstructions() {
+    final Command expectedCommand =
+        Command.builder()
+            .setInstruction(null)
+            .setAction("select")
+            .setObject("#object1")
+            .setParameter("#param1")
+            .setType("list")
+            .build();
+    return Stream.of(
+        /** Single select */
+        Arguments.of("select #param1 on #object1 list.", expectedCommand),
+        Arguments.of("select #param1 on the #object1 list.", expectedCommand));
   }
 
   /**
