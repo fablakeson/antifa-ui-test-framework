@@ -4,7 +4,7 @@
 
 ## What is Antifa Framework?
 
-Antifa (Automated NLP-based Test Integration Framework Application) is an automated interface testing framework that interprets instructions in natural language and converts them to webdriver commands, making it possible to write complete interface tests in a fast and understandable way, even for non-programmers.
+Antifa (Automated NLP-based Test Integration Framework Application) is an automated user interface testing framework that interprets instructions in natural language and converts them to webdriver commands, making it possible to write complete interface tests in a fast and understandable way, even for non-programmers.
 
 *This project is under development and in an experimental stage.*
 
