@@ -1,0 +1,28 @@
+### Start test at calculator Page
+Open the calculator page at "http://www.math.com/students/calculators/source/basic.htm".
+
+# Page Definitions
+Define @one as "One" located by "input[name=one]".
+Define @two as "Two" located by "input[name=two]".
+Define @three as "Three" located by "input[name=three]".
+Define @add as "Add" located by "input[name=plus]".
+Define @calculate as "Calculate" located by "input[name=DoIt]".
+
+# Insert first term
+Click on the @one button.
+Click on the @two button.
+Click on the @three button.
+
+# Add operation
+Click the @add button.
+
+# Insert the second term
+Click on the @three button.
+Click on the @two button.
+Click on the @one button.
+
+# Get the result
+Click the @calculate button.
+
+# Check the result
+Read "444" on the page.
