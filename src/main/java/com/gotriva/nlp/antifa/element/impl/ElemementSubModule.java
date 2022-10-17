@@ -2,6 +2,7 @@ package com.gotriva.nlp.antifa.element.impl;
 
 import static com.gotriva.nlp.antifa.constants.ElementConstants.BUTTON;
 import static com.gotriva.nlp.antifa.constants.ElementConstants.CHECKBOX;
+import static com.gotriva.nlp.antifa.constants.ElementConstants.DISPLAY;
 import static com.gotriva.nlp.antifa.constants.ElementConstants.FIELD;
 import static com.gotriva.nlp.antifa.constants.ElementConstants.FIGURE;
 import static com.gotriva.nlp.antifa.constants.ElementConstants.FILE;
@@ -66,6 +67,7 @@ public class ElemementSubModule extends AbstractModule {
         .registerFactory(INPUT, (element) -> new Text(element))
         .registerFactory(FIELD, (element) -> new Text(element))
         .registerFactory(TEXTBOX, (element) -> new Text(element))
+        .registerFactory(DISPLAY, (element) -> new Text(element))
         /** return composite factory */
         .build();
   }

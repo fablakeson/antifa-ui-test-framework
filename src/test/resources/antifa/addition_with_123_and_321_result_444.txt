@@ -7,6 +7,7 @@ Define @two as "Two" located by "input[name=two]".
 Define @three as "Three" located by "input[name=three]".
 Define @add as "Add" located by "input[name=plus]".
 Define @calculate as "Calculate" located by "input[name=DoIt]".
+Define @result as "Result" located by "input[name=Input]".
 
 # Insert first term
 Click on the @one button.
@@ -25,4 +26,4 @@ Click on the @one button.
 Click the @calculate button.
 
 # Check the result
-Read "444" on the page.
+Read "444" on @result display.

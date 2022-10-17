@@ -20,15 +20,15 @@ public class StrategiesSubModule extends AbstractModule {
 
   @Qualifier
   @Retention(RUNTIME)
-  @interface strategiesList {}
+  @interface StrategiesList {}
 
   @Qualifier
   @Retention(RUNTIME)
-  public static @interface strategiesMap {}
+  public static @interface StrategiesMap {}
 
   @Provides
   @Singleton
-  @strategiesList
+  @StrategiesList
   public List<ActionStrategy> providestrategiesList() {
     /** Interactable strategies */
     return ImmutableList.<ActionStrategy>builder()
@@ -40,11 +40,11 @@ public class StrategiesSubModule extends AbstractModule {
         .add(new UncheckStrategy())
         .add(new UploadStrategy())
         .add(new WriteStrategy())
+        .add(new ReadStrategy())
         .add(new SelectStrategy())
         /** Page Object strategies */
         .add(new OpenPageStrategy())
         .add(new ClosePageStrategy())
-        .add(new ReadPageStrategy())
         .add(new ScrollPageStrategy())
         .add(new DefinePageStrategy())
         /** return list */
@@ -54,9 +54,9 @@ public class StrategiesSubModule extends AbstractModule {
   @Provides
   @Singleton
   @Inject
-  @strategiesMap
+  @StrategiesMap
   public Map<String, ActionStrategy> providestrategiesMap(
-      @strategiesList List<ActionStrategy> strategies) {
+      @StrategiesList List<ActionStrategy> strategies) {
     return strategies.stream()
         .collect(ImmutableMap.toImmutableMap(ActionStrategy::getAction, Function.identity()));
   }

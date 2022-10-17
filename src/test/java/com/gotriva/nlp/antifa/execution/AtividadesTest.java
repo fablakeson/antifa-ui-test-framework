@@ -3,7 +3,6 @@ package com.gotriva.nlp.antifa.execution;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -18,7 +17,7 @@ public class AtividadesTest {
         driver = new ChromeDriver();
     }
 
-    @Test
+    //@Test
     public void avidade_extra() {
         // Start test at google
         driver.get("http://www.math.com/students/calculators/source/basic.htm");

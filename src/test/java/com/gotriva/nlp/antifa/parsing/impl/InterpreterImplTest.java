@@ -137,7 +137,7 @@ public class InterpreterImplTest {
             .setInstruction(null)
             .setAction("define")
             .setObject("#object1")
-            .setParameter("#param3" + DEFAULT_SEPARATOR + "#param2")
+            .setParameter(String.join(DEFAULT_SEPARATOR, "#param3", "#param2"))
             .build();
     return Stream.of(
         /** Single define */
@@ -181,13 +181,12 @@ public class InterpreterImplTest {
         Command.builder()
             .setInstruction(null)
             .setAction("read")
-            .setObject("page")
+            .setObject("#object1")
             .setParameter("#param1")
             .build();
     return Stream.of(
         /** Single read */
-        Arguments.of("read #param1 on the page.", expectedCommand),
-        Arguments.of("read #param1 on page.", expectedCommand));
+        Arguments.of("read #param1 on #object1 input.", expectedCommand));
   }
 
   /** Scroll instructions for test. */

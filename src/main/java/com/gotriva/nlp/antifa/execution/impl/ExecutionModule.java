@@ -16,7 +16,7 @@ import com.gotriva.nlp.antifa.execution.ExecutionContext;
 import com.gotriva.nlp.antifa.execution.Executor;
 import com.gotriva.nlp.antifa.strategy.ActionStrategy;
 import com.gotriva.nlp.antifa.strategy.impl.StrategiesSubModule;
-import com.gotriva.nlp.antifa.strategy.impl.StrategiesSubModule.strategiesMap;
+import com.gotriva.nlp.antifa.strategy.impl.StrategiesSubModule.StrategiesMap;
 import java.lang.annotation.Retention;
 import java.util.Map;
 import java.util.Properties;
@@ -80,7 +80,7 @@ public class ExecutionModule extends AbstractModule {
 
   @Provides
   public Executor providExecutor(
-      @strategiesMap Map<String, ActionStrategy> strategies, @Context ExecutionContext context) {
+      @StrategiesMap Map<String, ActionStrategy> strategies, @Context ExecutionContext context) {
     return new ExecutorImpl(strategies, context);
   }
 }

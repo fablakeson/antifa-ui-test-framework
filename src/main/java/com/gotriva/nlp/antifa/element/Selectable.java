@@ -1,5 +1,6 @@
 package com.gotriva.nlp.antifa.element;
 
+/** An interace to represent a read value interaction capable element. */
 public interface Selectable extends Interactable {
 
   /**

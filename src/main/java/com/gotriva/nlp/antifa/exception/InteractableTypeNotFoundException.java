@@ -11,6 +11,6 @@ public class InteractableTypeNotFoundException extends RuntimeException {
    * @param typeName
    */
   public InteractableTypeNotFoundException(String typeName) {
-    super(MESSAGE);
+    super(String.format(MESSAGE, typeName));
   }
 }
