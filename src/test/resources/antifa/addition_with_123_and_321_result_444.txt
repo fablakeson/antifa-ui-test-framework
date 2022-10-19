@@ -26,4 +26,4 @@ Click on the @one button.
 Click the @calculate button.
 
 # Check the result
-Read "444" on @result display.
+Read "444" on @result field.

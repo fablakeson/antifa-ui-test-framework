@@ -81,7 +81,7 @@ Ex.: `Click on the @UserProfile image.`<br>
 Ex.: `Hover on @Info icon.`
 
 - **Label:** represents an HTML textual element. Is capable of *hover*, *click* actions.<br>
-Alias: `label`, `tag`, `header`.<br>
+Alias: `label`, `tag`, `header`, `message`.<br>
 Ex.: `Click on @About label.`<br>
 Ex.: `Click on @Menu tag.`<br>
 Ex.: `Hover on @PageTitle header.`<br>
@@ -96,7 +96,7 @@ Ex.: `Set @Volume range to 35%.`<br>
 Ex.: `Set @MinimumPrice range to 750.`
 
 - **Text:** represents an HTML `input` input of type `text`, `password` or a `textarea`. Is capable of *write* and *read* action.<br>
-Alias: `textbox`, `input`, `field`, `display`, `message`.<br>
+Alias: `textbox`, `input`, `field`, `display`.<br>
 Ex.: `Write "testuser@testmail.com" to @Username input.`<br>
 Ex.: `Write "This is a test message" to @Message textbox.`<br>
 Ex.: `Read "Approved" on @Status message.`<br>
@@ -155,12 +155,13 @@ Open the login page at "http://some-website/login.html".
 Define @username as "User Name" located by "#username".
 Define @password as "User Password" located by "#password".
 Define @submit as "Submit" located by "#login".
+Define @status as "Status" located by "#status".
 
 ## Test instructions
 Write "teste@mail.com.br" to @username input.
 Write "testpassword" to the @password input.
 Click on the @submit button.
-Read "Login with success!!!" on the page.
+Read "Login with success!!!" on @status message.
 
 ## Here your test ends
 ```

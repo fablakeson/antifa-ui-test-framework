@@ -40,4 +40,6 @@ public class ElementConstants {
   public static final String TEXTBOX = "textbox";
 
   public static final String DISPLAY = "display";
+
+  public static final String MESSAGE = "message";
 }

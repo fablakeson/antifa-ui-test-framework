@@ -12,6 +12,7 @@ import static com.gotriva.nlp.antifa.constants.ElementConstants.IMAGE;
 import static com.gotriva.nlp.antifa.constants.ElementConstants.INPUT;
 import static com.gotriva.nlp.antifa.constants.ElementConstants.LABEL;
 import static com.gotriva.nlp.antifa.constants.ElementConstants.LIST;
+import static com.gotriva.nlp.antifa.constants.ElementConstants.MESSAGE;
 import static com.gotriva.nlp.antifa.constants.ElementConstants.OPTION;
 import static com.gotriva.nlp.antifa.constants.ElementConstants.OPTIONS;
 import static com.gotriva.nlp.antifa.constants.ElementConstants.OPT_IN;
@@ -55,6 +56,8 @@ public class ElemementSubModule extends AbstractModule {
         .registerFactory(LABEL, (element) -> new Label(element))
         .registerFactory(HEADER, (element) -> new Label(element))
         .registerFactory(TAG, (element) -> new Label(element))
+        .registerFactory(MESSAGE, (element) -> new Label(element))
+        .registerFactory(DISPLAY, (element) -> new Label(element))
         /** Option type names */
         .registerFactory(RADIO, (element) -> new Radio(element))
         .registerFactory(OPTION, (element) -> new Radio(element))
@@ -67,7 +70,6 @@ public class ElemementSubModule extends AbstractModule {
         .registerFactory(INPUT, (element) -> new Text(element))
         .registerFactory(FIELD, (element) -> new Text(element))
         .registerFactory(TEXTBOX, (element) -> new Text(element))
-        .registerFactory(DISPLAY, (element) -> new Text(element))
         /** return composite factory */
         .build();
   }
