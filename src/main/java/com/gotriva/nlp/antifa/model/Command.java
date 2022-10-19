@@ -78,7 +78,6 @@ public class Command {
 
     public Command build() {
       /** Assert that name and object are not null */
-      assert action != null && object != null : "'action' and 'object' must be not null.";
       return new Command(instruction, action, parameter, object, type);
     }
   }

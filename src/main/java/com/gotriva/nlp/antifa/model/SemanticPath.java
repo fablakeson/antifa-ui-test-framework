@@ -10,10 +10,12 @@ import com.google.common.collect.ImmutableList;
 import edu.stanford.nlp.ling.IndexedWord;
 import edu.stanford.nlp.semgraph.SemanticGraph;
 import edu.stanford.nlp.trees.GrammaticalRelation;
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -99,15 +101,17 @@ public class SemanticPath {
       LOGGER.debug("Edge: {}", edge);
 
       /** Get destination. */
-      IndexedWord destination = graph.getChildWithReln(source, edge);
-      LOGGER.debug("Dest: {}", destination);
+      List<IndexedWord> children = new ArrayList<>(graph.getChildrenWithReln(source, edge));
 
       /** Check if destination was found */
-      if (destination == null) {
+      if (children.size() <= step.getOrder()) {
         LOGGER.debug("Desination not found. Ending traversal.");
         LOGGER.debug("========================================");
         return Optional.empty();
       }
+
+      IndexedWord destination = children.get(step.getOrder());
+      LOGGER.debug("Dest: {}", destination);
 
       /** Add destination to the graph */
       putOrAppend(knowledgeFrame, step.getDestination(), destination);
@@ -120,11 +124,12 @@ public class SemanticPath {
 
     /** Build command from knowledge frame map with mandatory fields. */
     final Command.Builder commandBuilder =
-        Command.builder()
-            .setAction(concatString(knowledgeFrame.get(ACTION)))
-            .setObject(concatString(knowledgeFrame.get(OBJECT)));
+        Command.builder().setAction(concatString(knowledgeFrame.get(ACTION)));
 
     /** Optional components */
+    if (knowledgeFrame.containsKey(OBJECT)) {
+      commandBuilder.setObject(concatString(knowledgeFrame.get(OBJECT)));
+    }
     if (knowledgeFrame.containsKey(PARAMETER)) {
       commandBuilder.setParameter(concatString(knowledgeFrame.get(PARAMETER)));
     }

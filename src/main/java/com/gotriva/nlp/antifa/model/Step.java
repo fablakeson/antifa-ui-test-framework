@@ -19,6 +19,9 @@ public class Step {
     /** The builder destination. */
     private Command.ComponentType destination;
 
+    /** The builder order. */
+    private Integer order = 0;
+
     private Builder() {}
 
     /**
@@ -38,13 +41,18 @@ public class Step {
       return this;
     }
 
+    public Builder at(Integer order) {
+      this.order = order;
+      return this;
+    }
+
     public Builder to(Command.ComponentType destination) {
       this.destination = destination;
       return this;
     }
 
     public Step build() {
-      return new Step(source, edge, destination);
+      return new Step(source, edge, destination, order);
     }
   }
 
@@ -57,11 +65,16 @@ public class Step {
   /** The expected destination. */
   private final Command.ComponentType destination;
 
+  /** The order of relation on source node. */
+  private final Integer order;
+
   /** Private default constructor */
-  private Step(ComponentType source, GrammaticalRelation edge, ComponentType destination) {
+  private Step(
+      ComponentType source, GrammaticalRelation edge, ComponentType destination, Integer order) {
     this.source = source;
     this.edge = edge;
     this.destination = destination;
+    this.order = order;
   }
 
   /**
@@ -82,6 +95,10 @@ public class Step {
 
   public Command.ComponentType getDestination() {
     return destination;
+  }
+
+  public Integer getOrder() {
+    return order;
   }
 
   /** Override methods */

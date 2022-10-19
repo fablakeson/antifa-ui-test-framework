@@ -116,11 +116,12 @@ public class GenericPageObject {
    * @param locator the location strategy to find the webelement
    * @param type the interactable type
    */
-  public <T extends Interactable> void addElement(String name, By locator, String type) {
+  public <T extends Interactable> Interactable addElement(String name, By locator, String type) {
     WebElement element = driver.findElement(locator);
-    if (type != null) {}
+    assert type != null : String.format("No type defined for element '%s'.", name);
     AbstractElement elementWrapper = factory.create(type, element);
     elements.put(name, elementWrapper);
+    return elementWrapper;
   }
 
   /**

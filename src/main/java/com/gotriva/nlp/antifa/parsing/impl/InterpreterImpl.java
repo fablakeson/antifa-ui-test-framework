@@ -9,10 +9,12 @@ import static com.gotriva.nlp.antifa.model.Step.builder;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.ADJECTIVAL_MODIFIER;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.ADVERBIAL_MODIFIER;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.CASE_MARKER;
+import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.CLAUSAL_COMPLEMENT;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.CLAUSAL_MODIFIER;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.COMPOUND_MODIFIER;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.DIRECT_OBJECT;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.NOMINAL_MODIFIER;
+import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.NOMINAL_SUBJECT;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.NUMERIC_MODIFIER;
 import static edu.stanford.nlp.trees.ud.UniversalGrammaticalRelations.OBLIQUE_MODIFIER;
 
@@ -91,6 +93,17 @@ public class InterpreterImpl implements Interpreter {
               .newStep(builder().from(TYPE).with(COMPOUND_MODIFIER).to(OBJECT))
               /** Ex: Upload #param1 to the #object2 file. */
               .build(),
+          SemanticPath.builder()
+              /** BYPASS -- compound (0) --> OBJECT */
+              .newStep(builder().from(BYPASS).with(COMPOUND_MODIFIER).at(0).to(OBJECT))
+              /** BYPASS -- compound (1) --> TYPE */
+              .newStep(builder().from(BYPASS).with(COMPOUND_MODIFIER).at(1).to(TYPE))
+              /** BYPASS -- obl --> PARAMETER */
+              .newStep(builder().from(BYPASS).with(NOMINAL_MODIFIER).to(PARAMETER))
+              /** OBJECT -- compound --> ACTION */
+              .newStep(builder().from(OBJECT).with(COMPOUND_MODIFIER).to(ACTION))
+              /** Ex: Store #object1 value to #param1. */
+              .build(),
 
           /** Actions without paramter */
           SemanticPath.builder()
@@ -136,6 +149,17 @@ public class InterpreterImpl implements Interpreter {
               /** OBJECT -- case --> PARAMETER */
               .newStep(builder().from(OBJECT).with(CASE_MARKER).to(PARAMETER))
               /** Ex: scroll down the page. */
+              .build(),
+          SemanticPath.builder()
+              /** ACTION -- ccomp --> PARAMETER */
+              .newStep(builder().from(ACTION).with(CLAUSAL_COMPLEMENT).to(PARAMETER))
+              /** PARAMETER -- nsubj --> PARAMETER */
+              .newStep(builder().from(PARAMETER).with(NOMINAL_SUBJECT).to(PARAMETER))
+              /** ACTION -- ccomp --> BYPASS */
+              .newStep(builder().from(ACTION).with(CLAUSAL_COMPLEMENT).to(BYPASS))
+              /** BYPASS -- obl --> OBJECT */
+              .newStep(builder().from(BYPASS).with(OBLIQUE_MODIFIER).to(PARAMETER))
+              /** Example: Assert "444" equals $result. */
               .build());
 
   /** The default constructor. */

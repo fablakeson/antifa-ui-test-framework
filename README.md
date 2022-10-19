@@ -95,10 +95,12 @@ Alias: `range`.<br>
 Ex.: `Set @Volume range to 35%.`<br>
 Ex.: `Set @MinimumPrice range to 750.`
 
-- **Text:** represents an HTML `input` input of type `text`, `password` or a `textarea`. Is capable of *write* action.<br>
-Alias: `textbox`, `input`, `field`.<br>
+- **Text:** represents an HTML `input` input of type `text`, `password` or a `textarea`. Is capable of *write* and *read* action.<br>
+Alias: `textbox`, `input`, `field`, `display`, `message`.<br>
 Ex.: `Write "testuser@testmail.com" to @Username input.`<br>
-Ex.: `Write "This is a test message" to @Message textbox.`
+Ex.: `Write "This is a test message" to @Message textbox.`<br>
+Ex.: `Read "Approved" on @Status message.`<br>
+Ex.: `Read "Jhon Doe" on the @FullName field.`<br>
 
 ### Page Actions
 
@@ -115,6 +117,14 @@ Some actions are bounded to the parent of all *elements*, the document *page obj
   Ex.: `Declare @UserName as "User Name" located by "input[name=username]".`<br>
   Ex.: `Declare @Password as "Password" located by "#password".`<br>
   Ex.: `Declare @Submit as "Submit" located by "input[type=submit]".`
+
+- <em>**Store:**</em> this action store the value of given element on a variable declared with `$`. You can use this stored value on *Assert* action.<br>
+Ex.: `Store @message display value on $message.`<br>
+Ex.: `Store @result field value on $result.`<br>
+
+- <em>**Assert:**</em> this action compares the expected (first) value with the value found on some variable (last). Currently just `equals` operation is supported.<br>
+Ex.: `Assert "Success" equals to $result.`<br>
+Ex.: `Assert "Some Username" equals to $username.`<br>
 
 - <em>**Open:**</em> this action indicates the opening of a new page or visual context (dialog, modal, panel, tab). It can actively open a new page if an URL is provided. Using this declaration on to begin your tests.<br>
 Ex.: `Open the login page on "http://www.mywebsite.com/login".`<br>

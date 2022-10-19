@@ -52,6 +52,8 @@ public class InterpreterImplTest {
     "uploadInstructions",
     "writeInstructions",
     "selectInstructions",
+    "storeInstructions",
+    "assertInstructions"
   })
   public void testInterpret_withInstruction_thenReturnCommand(
       String instruction, Command expecteCommand) {
@@ -272,6 +274,34 @@ public class InterpreterImplTest {
         /** Single select */
         Arguments.of("select #param1 on #object1 list.", expectedCommand),
         Arguments.of("select #param1 on the #object1 list.", expectedCommand));
+  }
+
+  static Stream<Arguments> storeInstructions() {
+    final Command expectedCommand =
+        Command.builder()
+            .setInstruction(null)
+            .setAction("store")
+            .setObject("#object1")
+            .setParameter("#param1")
+            .setType("list")
+            .build();
+    return Stream.of(
+        /** Single store */
+        Arguments.of("store #object1 input value on #param1.", expectedCommand),
+        Arguments.of("store #object1 display value on #param1.", expectedCommand),
+        Arguments.of("store #object1 textarea value on #param1.", expectedCommand));
+  }
+
+  static Stream<Arguments> assertInstructions() {
+    final Command expectedCommand =
+        Command.builder()
+            .setInstruction(null)
+            .setAction("assert")
+            .setParameter(String.join(DEFAULT_SEPARATOR, "#param2", "#param1", "equals"))
+            .build();
+    return Stream.of(
+        /** Single assert */
+        Arguments.of("assert #param1 equals to #param2.", expectedCommand));
   }
 
   /**

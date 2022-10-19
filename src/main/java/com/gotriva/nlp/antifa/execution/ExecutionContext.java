@@ -46,4 +46,20 @@ public interface ExecutionContext extends Closeable {
    * @return the screenshot image base-64 representation
    */
   public String getScreenshot();
+
+  /**
+   * Store the given value for the given parameter.
+   *
+   * @param parameter
+   * @param value
+   */
+  public void setParameter(String parameter, Object value);
+
+  /**
+   * Get the given parameter value.
+   *
+   * @param parameter
+   * @return the parameter value.
+   */
+  public Object getParameter(String parameter);
 }

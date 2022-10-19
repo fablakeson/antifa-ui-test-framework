@@ -80,6 +80,11 @@ public class ExecutorImpl implements Executor {
                 interactable,
                 command.getParameter());
           } else if (strategy instanceof PageObjectActionStrategy) {
+            /** Check if this page action involves an typed element */
+            if (command.getType() != null && !"page".equals(command.getType())) {
+              /** Ensure the interactable exists for this page action */
+              getInteractableFor(command);
+            }
             /** Try handle this page context action. */
             handlePageObject(
                 (PageObjectActionStrategy) strategy, command.getObject(), command.getParameter());
@@ -158,23 +163,36 @@ public class ExecutorImpl implements Executor {
     /** Check if current object not exists on page */
     if (!pageObject.hasElement(command.getObject())) {
       /** Get object metadata */
-      ElementMetadata metadata = getMetadata(command.getObject());
-      /** Fail if metadata is empty */
-      if (Objects.isNull(metadata)) {
-        throw new ExecutionException("Element \"" + command.getObject() + "\" is not defined.");
-      }
-      /** Fail if type is not present */
-      if (Objects.isNull(command.getType())) {
-        throw new ExecutionException(
-            MessageFormat.format(
-                "Command 'type' must be present when element '{0}' is referenced at first time.",
-                command.getObject()));
-      }
-      /** Creates the object on this page */
-      pageObject.addElement(command.getObject(), metadata.getLocator(), command.getType());
+      return createInteractableFor(command);
     }
     /** returns the interactable element */
     return pageObject.getElement(command.getObject());
+  }
+
+  /**
+   * Creates a interactable for given command.
+   *
+   * @param command the command.
+   * @return the interactable.
+   */
+  private Interactable createInteractableFor(Command command) {
+    /** Get object metadata */
+    ElementMetadata metadata = getMetadata(command.getObject());
+    /** Fail if metadata is empty */
+    if (Objects.isNull(metadata)) {
+      throw new ExecutionException("Element \"" + command.getObject() + "\" is not defined.");
+    }
+    /** Fail if type is not present */
+    if (Objects.isNull(command.getType())) {
+      throw new ExecutionException(
+          MessageFormat.format(
+              "Command 'type' must be present when element '{0}' is referenced at first time.",
+              command.getObject()));
+    }
+    /** Creates the object on this page */
+    return context
+        .getCurrentPage()
+        .addElement(command.getObject(), metadata.getLocator(), command.getType());
   }
 
   /**

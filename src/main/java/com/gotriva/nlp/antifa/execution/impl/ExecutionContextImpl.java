@@ -23,6 +23,9 @@ public class ExecutionContextImpl implements ExecutionContext {
   /** The element metadata map. */
   private Map<String, ElementMetadata> elementMetadata;
 
+  /** The parameters map */
+  private Map<String, Object> parameters;
+
   /** The associated context web driver */
   private WebDriver driver;
 
@@ -33,6 +36,7 @@ public class ExecutionContextImpl implements ExecutionContext {
   ExecutionContextImpl(WebDriver driver, CompositeElementFactory factory) {
     this.pageStack = new LinkedList<>();
     this.elementMetadata = new HashMap<>();
+    this.parameters = new HashMap<>();
     this.driver = driver;
     this.factory = factory;
   }
@@ -106,5 +110,15 @@ public class ExecutionContextImpl implements ExecutionContext {
   @Override
   public ElementMetadata getMetadata(String element) {
     return elementMetadata.get(element);
+  }
+
+  @Override
+  public void setParameter(String parameter, Object value) {
+    parameters.put(parameter, value);
+  }
+
+  @Override
+  public Object getParameter(String parameter) {
+    return parameters.get(parameter);
   }
 }

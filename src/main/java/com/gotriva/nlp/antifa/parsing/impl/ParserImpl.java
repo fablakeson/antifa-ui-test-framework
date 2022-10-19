@@ -28,7 +28,8 @@ public class ParserImpl implements Parser {
   private static final Logger LOGGER = LoggerFactory.getLogger(ParserImpl.class);
 
   /** Pattern to find quoted parameters. */
-  private static final Pattern QUOTE_PATTERN = Pattern.compile("\"(.*?)\"|(@[\\w\\d]+)");
+  private static final Pattern QUOTE_PATTERN =
+      Pattern.compile("\"(.*?)\"|(@[\\w\\d]+)|(\\$[\\w\\d]+)");
 
   /** Pattern to find parameters replacement. */
   private static final Pattern PARAMETER_PATTERN = Pattern.compile("(#.+?\\d{1,})");
@@ -127,7 +128,7 @@ public class ParserImpl implements Parser {
    */
   private String restore(String parameter, Map<String, String> parameters) {
     if (parameter == null) {
-      return parameter;
+      return null;
     }
     String[] parts = parameter.split(DefaultConstants.DEFAULT_SEPARATOR);
     for (int i = 0; i < parts.length; ++i) {
@@ -147,10 +148,17 @@ public class ParserImpl implements Parser {
    * @return the original string.
    */
   private String restore(Matcher matcher, Map<String, String> parameters) {
+    LOGGER.debug(">>>> parameters: {}", parameters);
     return matcher.replaceAll(
         (result) -> {
           String originalValue = parameters.get(result.group());
-          return originalValue.startsWith("@") ? originalValue : "\"" + originalValue + "\"";
+          if (originalValue.startsWith("@")) {
+            return originalValue;
+          }
+          if (originalValue.startsWith("$")) {
+            return "\\" + originalValue;
+          }
+          return "\"" + originalValue + "\"";
         });
   }
 
@@ -191,9 +199,12 @@ public class ParserImpl implements Parser {
           if (result.group(1) != null) {
             parameter = "#param" + counter.getAndIncrement();
             value = result.group(1);
-          } else {
+          } else if (result.group(2) != null) {
             parameter = "#object" + counter.getAndIncrement();
             value = result.group(2);
+          } else {
+            parameter = "#param" + counter.getAndIncrement();
+            value = result.group(3);
           }
           parameters.put(parameter, value);
           return parameter;

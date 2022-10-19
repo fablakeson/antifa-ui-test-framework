@@ -43,10 +43,12 @@ public class StrategiesSubModule extends AbstractModule {
         .add(new ReadStrategy())
         .add(new SelectStrategy())
         /** Page Object strategies */
-        .add(new OpenPageStrategy())
+        .add(new AssertPageStrategy())
         .add(new ClosePageStrategy())
-        .add(new ScrollPageStrategy())
         .add(new DefinePageStrategy())
+        .add(new OpenPageStrategy())
+        .add(new ScrollPageStrategy())
+        .add(new StorePageStrategy())
         /** return list */
         .build();
   }

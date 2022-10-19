@@ -1,0 +1,30 @@
+### Start test at calculator Page
+Open the calculator page at "http://www.math.com/students/calculators/source/basic.htm".
+
+# Page Definitions
+Define @one as "One" located by "input[name=one]".
+Define @two as "Two" located by "input[name=two]".
+Define @three as "Three" located by "input[name=three]".
+Define @minus as "Subtract" located by "input[name=minus]".
+Define @calculate as "Calculate" located by "input[name=DoIt]".
+Define @result as "Result" located by "input[name=Input]".
+
+# Insert first term
+Click on the @three button.
+Click on the @two button.
+Click on the @one button.
+
+# Add operation
+Click the @minus button.
+
+# Insert the second term
+Click on the @one button.
+Click on the @two button.
+Click on the @three button.
+
+# Get the result
+Click the @calculate button.
+Store @result input value on $result.
+
+# Check the result
+Assert "198" equals to $result.
