@@ -80,11 +80,12 @@ Alias: `image`, `icon`, `figure`.<br>
 Ex.: `Click on the @UserProfile image.`<br>
 Ex.: `Hover on @Info icon.`
 
-- **Label:** represents an HTML textual element. Is capable of *hover*, *click* actions.<br>
+- **Label:** represents an HTML textual element. Is capable of *hover*, *click* and *read* actions.<br>
 Alias: `label`, `tag`, `header`, `message`.<br>
 Ex.: `Click on @About label.`<br>
 Ex.: `Click on @Menu tag.`<br>
 Ex.: `Hover on @PageTitle header.`<br>
+Ex.: `Read "Welcome!" on @Greetings message.`<br>
 
 - **Radio:** represents an HTML `input` element of `radio` type. Is capable of *check* action.<br>
 Alias: `radio`, `option`.<br>
@@ -133,12 +134,12 @@ Ex.: `Open the settings tab.`
 - <em>**Close:**</em> this action closes the current opened page or visual context, if any.<br>
   Ex.: `Close the message page.`
 
-- <em>**Read:**</em> this action reads some visible text on page corpus.<br>
-  Ex.: `Read "Login with success!" on the page.`<br>
+- <em>**Read:**</em> this action reads some visible text on element inner TEXT or input value.<br>
+  Ex.: `Read "Login with success!" on the @status message.`<br>
 
-- <em>**Scroll:**</em> this action scrolls the page *up* or *down*.<br>
-  Ex.: `Scroll "down" the page.`<br>
-  Ex.: `Scroll "up" the page.`
+- <em>**Scroll:**</em> this action scrolls the page *up* or *down*. The default scroll range is 300px.<br>
+  Ex.: `Scroll down the page.`<br>
+  Ex.: `Scroll up the page.`
 
 
 ## Example Test Input File
@@ -146,25 +147,39 @@ Ex.: `Open the settings tab.`
 
 File: `login_with_correct_info_then_success.txt`
 ```
-### Your test may have comments like this
+# Your test may have comments like this
 
-### Start test at page login
+## Start test at page login
+
 Open the login page at "http://some-website/login.html".
 
 ## Page elements definitions
-Define @username as "User Name" located by "#username".
-Define @password as "User Password" located by "#password".
-Define @submit as "Submit" located by "#login".
-Define @status as "Status" located by "#status".
+
+Declare @username as "User Name" located by "#username".
+
+Declare @password as "User Password" located by "#password".
+
+Declare @submit as "Submit" located by "#login".
+
+Declare @status as "Status" located by "#status".
 
 ## Test instructions
-Write "teste@mail.com.br" to @username input.
-Write "testpassword" to the @password input.
-Click on the @submit button.
-Read "Login with success!!!" on @status message.
 
-## Here your test ends
+Write "teste@mail.com.br" to @username input.
+
+Write "testpassword" to the @password input.
+
+Click on the @submit button.
+
+### Page request loading time...
+
+Wait 5 seconds.
+
+## Assert your test results
+
+Read "Login with success!!!" on @status message.
 ```
+The test file above is also a valid Markdown document, this format is good for readability.
 
 ## Example Test Output (XML)
 
@@ -201,7 +216,7 @@ File: `antifa_test_login_with_correct_info_then_success_1663981217806.xml`
       <elapsedTime unit="ms">0</elapsedTime>
       <result>SUCCESS</result>
       <command>
-        <instruction>Define @username as "User Name" located by "#username".</instruction>
+        <instruction>Declare @username as "User Name" located by "#username".</instruction>
         <action>define</action>
         <object>@username</object>
         <parameter>#username	User Name</parameter>
@@ -222,11 +237,11 @@ Here is a short list of reasons why you should consider adopting this framework:
 
 3. It's free and always will be! This is a community-maintained project and you can also help evolve it.
 
-4. You support the anti-fascist struggle and want to make that clear to your organization and coworkers!
+4. You support the anti-fascist struggle and want to make it clear to your organization and coworkers!
 
-<small>* At current state we only support Selenium, but it other implementations should be added in future.</small>
+<small>* At current state we only support Selenium, but it other implementations will be added in future.</small>
 
-## Are you a real NERD? Really? Then read our paper!
+## Are you a NERD? Then read our paper!
 
 * [ANTIFA: An NLP-based Automated User Interface Test Framework](#)
 

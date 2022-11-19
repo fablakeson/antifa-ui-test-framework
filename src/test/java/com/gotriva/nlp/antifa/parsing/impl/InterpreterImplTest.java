@@ -233,18 +233,14 @@ public class InterpreterImplTest {
 
   static Stream<Arguments> storeInstructions() {
     final Command expectedCommand =
-        Command.builder()
-            .setAction("store")
-            .setObject("#objectA")
-            .setParameter("#paramA")
-            .setType("list")
-            .build();
+        Command.builder().setAction("store").setObject("#objectA").setParameter("#paramA").build();
     return Stream.of(
         /** Single store */
         Arguments.of("store #objectA input value on #paramA.", expectedCommand),
         Arguments.of("store #objectA display value on #paramA.", expectedCommand),
         Arguments.of("store #objectA textarea value on #paramA.", expectedCommand),
-        Arguments.of("store #objectDD label value on #paramDE.", expectedCommand));
+        Arguments.of("store #objectA label value on #paramA.", expectedCommand),
+        Arguments.of("store #objectA message value on #paramA.", expectedCommand));
   }
 
   static Stream<Arguments> assertInstructions() {
