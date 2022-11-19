@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,7 @@ public class ParserImpl implements Parser {
       Pattern.compile("\"(.*?)\"|(@[\\w\\d]+)|(\\$[\\w\\d]+)");
 
   /** Pattern to find parameters replacement. */
-  private static final Pattern PARAMETER_PATTERN = Pattern.compile("(#.+?\\d{1,})");
+  private static final Pattern PARAMETER_PATTERN = Pattern.compile("(#.+?[A-Z]{1,})");
 
   /** The NLP pipeline processor. */
   private final StanfordCoreNLP pipeline;
@@ -175,7 +176,7 @@ public class ParserImpl implements Parser {
     while (iterator.hasNext()) {
       String currentInstruction = iterator.next();
       Matcher matcher = QUOTE_PATTERN.matcher(currentInstruction);
-      String newInstruction = replace(matcher, counter, parameters).toLowerCase();
+      String newInstruction = replace(matcher, counter, parameters);
       iterator.set(newInstruction);
       LOGGER.debug("Replaced: {} -> {}", currentInstruction, newInstruction);
     }
@@ -197,17 +198,31 @@ public class ParserImpl implements Parser {
           final String parameter;
           final String value;
           if (result.group(1) != null) {
-            parameter = "#param" + counter.getAndIncrement();
+            parameter = "#param" + toAlphabet(counter.getAndIncrement());
             value = result.group(1);
           } else if (result.group(2) != null) {
-            parameter = "#object" + counter.getAndIncrement();
+            parameter = "#object" + toAlphabet(counter.getAndIncrement());
             value = result.group(2);
           } else {
-            parameter = "#param" + counter.getAndIncrement();
+            parameter = "#param" + toAlphabet(counter.getAndIncrement());
             value = result.group(3);
           }
           parameters.put(parameter, value);
           return parameter;
         });
+  }
+
+  /**
+   * Converts a number to alphabet representation in the form: 0: A, 1: B, 2: C, 3: D, ..., J: 9.
+   *
+   * @param number
+   * @return
+   */
+  private String toAlphabet(int number) {
+    return String.valueOf(number)
+        .chars()
+        .map(i -> i + 17)
+        .mapToObj(Character::toString)
+        .collect(Collectors.joining());
   }
 }

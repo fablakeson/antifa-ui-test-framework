@@ -51,7 +51,7 @@ public class ExecutorImpl implements Executor {
         /** Try to execute the command */
         try {
           /** Get strategy strategy for this command. */
-          ActionStrategy strategy = strategies.get(command.getAction());
+          ActionStrategy strategy = strategies.get(command.getAction().toLowerCase());
           if (Objects.isNull(strategy)) {
             throw new ExecutionException("Strategy not found: " + command.getAction());
           }
