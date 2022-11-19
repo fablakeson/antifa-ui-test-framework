@@ -160,6 +160,13 @@ public class InterpreterImpl implements Interpreter {
               /** BYPASS -- obl --> OBJECT */
               .newStep(builder().from(BYPASS).with(OBLIQUE_MODIFIER).to(PARAMETER))
               /** Example: Assert "444" equals $result. */
+              .build(),
+          SemanticPath.builder()
+              /** ACTION -- obj --> PARAMETER */
+              .newStep(builder().from(ACTION).with(DIRECT_OBJECT).to(PARAMETER))
+              /** PARAMETER -- nummod --> PARAMETER */
+              .newStep(builder().from(PARAMETER).with(NUMERIC_MODIFIER).to(PARAMETER))
+              /** Example: Wait 5 milliseconds. */
               .build());
 
   /** The default constructor. */

@@ -7,16 +7,18 @@ Define @sobrenome as "Sobrenome" located by "input[id=lastName]".
 Define @usuario as "Nome de usuario" located by "input[id=username]".
 Define @senha as "Senha" located by "input[name=Passwd]".
 Define @confirmaSenha as "Confirma Senha" located by "input[name=ConfirmPasswd]".
-Define @proximo as "Botao Proximo" located by "#accountDetailsNext".
-Define @status as "Mensagem de Erro" located by ".o6cuMc".
+Define @proximo as "Próximo" located by "#accountDetailsNext".
+Define @usernameValidation as "Validação do Username" located by ".o6cuMc".
 
-#Setting info
+# Setting info
 Write "Jose" to @nome input.
 Write "da Silva" to @sobrenome input.
 Write "12345678" to @senha input.
 Write "josedasilva" to @usuario input.
 Write "12345678" to @confirmaSenha input.
-
+Click on the @proximo button.
+# Page submit loading...
+Wait 5 seconds.
 
 # Get the result
-Read "Este nome de usuário já está em uso. Tente outro." on @status message.
+Read "Este nome de usuário já está em uso. Tente outro." on @usernameValidation message.

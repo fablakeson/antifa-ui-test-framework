@@ -53,7 +53,8 @@ public class InterpreterImplTest {
     "writeInstructions",
     "selectInstructions",
     "storeInstructions",
-    "assertInstructions"
+    "assertInstructions",
+    "waitInstructions"
   })
   public void testInterpret_withInstruction_thenReturnCommand(
       String instruction, Command expecteCommand) {
@@ -67,12 +68,7 @@ public class InterpreterImplTest {
   /** Click instructions for test. */
   static Stream<Arguments> clickInstructions() {
     final Command expectedCommand =
-        Command.builder()
-            .setInstruction(null)
-            .setAction("click")
-            .setType("button")
-            .setObject("#objectA")
-            .build();
+        Command.builder().setAction("click").setType("button").setObject("#objectA").build();
     return Stream.of(
         /** Single click */
         Arguments.of("click on the #objectA button.", expectedCommand),
@@ -84,12 +80,7 @@ public class InterpreterImplTest {
   /** Check instructions for test. */
   static Stream<Arguments> checkInstructions() {
     final Command expectedCommand =
-        Command.builder()
-            .setInstruction(null)
-            .setAction("check")
-            .setType("radio")
-            .setObject("#objectA")
-            .build();
+        Command.builder().setAction("check").setType("radio").setObject("#objectA").build();
     return Stream.of(
         /** Single check */
         Arguments.of("check on the #objectA radio.", expectedCommand),
@@ -101,12 +92,7 @@ public class InterpreterImplTest {
   /** Uncheck instructions for test. */
   static Stream<Arguments> uncheckInstructions() {
     final Command expectedCommand =
-        Command.builder()
-            .setInstruction(null)
-            .setAction("uncheck")
-            .setType("checkbox")
-            .setObject("#objectA")
-            .build();
+        Command.builder().setAction("uncheck").setType("checkbox").setObject("#objectA").build();
     return Stream.of(
         /** Single uncheck */
         Arguments.of("uncheck on the #objectA checkbox.", expectedCommand),
@@ -118,12 +104,7 @@ public class InterpreterImplTest {
   /** Hover instructions for test. */
   static Stream<Arguments> hoverInstructions() {
     final Command expectedCommand =
-        Command.builder()
-            .setInstruction(null)
-            .setAction("hover")
-            .setType("image")
-            .setObject("#objectA")
-            .build();
+        Command.builder().setAction("hover").setType("image").setObject("#objectA").build();
     return Stream.of(
         /** Single hover */
         Arguments.of("hover on the #objectA image.", expectedCommand),
@@ -136,7 +117,6 @@ public class InterpreterImplTest {
   static Stream<Arguments> defineInstructions() {
     final Command expectedCommand =
         Command.builder()
-            .setInstruction(null)
             .setAction("define")
             .setObject("#objectA")
             .setParameter(String.join(DEFAULT_SEPARATOR, "#param3", "#param2"))
@@ -149,12 +129,7 @@ public class InterpreterImplTest {
   /** Close instructions for test. */
   static Stream<Arguments> closeInstructions() {
     final Command expectedCommand =
-        Command.builder()
-            .setInstruction(null)
-            .setAction("close")
-            .setObject("login")
-            .setType("page")
-            .build();
+        Command.builder().setAction("close").setObject("login").setType("page").build();
     return Stream.of(
         /** Single close */
         Arguments.of("close the login page.", expectedCommand),
@@ -165,7 +140,6 @@ public class InterpreterImplTest {
   static Stream<Arguments> openInstructions() {
     final Command expectedCommand =
         Command.builder()
-            .setInstruction(null)
             .setAction("open")
             .setObject("home")
             .setParameter("#paramA")
@@ -180,12 +154,7 @@ public class InterpreterImplTest {
   /** Read instructions for test. */
   static Stream<Arguments> readInstructions() {
     final Command expectedCommand =
-        Command.builder()
-            .setInstruction(null)
-            .setAction("read")
-            .setObject("#objectA")
-            .setParameter("#paramA")
-            .build();
+        Command.builder().setAction("read").setObject("#objectA").setParameter("#paramA").build();
     return Stream.of(
         /** Single read */
         Arguments.of("read #paramA on #objectA input.", expectedCommand));
@@ -194,19 +163,9 @@ public class InterpreterImplTest {
   /** Scroll instructions for test. */
   static Stream<Arguments> scrollInstructions() {
     final Command expectedScrollDownCommand =
-        Command.builder()
-            .setInstruction(null)
-            .setAction("scroll")
-            .setObject("page")
-            .setParameter("down")
-            .build();
+        Command.builder().setAction("scroll").setObject("page").setParameter("down").build();
     final Command expectedScrollUpCommand =
-        Command.builder()
-            .setInstruction(null)
-            .setAction("scroll")
-            .setObject("page")
-            .setParameter("up")
-            .build();
+        Command.builder().setAction("scroll").setObject("page").setParameter("up").build();
     return Stream.of(
         /** Single scroll */
         Arguments.of("scroll down the page.", expectedScrollDownCommand),
@@ -217,7 +176,6 @@ public class InterpreterImplTest {
   static Stream<Arguments> setInstructions() {
     final Command expectedCommand =
         Command.builder()
-            .setInstruction(null)
             .setAction("set")
             .setObject("#objectA")
             .setParameter("#paramA")
@@ -233,7 +191,6 @@ public class InterpreterImplTest {
   static Stream<Arguments> uploadInstructions() {
     final Command expectedCommand =
         Command.builder()
-            .setInstruction(null)
             .setAction("upload")
             .setObject("#objectA")
             .setParameter("#paramA")
@@ -249,7 +206,6 @@ public class InterpreterImplTest {
   static Stream<Arguments> writeInstructions() {
     final Command expectedCommand =
         Command.builder()
-            .setInstruction(null)
             .setAction("write")
             .setObject("#objectB")
             .setParameter("#paramA")
@@ -264,7 +220,6 @@ public class InterpreterImplTest {
   static Stream<Arguments> selectInstructions() {
     final Command expectedCommand =
         Command.builder()
-            .setInstruction(null)
             .setAction("select")
             .setObject("#objectA")
             .setParameter("#paramA")
@@ -279,7 +234,6 @@ public class InterpreterImplTest {
   static Stream<Arguments> storeInstructions() {
     final Command expectedCommand =
         Command.builder()
-            .setInstruction(null)
             .setAction("store")
             .setObject("#objectA")
             .setParameter("#paramA")
@@ -289,19 +243,45 @@ public class InterpreterImplTest {
         /** Single store */
         Arguments.of("store #objectA input value on #paramA.", expectedCommand),
         Arguments.of("store #objectA display value on #paramA.", expectedCommand),
-        Arguments.of("store #objectA textarea value on #paramA.", expectedCommand));
+        Arguments.of("store #objectA textarea value on #paramA.", expectedCommand),
+        Arguments.of("store #objectDD label value on #paramDE.", expectedCommand));
   }
 
   static Stream<Arguments> assertInstructions() {
     final Command expectedCommand =
         Command.builder()
-            .setInstruction(null)
             .setAction("assert")
             .setParameter(String.join(DEFAULT_SEPARATOR, "#param2", "#paramA", "equals"))
             .build();
     return Stream.of(
         /** Single assert */
         Arguments.of("assert #paramA equals to #param2.", expectedCommand));
+  }
+
+  static Stream<Arguments> waitInstructions() {
+    final Command.Builder baseCommand = Command.builder().setAction("wait");
+    return Stream.of(
+        /** Single assert */
+        Arguments.of(
+            "wait 1 millisecond.",
+            baseCommand.setParameter(String.join(DEFAULT_SEPARATOR, "1", "millisecond")).build()),
+        Arguments.of(
+            "wait 300 milliseconds.",
+            baseCommand
+                .setParameter(String.join(DEFAULT_SEPARATOR, "300", "milliseconds"))
+                .build()),
+        Arguments.of(
+            "wait 1 second.",
+            baseCommand.setParameter(String.join(DEFAULT_SEPARATOR, "1", "second")).build()),
+        Arguments.of(
+            "wait 15 seconds.",
+            baseCommand.setParameter(String.join(DEFAULT_SEPARATOR, "15", "seconds")).build()),
+        Arguments.of(
+            "wait 1 minute.",
+            baseCommand.setParameter(String.join(DEFAULT_SEPARATOR, "1", "minute")).build()),
+        Arguments.of(
+            "wait 2 minutes.",
+            baseCommand.setParameter(String.join(DEFAULT_SEPARATOR, "2", "minutes")).build()));
   }
 
   /**

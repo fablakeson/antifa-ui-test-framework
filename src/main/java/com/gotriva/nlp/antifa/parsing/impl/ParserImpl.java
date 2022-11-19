@@ -18,7 +18,6 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +32,7 @@ public class ParserImpl implements Parser {
       Pattern.compile("\"(.*?)\"|(@[\\w\\d]+)|(\\$[\\w\\d]+)");
 
   /** Pattern to find parameters replacement. */
-  private static final Pattern PARAMETER_PATTERN = Pattern.compile("(#.+?[A-Z]{1,})");
+  private static final Pattern PARAMETER_PATTERN = Pattern.compile("(#.+?[0-9]{1,})");
 
   /** The NLP pipeline processor. */
   private final StanfordCoreNLP pipeline;
@@ -54,31 +53,23 @@ public class ParserImpl implements Parser {
    * @return
    */
   public List<Command> parse(List<String> instructions) {
-
     /** Copy instructions list */
     List<String> instructionsCopy = new ArrayList<>(instructions);
-
-    /** Replace parameters */
-    Map<String, String> parameters = replace(instructionsCopy);
-
-    /** Concatenate the instructions into one text. */
-    String instructionsText = String.join("\n", instructionsCopy);
-
-    /** Creates an annotation from instructions text */
-    Annotation annotation = new Annotation(instructionsText);
-
-    /** Execute pipeline */
-    pipeline.annotate(annotation);
-
-    /** Get sentence annotations */
-    List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
 
     /** Commands to be returned. */
     List<Command> commands = new LinkedList<>();
 
-    /** Parse the sentences into commands */
-    for (CoreMap sentence : sentences) {
-      /** Get semantic dependency graph */
+    for (int i = 0; i < instructionsCopy.size(); ++i) {
+      /** Replace parameters */
+      // TODO: refactor replace function to work with a single string.
+      Map<String, String> parameters = replace(instructionsCopy.subList(i, i + 1));
+      String instruction = instructionsCopy.get(i).toLowerCase();
+      /** Creates an annotation from instructions text */
+      Annotation annotation = new Annotation(instruction);
+      /** Execute pipeline */
+      pipeline.annotate(annotation);
+      /** Get the first sentence annotation */
+      CoreMap sentence = annotation.get(CoreAnnotations.SentencesAnnotation.class).get(0);
       SemanticGraph dependencyParse = sentence.get(BasicDependenciesAnnotation.class);
       LOGGER.debug("dependencyParse: {}", dependencyParse);
       /** Try to interpret the graph as a command */
@@ -94,6 +85,46 @@ public class ParserImpl implements Parser {
 
     return commands;
   }
+
+  // TODO: Remove dead code.
+  // /**
+  //  * Parses the instructions into a list of commands.
+  //  *
+  //  * @param instructions
+  //  * @return
+  //  */
+  // public List<Command> parseOld(List<String> instructions) {
+  //   /** Copy instructions list */
+  //   List<String> instructionsCopy = new ArrayList<>(instructions);
+  //   /** Replace parameters */
+  //   Map<String, String> parameters = replace(instructionsCopy);
+  //   /** Concatenate the instructions into one text. */
+  //   String instructionsText = String.join("\n", instructionsCopy);
+  //   /** Creates an annotation from instructions text */
+  //   Annotation annotation = new Annotation(instructionsText);
+  //   /** Execute pipeline */
+  //   pipeline.annotate(annotation);
+  //   /** Get sentence annotations */
+  //   List<CoreMap> sentences = annotation.get(CoreAnnotations.SentencesAnnotation.class);
+  //   /** Commands to be returned. */
+  //   List<Command> commands = new LinkedList<>();
+  //   /** Parse the sentences into commands */
+  //   for (CoreMap sentence : sentences) {
+  //     /** Get semantic dependency graph */
+  //     SemanticGraph dependencyParse = sentence.get(BasicDependenciesAnnotation.class);
+  //     LOGGER.debug("dependencyParse: {}", dependencyParse);
+  //     /** Try to interpret the graph as a command */
+  //     Command command = interpreter.intepret(dependencyParse);
+  //     /** Restore command parameters */
+  //     command.setInstruction(StringUtils.capitalize(sentence.toString()));
+  //     command = restore(command, parameters);
+  //     /** Print action */
+  //     LOGGER.debug("command: {}", command);
+  //     /** add action to list */
+  //     commands.add(command);
+  //   }
+  //   return commands;
+  // }
 
   // TODO: Add methods below to a testable helper class.
 
@@ -198,31 +229,17 @@ public class ParserImpl implements Parser {
           final String parameter;
           final String value;
           if (result.group(1) != null) {
-            parameter = "#param" + toAlphabet(counter.getAndIncrement());
+            parameter = "#param" + counter.getAndIncrement();
             value = result.group(1);
           } else if (result.group(2) != null) {
-            parameter = "#object" + toAlphabet(counter.getAndIncrement());
+            parameter = "#object" + counter.getAndIncrement();
             value = result.group(2);
           } else {
-            parameter = "#param" + toAlphabet(counter.getAndIncrement());
+            parameter = "#param" + counter.getAndIncrement();
             value = result.group(3);
           }
           parameters.put(parameter, value);
           return parameter;
         });
-  }
-
-  /**
-   * Converts a number to alphabet representation in the form: 0: A, 1: B, 2: C, 3: D, ..., J: 9.
-   *
-   * @param number
-   * @return
-   */
-  private String toAlphabet(int number) {
-    return String.valueOf(number)
-        .chars()
-        .map(i -> i + 17)
-        .mapToObj(Character::toString)
-        .collect(Collectors.joining());
   }
 }

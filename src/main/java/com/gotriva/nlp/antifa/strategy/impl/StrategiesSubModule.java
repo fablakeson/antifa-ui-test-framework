@@ -49,6 +49,7 @@ public class StrategiesSubModule extends AbstractModule {
         .add(new OpenPageStrategy())
         .add(new ScrollPageStrategy())
         .add(new StorePageStrategy())
+        .add(new WaitPageStrategy())
         /** return list */
         .build();
   }

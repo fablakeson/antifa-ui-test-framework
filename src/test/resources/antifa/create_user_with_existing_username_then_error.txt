@@ -1,0 +1,25 @@
+### Start test at Google Login Page
+Open the Google Login page at "https://accounts.google.com/signup".
+
+# Page Definitions
+Define @nome as "Nome" located by "input[id=firstName]".
+Define @sobrenome as "Sobrenome" located by "input[id=lastName]".
+Define @usuario as "Nome de usuario" located by "input[id=username]".
+Define @senha as "Senha" located by "input[name=Passwd]".
+Define @confirmaSenha as "Confirma Senha" located by "input[name=ConfirmPasswd]".
+Define @proximo as "Próximo" located by "#accountDetailsNext".
+Define @validation as "Validação" located by ".o6cuMc".
+
+# Setting info
+Write "Jose" to @nome input.
+Write "da Silva" to @sobrenome input.
+Write "12345678" to @senha input.
+Write "josedasilva" to @usuario input.
+Write "12345678" to @confirmaSenha input.
+Click on the @proximo button.
+# Page submit loading...
+Wait 5 seconds.
+Store @validation label value on $validationMessage.
+
+# Assert the result
+Assert "Este nome de usuário já está em uso. Tente outro." equals to $validationMessage.
