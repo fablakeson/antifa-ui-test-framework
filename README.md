@@ -166,6 +166,12 @@ Ex.: `Open the settings tab.`
   Ex.: `Scroll down the page.`<br>
   Ex.: `Scroll up the page.`
 
+- <em>**Wait:**</em> this action pause the execution for some *amount* of *time units*. Available *time units* are: *millisecond(s)*, *second(s)* and *minute(s)*.<br>
+  Ex.: `Wait 1 second.`<br>
+  Ex.: `Wait 5 seconds.`<br>
+  Ex.: `Wait 500 milliseconds.`<br>
+  Ex.: `Wait 2 minutes.`
+
 
 ## Example Test Input File
 
