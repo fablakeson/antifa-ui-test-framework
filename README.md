@@ -10,17 +10,42 @@ Antifa (Automated NLP-based Test Integration Framework Application) is an automa
 
 ## How to use?
 
+### As maven plugin
+
 1. Clone this project.
 
 2. Build the src code with maven.
 
-3. Run your tests passing the input and output directories on `mvn` command:
+3. Run your tests passing the following parameters on `mvn` command:
 ```
 mvn com.gotriva:antifa-test-maven-plugin:0.0.1-SNAPSHOT:ui-test \
-    -DinputDirectory=<your_input_directory> \
-    -DoutputDirectory=<your_output_directory> \
+    -DwebdriverPath=<chromedriver_path> \
+    -DinputDirectory=<your_input_files_directory> \
+    -DoutputDirectory=<your_output_files_directory> \
     -DoutputFormat=<HTML|XML>
 ```
+
+### As CLI tool
+
+1. Download the latest release binary (.jar) [here](https://github.com/fablakeson/antifa-ui-test-framework/releases).
+
+2. Run your tests passing the following command line argument flags:
+```
+java -jar antifa-test.jar \
+    --webdriverPath=<chromedriver_path> \
+    --inputDirectory=<your_input_file_directory> \
+    --outputDirectory=<your_output_file_directory> \
+    --outputFormat=<HTML|XML>
+```
+
+### Default Values
+
+Non provided values will be replaced by defaults as follows:
+
+* The `webdriverPath` default is a `chromedriver` file on same path as the executable.
+* The `inputDirectory` default is a folder named `/input` on same path as the executable. If this folder not exists the test fails.
+* The `outputDirectory` default is a folder named `/output` on same path as the executable. If this folder not exists the test fails.
+* The `outputFormat` default is `HTML`.
 
 ## How to write tests?
 
@@ -45,7 +70,7 @@ Ex.: `login_with_correct_credentials_then_success_message_appears.txt`
 
 - Your test **should** start with the *open* command.
 
-- Your **must** *declare* the page elements before interact with then (see *declare* action on next section).
+- Your **must** *define* the page elements before interact with then (see *define* action on next section).
 
 - Some *actions* requires a *parameter*, it *must* be written between quotes.<br>
   Ex.: `Write "Hello World" on the @Message box.`
@@ -107,7 +132,7 @@ Ex.: `Read "Jhon Doe" on the @FullName field.`<br>
 
 Some actions are bounded to the parent of all *elements*, the document *page object*. We call it *page actions*. The page actions are:
 
-- <em>**Declare**:</em> this actions associates a **name** to a reader friendly **label** and a HTML element found by a given **locator**.
+- <em>**Define**:</em> this actions associates a **name** to a reader friendly **label** and a HTML element found by a given **locator**.
 
   * The **name** must have the prefix `@` (*at*) and should not have spaces. You can use any naming convention you want (camelCase, snake_case, PascalCase), but use just one of then for good readability.<br>
   * The **label** must be enclosed in double quotes (`"`) and can contains any characters except double quotes.<br>
@@ -115,11 +140,11 @@ Some actions are bounded to the parent of all *elements*, the document *page obj
 
   Look the examples below:
 
-  Ex.: `Declare @UserName as "User Name" located by "input[name=username]".`<br>
-  Ex.: `Declare @Password as "Password" located by "#password".`<br>
-  Ex.: `Declare @Submit as "Submit" located by "input[type=submit]".`
+  Ex.: `Define @UserName as "User Name" located by "input[name=username]".`<br>
+  Ex.: `Define @Password as "Password" located by "#password".`<br>
+  Ex.: `Define @Submit as "Submit" located by "input[type=submit]".`
 
-- <em>**Store:**</em> this action store the value of given element on a variable declared with `$`. You can use this stored value on *Assert* action.<br>
+- <em>**Store:**</em> this action store the value of given element on a variable defined with `$`. You can use this stored value on *Assert* action.<br>
 Ex.: `Store @message display value on $message.`<br>
 Ex.: `Store @result field value on $result.`<br>
 
@@ -150,33 +175,23 @@ File: `login_with_correct_info_then_success.txt`
 # Your test may have comments like this
 
 ## Start test at page login
-
 Open the login page at "http://some-website/login.html".
 
 ## Page elements definitions
-
-Declare @username as "User Name" located by "#username".
-
-Declare @password as "User Password" located by "#password".
-
-Declare @submit as "Submit" located by "#login".
-
-Declare @status as "Status" located by "#status".
+Define @username as "User Name" located by "#username".
+Define @password as "User Password" located by "#password".
+Define @submit as "Submit" located by "#login".
+Define @status as "Status" located by "#status".
 
 ## Test instructions
-
 Write "teste@mail.com.br" to @username input.
-
 Write "testpassword" to the @password input.
-
 Click on the @submit button.
 
 ### Page request loading time...
-
 Wait 5 seconds.
 
 ## Assert your test results
-
 Read "Login with success!!!" on @status message.
 ```
 The test file above is also a valid Markdown document, this format is good for readability.
@@ -216,7 +231,7 @@ File: `antifa_test_login_with_correct_info_then_success_1663981217806.xml`
       <elapsedTime unit="ms">0</elapsedTime>
       <result>SUCCESS</result>
       <command>
-        <instruction>Declare @username as "User Name" located by "#username".</instruction>
+        <instruction>Define @username as "User Name" located by "#username".</instruction>
         <action>define</action>
         <object>@username</object>
         <parameter>#username	User Name</parameter>

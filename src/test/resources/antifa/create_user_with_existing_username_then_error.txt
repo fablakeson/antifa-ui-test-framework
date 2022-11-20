@@ -8,7 +8,7 @@ Define @usuario as "Nome de usuario" located by "input[id=username]".
 Define @senha as "Senha" located by "input[name=Passwd]".
 Define @confirmaSenha as "Confirma Senha" located by "input[name=ConfirmPasswd]".
 Define @proximo as "Próximo" located by "#accountDetailsNext".
-Define @validation as "Validação" located by ".o6cuMc".
+Define @validacao as "Validação" located by ".o6cuMc".
 
 # Setting info
 Write "Jose" to @nome input.
@@ -19,7 +19,7 @@ Write "12345678" to @confirmaSenha input.
 Click on the @proximo button.
 # Page submit loading...
 Wait 5 seconds.
-Store @validation label value on $validationMessage.
+Store @validacao message value on $mensagemValidacao.
 
 # Assert the result
-Assert "Este nome de usuário já está em uso. Tente outro." equals to $validationMessage.
+Assert "Este nome de usuário já está em uso. Tente outro." equals to $mensagemValidacao.
