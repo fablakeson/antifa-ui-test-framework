@@ -57,6 +57,12 @@ public class AntifaMojo extends AbstractMojo {
   @Parameter(property = "outputFormat", defaultValue = "HTML", required = true)
   private OutputFormat outputFormat;
 
+  @Parameter(
+      property = "webdriverPath",
+      defaultValue = "${project.build.directory}/chromedriver",
+      required = true)
+  private File webdriverPath;
+
   /*
    * (non-Javadoc)
    *
@@ -80,6 +86,7 @@ public class AntifaMojo extends AbstractMojo {
     /** Output result */
     LOGGER.info("Output result as: " + outputFormat);
 
+    System.setProperty("webdriver.chrome.driver", webdriverPath.getAbsolutePath());
     Antifa antifa = Antifa.instance(outputDirectory, outputFormat);
 
     /** For each test file */

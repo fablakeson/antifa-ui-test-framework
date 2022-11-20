@@ -10,33 +10,34 @@ import org.apache.commons.lang3.StringUtils;
 
 public class App {
 
-  private static final String WEBDRIVER_PATH_FLAG = "-DwebdriverPath";
-  private static final String INPUT_PATH_FLAG = "-DinputPath";
-  private static final String OUTPUT_PATH_FLAG = "-DoutputPath";
-  private static final String OUTPUT_FORMAT_FLAG = "-DoutputFormat";
+  private static final String WEBDRIVER_PATH_FLAG = "--webdriverPath";
+  private static final String INPUT_PATH_FLAG = "--inputDirectory";
+  private static final String OUTPUT_PATH_FLAG = "--outputDirectory";
+  private static final String OUTPUT_FORMAT_FLAG = "--outputFormat";
 
   public static void main(String[] args) {
     Map<String, String> properties = getPropertiesFromArgs(args);
 
     String webdriverPath = properties.getOrDefault(WEBDRIVER_PATH_FLAG, "chromedriver");
-    String inputPath = properties.getOrDefault(INPUT_PATH_FLAG, "input");
-    String outputPath = properties.getOrDefault(OUTPUT_PATH_FLAG, "output");
+    String inputDirectory = properties.getOrDefault(INPUT_PATH_FLAG, "input");
+    String outputDirectory = properties.getOrDefault(OUTPUT_PATH_FLAG, "output");
     String outputFormatValue = properties.getOrDefault(OUTPUT_FORMAT_FLAG, "HTML");
 
     File webdriverExecutable = new File(webdriverPath);
     validateExecutable(webdriverExecutable);
 
-    File inputDirectory = new File(inputPath);
-    validateDirectory(inputDirectory);
+    File inputDirectoryFile = new File(inputDirectory);
+    validateDirectory(inputDirectoryFile);
 
-    File outputDirectory = new File(outputPath);
-    validateDirectory(outputDirectory);
+    File outputDirectoryFile = new File(outputDirectory);
+    validateDirectory(outputDirectoryFile);
 
     OutputFormat outputFormat = OutputFormat.valueOf(outputFormatValue);
 
-    Antifa antifa = Antifa.instance(outputDirectory, outputFormat);
+    System.setProperty("webdriver.chrome.driver", webdriverExecutable.getAbsolutePath());
+    Antifa antifa = Antifa.instance(outputDirectoryFile, outputFormat);
 
-    maybeExecuteTest(antifa, inputDirectory);
+    maybeExecuteTest(antifa, inputDirectoryFile);
   }
 
   private static Map<String, String> getPropertiesFromArgs(String[] args) {
