@@ -23,6 +23,7 @@ import java.util.Properties;
 import javax.inject.Qualifier;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
@@ -59,15 +60,17 @@ public class ExecutionModule extends AbstractModule {
   @Provides
   @Driver
   public WebDriver provideWebDriver(@WebDriverProperties Properties props) {
+    ChromeOptions options = new ChromeOptions();
+    options.addArguments("--remote-allow-origins=*");
     switch (props.getProperty(WEB_DRIVER)) {
       case WEB_DRIVER_CHROME_VALUE:
-        return new ChromeDriver();
+        return new ChromeDriver(options);
       case WEB_DRIVER_FIREFOX_VALUE:
         return new FirefoxDriver();
       case WEB_DRIVER_EDGE_VALUE:
         return new EdgeDriver();
       default:
-        return new ChromeDriver();
+        return new ChromeDriver(options);
     }
   }
 
